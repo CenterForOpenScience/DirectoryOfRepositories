@@ -1,10 +1,10 @@
 # Python
 *.py[cod]
 *.so
-*/__pycache__
+*/__pycache__/*
 
 # DB / Migrations
 db.sqlite3
-dor/migrations
+dor/migrations/*
 
 !.gitkeep

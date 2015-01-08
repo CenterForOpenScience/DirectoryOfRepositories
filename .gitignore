@@ -1,32 +1,7 @@
-# OS generated files
-######################
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
-*.swp
-*~
-
 # Python
-#######################
 *.py[cod]
 *.so
-*.py[cod]
-
-# Packages
-*.egg
-*.egg-info
 */__pycache__
-
-
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
 
 # DB / Migrations
 db.sqlite3

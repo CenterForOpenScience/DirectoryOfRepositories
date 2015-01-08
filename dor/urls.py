@@ -6,6 +6,9 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'repos', views.RepositoryViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'taxonomy', views.TaxonomyViewSet)
+router.register(r'standards', views.StandardsViewSet)
+router.register(r'contenttype', views.ContentTypeViewSet)
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.

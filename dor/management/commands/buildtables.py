@@ -1,6 +1,87 @@
+from django.core.management.base import BaseCommand, CommandError
+from dor.models import Taxonomy, Standards, ContentType
+
+def build_taxonomy():
+    count = 0
+    for tax in INDEX_TERMS:
+        root = Taxonomy.add_root(name=tax, tax_id=count)
+        count += 1
+        for subj in INDEX_TERMS[tax]:
+            node = root.add_child(name=subj, tax_id=int(subj.split()[0]))
+            while bool(INDEX_TERMS[tax][subj]):
+                datatype = node.add_child(name=INDEX_TERMS[tax][subj].pop())
+
+    print(Taxonomy.dump_bulk())
+
+
+def build_standards():
+    for std in STANDARDS:
+        root = Standards.add_root(name=std)
+        for option in STANDARDS[std]:
+            root.add_child(name=option)
+
+    print(Standards.dump_bulk())
+
+
+def build_content():
+    for item in CONTENT_TYPE:
+        root = ContentType.add_root(name=item)
+        while(bool(CONTENT_TYPE[item])):
+            ext = root.add_child(name=CONTENT_TYPE[item].pop())
+
+    print(ContentType.dump_bulk())
+
+
+class Command(BaseCommand):
+    help = 'Builds the db table for the taxonomy tree'
+
+    def handle(self, *args, **options):
+        build_taxonomy()
+        build_standards()
+        build_content()
+
+
+CONTENT_TYPE = {
+      'Standard office documents': [],  # [file_extensions] 
+      'Networkbased data': [],  
+      'Databases': [],  
+      'Images': [],  
+      'Structured graphics': [],  
+      'Audiovisual data': [],  
+      'Scientific and statistical data formats': [],  
+      'Raw data': [],  
+      'Plain text': [],  
+      'Structured text': [],  
+      'Archived data': [],  
+      'Software applications': [],  
+      'Source code': [],  
+      'Configuration data': [],  
+      'other': [],  
+}
+
+STANDARDS = {
+    'databaseAccessTypes': ['open', 'restricted', 'closed'],
+    'accessTypes': ['open', 'embargoed', 'restricted', 'closed'],
+    'dataUploadTypes': ['open', 'restricted', 'closed'],
+    'accessRestrictions': ['feeRequired', 'registration', 'other'],
+    'repositoryTypes': ['disciplinary', 'institutional', 'other'],
+    'providerTypes': ['dataProvider', 'serviceProvider'],
+    'responsibilityTypes': ['funding', 'general', 'sponsoring', 'technical'],
+    'institutionTypes': ['commercial', 'non-profit'],
+    'databaseLicenseNames': ['CC', 'CC0', 'Copyrights', 'ODC', 'Public Domain', 'other'],
+    'dataLicenseNames': ['CC', 'CC0', 'Copyrights', 'ODC', 'OGL', 'RL', 'Public Domain', 'other', 'none'],
+    'softwareNames': ['CKAN', 'DataVerse', 'DigitalCommons', 'DSpace', 'EPrints', 'eSciDoc', 'OPUS', 'dLibra', 'other', 'unknown'],
+    'apiTypes': ['API', 'FTP', 'OAI-PMH', 'REST', 'SOAP', 'SPARQL', 'SWORD', 'other'],
+    'pidSystems': ['ARK', 'DOI', 'hdl', 'PURL', 'URN', 'other', 'none'],
+    'certificates': ['DIN 31644', 'DINI Certificate', 'DSA', 'ISO 16363', 'ISO 16919', 'TRAC', 'WDS', 'other'],
+    'syndicationTypes': ['ATOM', 'RSS'],
+    'yesno': ['yes', 'no'],
+    'yesnoun': ['yes', 'no', 'unknown'],
+}
+
 INDEX_TERMS = {
     'Atmospheric Composition and Structure': {
-        '0305 Aerosols and particles': [],  #Datatypes go in list
+        '0305 Aerosols and particles': [],  # Datatypes go in list
         '0310 Airglow and aurora': [],
         '0317 Chemical kinetic and photochemical properties': [],
         '0319 Cloud optics': [],

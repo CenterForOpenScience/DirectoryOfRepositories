@@ -1,5 +1,5 @@
-from dor.models import Repository
-from dor.serializers import RepositorySerializer, UserSerializer
+from dor.models import Repository, Taxonomy, Standards, ContentType
+from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer
 from dor.permissions import IsOwnerOrReadOnly
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, renderers, viewsets
@@ -13,6 +13,21 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'repos': reverse('repo-list', request=request, format=format)
     })
+
+
+class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ContentType.objects.all()
+    serializer_class = ContentTypeSerializer
+
+
+class StandardsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Standards.objects.all()
+    serializer_class = StandardsSerializer
+
+
+class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Taxonomy.objects.all()
+    serializer_class = TaxonomySerializer  
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):

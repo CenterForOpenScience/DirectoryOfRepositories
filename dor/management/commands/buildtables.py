@@ -4,12 +4,14 @@ from dor.models import Taxonomy, Standards, ContentType
 def build_taxonomy():
     for tax in INDEX_TERMS:
         root = Taxonomy.add_root(name=tax, tax_id=int(tax.split()[0]))
-        for subj in INDEX_TERMS[tax]:
-            node = root.add_child(name=subj, tax_id=int(subj.split()[0]))
-            for subsubj in INDEX_TERMS[tax][subj]:
-                specialty = node.add_child(name=subsubj, tax_id=int(subsubj.split()[0]))
-                while bool(INDEX_TERMS[tax][subj][subsubj]):
-                    datatype = node.add_child(name=INDEX_TERMS[tax][subj][subsubj].pop())
+        for field in INDEX_TERMS[tax]:
+            node_x = root.add_child(name=field, tax_id=int(field.split()[0]))
+            for subfield in INDEX_TERMS[tax][field]:
+                node_y = node_x.add_child(name=subfield, tax_id=int(subfield.split()[0]))
+                for subj in INDEX_TERMS[tax][field][subfield]:
+                    node_z = node_y.add_child(name=subj, tax_id=int(subj.split()[0]))
+                    while bool(INDEX_TERMS[tax][field][subfield][subj]):
+                        datatype = node_z.add_child(name=INDEX_TERMS[tax][field][subfield][subj].pop())
 
     print(Taxonomy.dump_bulk())
 

@@ -2,13 +2,15 @@ from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
 from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer, JournalSerializer
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, renderers, viewsets
+from django.http import HttpResponse
+from rest_framework import generics, permissions, viewsets
+from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
 from rest_framework.exceptions import APIException
-from rest_framework.decorators import api_view, detail_route
+from rest_framework.decorators import api_view, detail_route, renderer_classes
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-@api_view(('GET',))
+@api_view(('GET', ))
 def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),

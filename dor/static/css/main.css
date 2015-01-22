@@ -96,19 +96,120 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
-
-p {
-    color:red;
+body{
+    background: #F4F4F3;
 }
 
+a{
+    color: white;
+}
 
+a:hover{
+    color: #C8E6C9;
+    text-decoration: none;
+}
 
+#banner {
+    background: #4CAF50;
+}
 
+#banner-title {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 2em;
+    color: #fff;
+    padding: 20px 15px;
+}
 
+#banner-nav{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 1.2em;
+    color: #fff;
+    padding: 28px 15px;
+}
 
+.nav-button{
+    padding: 0 10px;
+}
 
+.hover-bar{
+    z-index: 2;
+    position: absolute;
+    top: 420px;
+    width: 100%;
+    text-align: center;
+}
 
+.rectangle {
+    background: #4CAF50;
+	width: 300px;
+	height: 100px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#logo{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 5em;
+    color: #fff;
+}
+
+#landing-image{
+    background: url("../img/hands.jpg");
+    background-size: 100%;
+    z-index: 1;
+    width: 100%;
+    height: 0;
+    padding-bottom: 30%;
+}
+
+#landing-info{
+    z-index: 1;
+    padding-top: 100px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 4em;
+    color: #424242;
+    text-align:center;
+}
+
+#search-header{
+    padding-top:20px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 2em;
+    color: #424242;
+}
+
+.form-group{
+    width:100%;
+}
+
+#search-form{
+    padding: 20px 0;
+}
+
+#search-query{
+    width:93%;
+}
+
+#search-button{
+    width:7%;
+}
+
+#advance-form{
+    background:#A5D6A7;
+    border-radius: 5px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+
+.filter-dropdown{
+    padding: 20px;
+}
 
 
 

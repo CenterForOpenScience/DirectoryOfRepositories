@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^routes/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls',
         namespace='rest_framework')),
+    url(r'^search/', TemplateView.as_view(template_name="search.html")),
     url(r'^', TemplateView.as_view(template_name="index.html")),
 ]

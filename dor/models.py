@@ -26,16 +26,32 @@ class Taxonomy(NS_Node):
         else:
             return 'root: {0}'.format(self.name)
 
-class Standards(NS_Node):
+class Standards(models.Model):
     name = models.CharField(max_length=100, default='')
+
+    databaseAccessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed','closed'),])
+    accessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('embargoed', 'embargoed'), ('restricted', 'restricted'), ('closed', 'closed')])
+    dataUploadTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed', 'closed'),])
+    repositoryTypes = models.CharField(max_length=100, default='', choices=[('disciplinary','disciplinary'), ('institutional', 'institutional'), ('other', 'other'),])
+    providerTypes = models.CharField(max_length=100, default='', choices=[('dataProvider', 'dataProvider'), ('serviceProvider', 'serviceProvider')])
+    responsibilityTypes = models.CharField(max_length=100, default='', choices=[('funding','funding'), ('general','general'), ('sponsoring', 'sponsoring'), ('technical', 'technical')])
+    institutionTypes = models.CharField(max_length=100, default='', choices=[('commercial','commercial'), ('non-profit', 'non-profit')])
+    databaseLicenseNames = models.CharField(max_length=100, default='', choices=[('Apache License 2.0', 'Apache License 2.0'), ('BSD', 'BSD'), ('CC', 'CC'), ('CC0', 'CC0'), ('Copyrights', 'Copyrights'), ('ODC', 'ODC'), ('Public Domain', 'Public Domain'), ('other', 'other')])
+    databaseLicenseURL = models.URLField(default='')
+    dataUploadLicenseURL = models.URLField(default='')
+    apiTypes = models.CharField(max_length=100, default='', choices=[('API', 'API'), ('FTP', 'FTP'), ('OAI-PMH', 'OAI-PMH'), ('REST', 'REST'), ('SOAP', 'SOAP'), ('SPARQL', 'SPARQL'), ('SWORD', 'SWORD'), ('other', 'other')])
+    pidSystems = models.CharField(max_length=100, default='', choices=[('ARK', 'ARK'), ('DOI', 'DOI'), ('HDL', 'HDL'), ('PURL', 'PURL'), ('URN', 'URN'), ('other', 'other'), ('none', 'none')])
+    aidSystems = models.CharField(max_length=100, default='', choices=[('AuthorClaim', 'AuthorClaim'), ('ISNI ORCID', 'ISNI ORCID'), ('ResearchedID', 'ResearchedID'), ('other', 'other'), ('none', 'none')])
+    enhancedPublications = models.CharField(max_length=100, default='', choices=[('yes', 'yes'), ('no', 'no'), ('unknown', 'unknown')])
+    qualityManagement = models.CharField(max_length=100, default='', choices=[('yes', 'yes'), ('no', 'no'), ('unknown', 'unknown')])
+    certificates = models.CharField(max_length=100, default='', choices=[('CLARIN Certificate B', 'CLARIN Certificate B'), ('DIN 31644', 'DIN 31644'), ('DINI Certificate', 'DINI Certificate'), ('DRAMBORA', 'DRAMBORA'), ('DSA', 'DSA'), ('ISO 16363', 'ISO 16363'), ('ISO 16919', 'ISO 16919'), ('RatSWD', 'RatSWD'), ('TRAC', 'TRAC'), ('Trusted Digital Repository', 'Trusted Digital Repository'), ('WDS', 'WDS'), ('other', 'other')])
+    syndicationTypes = models.CharField(max_length=100, default='', choices=[('ATOM', 'ATOM'), ('RSS', 'RSS')])
+
 
     node_order_by = ['name']
 
     def __str__(self):
-        if not self.is_root():
-            return '{0} - {1}'.format(self.get_parent().name, self.name)
-        else:
-            return 'root: {0}'.format(self.name)
+        return '{0} Standards'.format(self.name)
 
 
 class ContentType(NS_Node):
@@ -49,15 +65,20 @@ class ContentType(NS_Node):
 
 class Repository(models.Model):
     name = models.CharField(max_length=100, blank=True, default='')
+    alt_names = models.CharField(max_length=200, blank=True, default='')
     url = models.URLField()
+    persistent_url = models.URLField(null=True, default='')
     accepted_taxonomy = models.ManyToManyField('Taxonomy',)
     accepted_content = models.ManyToManyField('ContentType',)
-    standards = models.ManyToManyField('Standards',)
-    description = models.TextField(blank=True, default='')
+    standards = models.ForeignKey('Standards', related_name='standards')
+    description = models.CharField(max_length=1000, blank=True, default='')
     hosting_institution = models.CharField(max_length=100, blank=True, default='')
+    institution_country = models.CharField(max_length=100, blank=True, default='')
     owner = models.ForeignKey('auth.User', related_name='repositorys')
     contact = models.CharField(max_length=100, blank=True, default='')
-    metadata = models.TextField(default='')
+    metadataStandardName = models.CharField(max_length=200, default='')
+    metadataStandardURL = models.URLField()
+    metadataRemarks = models.CharField(max_length=1000, default='')
     size = models.IntegerField(default=0)
     date_operational = models.DateField(default=datetime.date(1900, 1, 1))
     created = models.DateTimeField(auto_now_add=True)

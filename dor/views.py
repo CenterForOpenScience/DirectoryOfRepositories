@@ -2,7 +2,7 @@ from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
 from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer, JournalSerializer
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, renderers, viewsets
+from rest_framework import generics, permissions, renderers, viewsets, filters
 from rest_framework.exceptions import APIException
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
@@ -21,6 +21,8 @@ class JournalViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
                           CanCreateOrReadOnly,]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ['name', 'repos_endorsed__name', 'repos_endorsed__standards__name']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -31,7 +33,7 @@ class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentTypeSerializer
 
 
-class StandardsViewSet(viewsets.ReadOnlyModelViewSet):
+class StandardsViewSet(viewsets.ModelViewSet):
     queryset = Standards.objects.all()
     serializer_class = StandardsSerializer
 
@@ -42,23 +44,19 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
     queryset = Repository.objects.all()
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ['name', 'accepted_taxonomy__name',
+                     'accepted_content__name']
 
     def perform_create(self, serializer):
        serializer.save(owner=self.request.user)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    This viewset automatically provides `list` and `detail` actions.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer

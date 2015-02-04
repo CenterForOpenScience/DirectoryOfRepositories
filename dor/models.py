@@ -22,12 +22,13 @@ class Taxonomy(NS_Node):
 
     def __str__(self):
         if not self.is_root():
-            return '{0} - {1}'.format(self.get_parent().name, self.name)
+            return '{} - {}'.format(self.get_parent().__str__(), self.name)
         else:
-            return 'root: {0}'.format(self.name)
+            return '{}'.format(self.name)
 
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')
+    owner = models.ForeignKey('auth.User', related_name='standards')
 
     databaseAccessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed','closed'),])
     accessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('embargoed', 'embargoed'), ('restricted', 'restricted'), ('closed', 'closed')])
@@ -78,7 +79,7 @@ class Repository(models.Model):
     contact = models.CharField(max_length=100, blank=True, default='')
     metadataStandardName = models.CharField(max_length=200, default='')
     metadataStandardURL = models.URLField()
-    metadataRemarks = models.CharField(max_length=1000, default='')
+    metadataRemarks = models.CharField(max_length=1000, blank=True, default='')
     size = models.IntegerField(default=0)
     date_operational = models.DateField(default=datetime.date(1900, 1, 1))
     created = models.DateTimeField(auto_now_add=True)

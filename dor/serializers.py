@@ -24,29 +24,23 @@ class TaxonomySerializer(serializers.ModelSerializer):
 
 
 class StandardsSerializer(serializers.ModelSerializer):
-    databaseAccessTypes = serializers.ChoiceField(choices=['open', 'restricted', 'closed'])
-    accessTypes = serializers.MultipleChoiceField(choices=['open', 'embargoed', 'restricted', 'closed'])
-    dataUploadTypes = serializers.ChoiceField(choices=['open', 'restricted', 'closed'])
-    repositoryTypes = serializers.ChoiceField(choices=['disciplinary', 'institutional', 'other'])
-    providerTypes = serializers.MultipleChoiceField(choices=['dataProvider', 'serviceProvider'])
-    responsibilityTypes = serializers.MultipleChoiceField(choices=['funding', 'general', 'sponsoring', 'technical'])
-    institutionTypes = serializers.ChoiceField(choices=['commercial', 'non-profit'])
-    databaseLicenseNames = serializers.ChoiceField(choices=['Apache License 2.0', 'BSD', 'CC', 'CC0', 'Copyrights', 'ODC', 'Public Domain', 'other'])
-    apiTypes = serializers.MultipleChoiceField(choices=['API', 'FTP', 'OAI-PMH', 'REST', 'SOAP', 'SPARQL', 'SWORD', 'other'])
-    pidSystems = serializers.MultipleChoiceField(choices=['ARK', 'DOI', 'HDL', 'PURL', 'URN', 'other', 'none'])
-    aidSystems = serializers.MultipleChoiceField(choices=['AuthorClaim', 'ISNI ORCID', 'ResearchedID', 'other', 'none'])
-    enhancedPublications = serializers.ChoiceField(choices=['yes', 'no', 'unknown'])
-    qualityManagement = serializers.ChoiceField(choices=['yes', 'no', 'unknown'])
-    certificates = serializers.MultipleChoiceField(choices=['CLARIN Certificate B','DIN 31644', 'DINI Certificate', 'DRAMBORA', 'DSA', 'ISO 16363', 'ISO 16919', 'RatSWD', 'TRAC', 'Trusted Digital Repository', 'WDS', 'other'])
-    syndicationTypes = serializers.MultipleChoiceField(choices=['ATOM', 'RSS'])
+    accessTypes = serializers.MultipleChoiceField(choices=[('open', 'open'), ('embargoed', 'embargoed'), ('restricted', 'restricted'), ('closed', 'closed')])
+    providerTypes = serializers.MultipleChoiceField(choices=[('dataProvider', 'dataProvider'), ('serviceProvider', 'serviceProvider')])
+    responsibilityTypes = serializers.MultipleChoiceField(choices=[('funding', 'funding'), ('general', 'general'), ('sponsoring', 'sponsoring'), ('technical', 'technical')])
+    apiTypes = serializers.MultipleChoiceField(choices=[('API', 'API'), ('FTP', 'FTP'), ('OAI-PMH', 'OAI-PMH'), ('REST', 'REST'), ('SOAP', 'SOAP'), ('SPARQL', 'SPARQL'), ('SWORD', 'SWORD'), ('other', 'other')])
+    pidSystems = serializers.MultipleChoiceField(choices=[('ARK', 'ARK'), ('DOI', 'DOI'), ('HDL', 'HDL'), ('PURL', 'PURL'), ('URN', 'URN'), ('other', 'other'), ('none', 'none')])
+    aidSystems = serializers.MultipleChoiceField(choices=[('AuthorClaim', 'AuthorClaim'), ('ISNI ORCID', 'ISNI ORCID'), ('ResearchedID', 'ResearchedID'), ('other', 'other'), ('none', 'none')])
+    certificates = serializers.MultipleChoiceField(choices=[('CLARIN Certificate B', 'CLARIN Certificate B'), ('DIN 31644', 'DIN 31644'), ('DINI Certificate', 'DINI Certificate'), ('DRAMBORA', 'DRAMBORA'), ('DSA', 'DSA'), ('ISO 16363', 'ISO 16363'), ('ISO 16919', 'ISO 16919'), ('RatSWD', 'RatSWD'), ('TRAC', 'TRAC'), ('Trusted Digital Repository', 'Trusted Digital Repository'), ('WDS', 'WDS'), ('other', 'other')])
+    syndicationTypes = serializers.MultipleChoiceField(choices=[('ATOM', 'ATOM'), ('RSS', 'RSS')])
+    
     class Meta:
         model = Standards
-        fields = ('databaseAccessTypes', 'accessTypes', 'dataUploadTypes', 
+        fields = ('databaseAccessTypes', 'accessTypes', 'dataUploadTypes',
                   'repositoryTypes', 'providerTypes', 'enhancedPublications',
-                  'responsibilityTypes', 'institutionTypes', 'databaseLicenseNames', 
+                  'responsibilityTypes', 'institutionTypes', 'databaseLicenseNames',
                   'apiTypes', 'pidSystems', 'qualityManagement', 'aidSystems',
-                  'certificates', 'syndicationTypes', 'databaseLicenseURL', 
-                  'dataUploadLicenseURL', 'name',)
+                  'certificates', 'syndicationTypes', 'databaseLicenseURL',
+                  'dataUploadLicenseURL', 'name', 'owner',)
 
 
 class ContentTypeSerializer(serializers.ModelSerializer):
@@ -57,11 +51,10 @@ class ContentTypeSerializer(serializers.ModelSerializer):
 
 class RepositorySerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    alt_names = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Repository
-        fields = ('name', 'alt_names', 'url', 'persistent_url', 'accepted_taxonomy', 
+        fields = ('name', 'alt_names', 'url', 'persistent_url', 'accepted_taxonomy',
                   'standards', 'owner', 'accepted_content', 'description', 'hosting_institution',
-                  'institution_country', 'contact', 'size', 'date_operational', 
-                  'metadataStandardName', 'metadataStandardURL', 'metadataRemarks',)
+                  'institution_country', 'contact', 'size', 'date_operational',
+                  'metadataStandardName', 'metadataStandardURL', 'metadataRemarks')

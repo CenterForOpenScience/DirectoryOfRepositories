@@ -36,6 +36,11 @@ class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
 class StandardsViewSet(viewsets.ModelViewSet):
     queryset = Standards.objects.all()
     serializer_class = StandardsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,
+                          CanCreateOrReadOnly,]
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):

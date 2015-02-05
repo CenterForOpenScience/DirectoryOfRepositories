@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Submission{% endblock %}
+
+{% block content %}
+    <div id="submission-form" class="col-md-8 col-md-offset-2">
+    <div id="sub-title">Submission Form</div>
+        <form action="#" method="post" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="repo_name">Repo name: </label>
+                <div class="col-md-10">
+                    <input id="repo_name" class="form-control" type="text" name="repo_name" value="{{ repo_name }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="url_name">Url: </label>
+                <div class="col-md-10">
+                    <input id="url_name" class="form-control" type="text" name="url_name" value="{{ url_name }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="accepted_tax">Accepted Taxonomy: </label>
+                <div class="col-md-10">
+                    <select multiple size="10" id="accepted_tax" class="form-control" name="accepted_tax" value="{{ accepted_tax }}">
+                        {% for tax in taxonomies %}
+                            <option>{{ tax.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="standards">Standards: </label>
+                <div class="col-md-10">
+                    <select multiple size="10" id="standards" class="form-control" name="standards" value="{{ standards }}">
+                        {% for std in standards %}
+                            <option>{{ std.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="owner_name">Owner's name: </label>
+                <div class="col-md-10">
+                    <input id="owner_name" class="form-control" type="text" name="owner_name" value="{{ owner_name }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="accepted_content">Accepted Content: </label>
+                <div class="col-md-10">
+                    <select multiple id="accepted_content" class="form-control" name="accepted_content" value="{{ accepted_content }}">
+                        {% for content in content_types %}
+                            <option>{{ content.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="desc">Description: </label>
+                <div class="col-md-10">
+                    <input id="desc" class="form-control" type="text" name="desc" value="{{ desc }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="hosting_institute">Hosting Institution's Name: </label>
+                <div class="col-md-10">
+                    <input id="hosting_institute" class="form-control" type="text" name="hosting_institute" value="{{ hosting_institute }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="contact_name">Contact: </label>
+                <div class="col-md-10">
+                    <input id="contact_name" class="form-control" type="text" name="contact_name" value="{{ contact_name }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="meta">Metadata: </label>
+                <div class="col-md-10">
+                    <input id="meta" class="form-control" type="text" name="meta" value="{{ meta }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="size">Size: </label>
+                <div class="col-md-10">
+                    <input id="size" class="form-control" type="text" name="size" value="{{ size }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="date_operational">Date Operational: </label>
+                <div class="col-md-10">
+                    <input id="date_operational" class="form-control" type="datetime-local" name="date_operational" value="{{ date_operational }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-success" value="OK">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Directory of Repositories{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -11,10 +11,11 @@
 
     <div class="row">
         <div id="search-form" class="col-md-8 col-md-offset-2">
-            <form class="form-inline" action="/PLACEHOLDER/" method="post">
-              <div class="form-group">
-                <input type="text" class="form-control" id="search-query"><button type="submit" id="search-button" class="btn btn-success">Search</button>
-              </div>
+            <form class="form-inline" action="/search/look-up/" method="POST" id="search-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="search-query" name="q"><button type="submit" id="search-button" class="btn btn-success">Search</button>
+                </div>
             </form>
         </div>
     </div>
@@ -29,7 +30,9 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu" aria-labelledby="taxonomy-dropdown" id="taxonomy-dropdown">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">CHOICES</a></li>
+                      {% for tax in taxonomies %}
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ tax.name }}</a></li>
+                      {% endfor %}
                   </ul>
                 </div>
             </div>
@@ -41,7 +44,9 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu" aria-labelledby="standards-dropdown" id="standards-dropdown">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-standards">CHOICES</a></li>
+                      {% for standard in standards %}
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ standard.name }}</a></li>
+                      {% endfor %}
                   </ul>
                 </div>
             </div>
@@ -53,10 +58,34 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu" aria-labelledby="content-type-dropdown" id="content-type-dropdown">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-content-type">CHOICES</a></li>
+                      {% for content_type in content_types %}
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ content_type.name }}</a></li>
+                      {% endfor %}
                   </ul>
                 </div>
             </div>
+
+            <div class="row">
+                <div id="filter-button-area" class="col-md-12">
+
+                </div>
+            </div>
         </div>
+
+    </div>
+
+    <div class="row">
+        <div id="results-view" class="col-md-8 col-md-offset-2">
+             {% for repo in repositories %}
+                 <div class="repo-result col-md-12" id={{ repo }}>
+                     <h2>{{ repo }}</h2>
+                     <br>URL: {{ repo.url }}
+                     <br>Hosting Institute: {{ repo.hosting_institution }}
+                     <br>Owner: {{ repo.owner }}
+                     <br>Date Operational: {{ repo.date_operational }}
+                 </div>
+             {% endfor %}
+        </div>
+
     </div>
 {% endblock %}

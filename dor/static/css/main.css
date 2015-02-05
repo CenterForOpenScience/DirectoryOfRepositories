@@ -109,6 +109,10 @@ a:hover{
     text-decoration: none;
 }
 
+h2{
+    padding: 0;
+    margin: 0;
+}
 #banner {
     background: #4CAF50;
 }
@@ -143,7 +147,7 @@ a:hover{
 
 .rectangle {
     background: #4CAF50;
-	width: 300px;
+	width: 400px;
 	height: 100px;
     margin-left:auto;
     margin-right:auto;
@@ -165,12 +169,22 @@ a:hover{
     padding-bottom: 30%;
 }
 
-#landing-info{
+#landing-header{
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 75px;
     font-family: 'Lato', sans-serif;
     font-weight: 400;
-    font-size: 4em;
+    font-size: 3em;
+    color: #424242;
+    text-align:center;
+}
+
+#landing-info{
+    z-index: 1;
+    padding-top: 20px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 1.3em;
     color: #424242;
     text-align:center;
 }
@@ -211,8 +225,61 @@ a:hover{
     padding: 20px;
 }
 
+#results-view{
+    padding-top:20px;
+}
 
+.repo-result{
+    background:#FFF;
+    border-radius: 5px;
+    border: solid;
+    border-color: #A5D6A7;
+    font-family: 'Lato', sans-serif;
+    padding: 10px;
+    margin-bottom:10px;
+}
+#filter-button-area{
+    padding:0px 20px 10px 20px;
+    display:inline-block;
+}
 
+table td{
+    border: solid;
+    border-color: #4CAF50;
+    padding: 5px;
+    float:left;
+}
+
+.full-button{
+    display:inline-block;
+    padding: 5px;
+}
+
+.filter-button{
+    background: #E8F5E9;
+    border-radius:5px 0 0 5px;
+    border-right:0;
+}
+
+.x-button{
+    border-radius: 0 5px 5px 0;
+}
+
+.x-button:hover{
+    background:#4CAF50;
+    cursor: pointer;
+}
+
+#sub-title{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 2em;
+    padding: 20px;
+}
+
+#submission-form{
+    font-family: 'Lato', sans-serif;
+}
 
 
 

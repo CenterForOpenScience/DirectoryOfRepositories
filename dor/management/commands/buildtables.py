@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         build_taxonomy()
-        build_standards()
+#        build_standards()
         build_content()
 
 

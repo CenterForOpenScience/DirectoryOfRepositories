@@ -25,5 +25,8 @@ class CanCreateOrReadOnly(permissions.BasePermission):
         if not ((len(request.user.journals.all()) + len(request.user.repositorys.all()) <= 1) or request.user.username == 'admin'):
             obj.delete()
             raise PermissionDenied("Can create only 1 object instance per user")
+        if not ((len(request.user.standards.all()) <= 1) or request.user.username == 'admin'):
+            obj.delete()
+            raise PermissionDenied("Can create only 1 standards instance per user")
         else:
             return True

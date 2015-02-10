@@ -2,15 +2,15 @@ from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
 from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer, JournalSerializer
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
-<<<<<<< HEAD
-from django.shortcuts import render_to_response, RequestContext
+from django.shortcuts import render_to_response, RequestContext, render
+from sub_form import RepoSubmissionForm
+from django.http import HttpResponseRedirect
+from django.core.context_processors import csrf
 from django.db.models import Q
 from django.http import HttpResponse
 from rest_framework import generics, permissions, viewsets
 from rest_framework.renderers import TemplateHTMLRenderer, StaticHTMLRenderer
-=======
 from rest_framework import generics, permissions, renderers, viewsets, filters
->>>>>>> 09be62039b94d649a17ae6b4c72b459790d1dbdd
 from rest_framework.exceptions import APIException
 from rest_framework.decorators import api_view, detail_route, renderer_classes
 from rest_framework.response import Response
@@ -87,11 +87,39 @@ class ExtraContext(object):
         return context
 
 
-class ExtraListView(ExtraContext, ListView):
-    pass
+def repositoryList(request):
+    repos = Repository.objects.all()
+    taxes = Taxonomy.objects.all()
+    standards = Standards.objects.all()
+    content_types = ContentType.objects.all()
+
+    args = {}
+    args.update(csrf(request))
+
+    args['repos'] = repos
+    args['taxes'] = taxes
+    args['standards'] = standards
+    args['content_types'] = content_types
+
+    return render_to_response('search.html', args)
 
 def index(request):
     return render_to_response('index.html', {}, context_instance=RequestContext(request))
 
 def submission(request):
-    return render_to_response('submission.html', {}, content_type=RequestContext(request))
+    if request.POST:
+        form = RepoSubmissionForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect('/search/')
+
+    else:
+        form = RepoSubmissionForm()
+
+    args = {}
+    args.update(csrf(request))
+
+    args['form'] = form
+
+    return render_to_response('submission.html', args)

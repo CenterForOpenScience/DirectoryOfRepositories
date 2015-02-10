@@ -40,7 +40,6 @@ $(document).ready(function() {
             return (n.indexOf(new_query) > -1);
         });
 
-        console.log(filteredArray);
         for (var j = 0; j< $("#results-view").find("div").length; j++){
             $($("#results-view").find("div")[j]).css("display","none");
         }
@@ -57,7 +56,6 @@ $(document).ready(function() {
     $('#search-form').on('submit', function(event){
         event.preventDefault();
         new_query = $("#search-query").val();
-        console.log("Submitted");
         search_query(new_query);
     });
 
@@ -68,6 +66,12 @@ $(document).ready(function() {
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
         $(this).closest('.full-button').remove();
+        search_query($("#search-query").val());
+    });
+
+    $(".dropdown-menu li a").click(function(){
+      var selText = $(this).text();
+      search_query(selText);
     });
 
 });

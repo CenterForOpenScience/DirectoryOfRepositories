@@ -24,13 +24,13 @@
         <div id="advance-form" class="col-md-8 col-md-offset-2">
             <div id="taxonomy" class="col-md-4 filter-dropdown">
                 Taxonomy
-                <div class="dropdown">
+                <div class="dropdown" id="tax-drop">
                   <button class="btn btn-default dropdown-toggle" type="button" id="taxonomy-drop" data-toggle="dropdown" aria-expanded="true">
                     Filter taxonomy
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="taxonomy-dropdown" id="taxonomy-dropdown">
-                      {% for tax in taxonomies %}
+                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="taxonomy-dropdown" id="taxonomy-dropdown">
+                      {% for tax in taxes %}
                           <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ tax.name }}</a></li>
                       {% endfor %}
                   </ul>
@@ -43,7 +43,7 @@
                     Filter standards
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="standards-dropdown" id="standards-dropdown">
+                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="standards-dropdown" id="standards-dropdown">
                       {% for standard in standards %}
                           <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ standard.name }}</a></li>
                       {% endfor %}
@@ -57,7 +57,7 @@
                     Filter content-type
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="content-type-dropdown" id="content-type-dropdown">
+                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="content-type-dropdown" id="content-type-dropdown">
                       {% for content_type in content_types %}
                           <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ content_type.name }}</a></li>
                       {% endfor %}
@@ -76,13 +76,26 @@
 
     <div class="row">
         <div id="results-view" class="col-md-8 col-md-offset-2">
-             {% for repo in repositories %}
+             {% for repo in repos %}
                  <div class="repo-result col-md-12" id={{ repo }}>
                      <h2>{{ repo }}</h2>
                      <br>URL: {{ repo.url }}
                      <br>Hosting Institute: {{ repo.hosting_institution }}
                      <br>Owner: {{ repo.owner }}
                      <br>Date Operational: {{ repo.date_operational }}
+                     <br>Taxonomies:
+                         <ul>
+                         {% for tax in repo.accepted_taxonomy.all %}
+                             <li>{{ tax }}</li>
+                         {% endfor %}
+                         </ul>
+                     Standards: {{ standards }}
+                     <br>Content-Types:
+                         <ul>
+                         {% for content in repo.accepted_content.all %}
+                             <li>{{ content }}</li>
+                         {% endfor %}
+                         </ul>
                  </div>
              {% endfor %}
         </div>

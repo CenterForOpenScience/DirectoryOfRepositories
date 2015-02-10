@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from django.views.generic.base import TemplateView
 from django.contrib import admin
+from django.contrib.auth.models import User
 from dor import views
 from dor import models
 from rest_framework.routers import DefaultRouter
@@ -35,28 +36,6 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',
         namespace='rest_framework')),
     url(r'^$', views.index, name='index'),
-    url(r'^search/', views.ExtraListView.as_view(
-        model=models.Taxonomy,
-        extra_context={
-            'taxonomies': models.Taxonomy.objects.all(),
-            'standards': models.Standards.objects.all(),
-            'content_types': models.ContentType.objects.all(),
-            'journals': models.Journal.objects.all(),
-            'repositories': models.Repository.objects.all(),
-        },
-        template_name='search.html'),
-        name='repo_search'
-        ),
-    url(r'^submissions/', views.ExtraListView.as_view(
-        model=models.Taxonomy,
-        extra_context={
-            'taxonomies': models.Taxonomy.objects.all(),
-            'standards': models.Standards.objects.all(),
-            'content_types': models.ContentType.objects.all(),
-            'journals': models.Journal.objects.all(),
-            'repositories': models.Repository.objects.all(),
-        },
-        template_name='submission.html'),
-        name='submission'
-        ),
+    url(r'^search/', 'dor.views.repositoryList'),
+    url(r'^submissions/$', 'dor.views.submission'),
 ]

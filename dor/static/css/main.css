@@ -238,6 +238,15 @@ h2{
     padding: 10px;
     margin-bottom:10px;
 }
+
+.repo-result a{
+    color: #4CAF50;
+}
+
+.repo-result a:hover{
+    text-decoration: underline;
+}
+
 #filter-button-area{
     padding:0px 20px 10px 20px;
     display:inline-block;

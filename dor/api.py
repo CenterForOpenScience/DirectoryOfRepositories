@@ -11,7 +11,7 @@ from rest_framework.response import Response
 class RepoList(APIView):
     def get(self,request,format=None):
         repos = Repository.objects.all()
-        serialized_repos = RepositorySerializer(repos, many=True)
+        serialized_repos = RepositorySerializer(repos, context={'request': request}, many=True)
         return Response(serialized_repos.data)
 
 class RepoDetail(APIView):
@@ -23,5 +23,5 @@ class RepoDetail(APIView):
 
     def get(self, request, pk, format=None):
         repo = self.get_object(pk)
-        serialized_repo = RepositorySerializer(repo)
+        serialized_repo = RepositorySerializer(repo, context={'request': request})
         return Response(serialized_repo.data)

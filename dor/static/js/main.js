@@ -11,16 +11,16 @@ $(document).ready(function() {
 
     //IMPLEMENT REST API FIRST
     function update_query(new_query){
-        console.log(new_query);
         $.ajax({
-            url: "/routes/taxonomy/?format=json",
+            url: "/ajax_search/",
             type: "POST",
-            data: {q : new_query},
-
+            data: {
+                'search_text' : new_query,
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+            },
             success: function(result){
                 $("#search-query").val('');
-                console.log(result);
-                console.log("success");
+                $("#results-view").html(result);
             }
         });
     }
@@ -53,25 +53,23 @@ $(document).ready(function() {
             hoverBarResize();
         });
 
-    $('#search-form').on('submit', function(event){
-        event.preventDefault();
-        new_query = $("#search-query").val();
-        search_query(new_query);
-    });
 
-    $(".dropdown-menu li a").click(function(){
-        var selText = $(this).text();
-        $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
-    });
+    update_query('');
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
         $(this).closest('.full-button').remove();
         search_query($("#search-query").val());
     });
+    $('#search-form').on('submit', function(event){
+        event.preventDefault();
+        new_query = $("#search-query").val();
+        update_query(new_query);
+    });
 
     $(".dropdown-menu li a").click(function(){
-      var selText = $(this).text();
-      search_query(selText);
+        var selText = $(this).text();
+        $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
+        search_query(selText);
     });
 
 });

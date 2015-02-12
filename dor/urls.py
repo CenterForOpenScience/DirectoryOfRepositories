@@ -1,10 +1,9 @@
-from django.conf.urls import url, include
-from django.views.generic.base import TemplateView
+from django.conf.urls import url, include, patterns
 from django.contrib import admin
-from django.contrib.auth.models import User
 from dor import views
 from dor import models
 from rest_framework.routers import DefaultRouter
+from rest_framework.urlpatterns import format_suffix_patterns
 #import rest_framework_swagger
 from dor import api
 
@@ -29,13 +28,16 @@ model_list = {
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
-urlpatterns = [
+urlpatterns = (
     url(r'^admin/', include(admin.site.urls)),
     url(r'^swag/', include('rest_framework_swagger.urls')),
     url(r'^routes/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls',
         namespace='rest_framework')),
     url(r'^$', views.index, name='index'),
+    url(r'^ajax_search/', 'dor.views.repositorySearch'),
     url(r'^search/', 'dor.views.repositoryList'),
     url(r'^submissions/$', 'dor.views.submission'),
-]
+    url(r'^api/repos/$', api.RepoList.as_view()),
+    url(r'^api/repos/[a-zA-Z/]+/$', api.RepoDetail.as_view()),
+)

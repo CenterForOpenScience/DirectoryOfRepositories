@@ -78,20 +78,16 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
 
 
-class ExtraContext(object):
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(ExtraContext, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
-
+def index(request):
+    return render_to_response('index.html', {}, context_instance=RequestContext(request))
 
 def repositoryList(request):
-    repos = Repository.objects.all()
+
+
     taxes = Taxonomy.objects.all()
     standards = Standards.objects.all()
     content_types = ContentType.objects.all()
+    repos = Repository.objects.all()
 
     args = {}
     args.update(csrf(request))
@@ -103,8 +99,20 @@ def repositoryList(request):
 
     return render_to_response('search.html', args)
 
-def index(request):
-    return render_to_response('index.html', {}, context_instance=RequestContext(request))
+def repositorySearch(request):
+    if request.POST:
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+
+    repos = Repository.objects.filter(name__contains=search_text)
+
+    args = {}
+    args.update(csrf(request))
+
+    args['repos'] = repos
+
+    return render_to_response('ajax_search.html', args)
 
 def submission(request):
     if request.POST:

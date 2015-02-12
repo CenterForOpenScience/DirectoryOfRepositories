@@ -11,9 +11,9 @@
 
     <div class="row">
         <div id="search-form" class="col-md-8 col-md-offset-2">
-            <form class="form-inline" action="/search/look-up/" method="POST" id="search-form">
-                {% csrf_token %}
+            <form class="form-inline" action="/search/" method="POST" id="search-form">
                 <div class="form-group">
+                    {% csrf_token %}
                     <input type="text" class="form-control" id="search-query" name="q"><button type="submit" id="search-button" class="btn btn-success">Search</button>
                 </div>
             </form>
@@ -76,29 +76,7 @@
 
     <div class="row">
         <div id="results-view" class="col-md-8 col-md-offset-2">
-             {% for repo in repos %}
-                 <div class="repo-result col-md-12" id={{ repo }}>
-                     <h2>{{ repo }}</h2>
-                     <br>URL: {{ repo.url }}
-                     <br>Hosting Institute: {{ repo.hosting_institution }}
-                     <br>Owner: {{ repo.owner }}
-                     <br>Date Operational: {{ repo.date_operational }}
-                     <br>Taxonomies:
-                         <ul>
-                         {% for tax in repo.accepted_taxonomy.all %}
-                             <li>{{ tax }}</li>
-                         {% endfor %}
-                         </ul>
-                     Standards: {{ standards }}
-                     <br>Content-Types:
-                         <ul>
-                         {% for content in repo.accepted_content.all %}
-                             <li>{{ content }}</li>
-                         {% endfor %}
-                         </ul>
-                 </div>
-             {% endfor %}
-        </div>
 
+        </div>
     </div>
 {% endblock %}

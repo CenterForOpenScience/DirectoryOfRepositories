@@ -1,0 +1,21 @@
+{% for repo in repos %}
+    <div class="repo-result col-md-12" id={{ repo }}>
+        <h2>{{ repo }}</h2>
+        <br>URL: <a href="{{ repo.url }}">{{ repo.url }}</a>
+        <br>Hosting Institute: {{ repo.hosting_institution }}
+        <br>Owner: {{ repo.owner }}
+        <br>Date Operational: {{ repo.date_operational }}
+        <br>Taxonomies:
+        <ul>
+            {% for tax in repo.accepted_taxonomy.all %}
+                <li>{{ tax }}</li>
+            {% endfor %}
+        </ul>
+        Content-Types:
+        <ul>
+            {% for content in repo.accepted_content.all %}
+                <li>{{ content }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}

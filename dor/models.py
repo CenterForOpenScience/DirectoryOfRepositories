@@ -1,14 +1,13 @@
 from django.db import models
 import datetime
-from rest_framework import fields
 from treebeard.ns_tree import NS_Node
-from dor.widgets import NestedCheckboxSelectMultiple
 
 
 class Journal(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='journals')
     repos_endorsed = models.ManyToManyField('Repository',)
+    # add embargo_period
 
     def __str__(self):
         return str(self.name)
@@ -25,6 +24,17 @@ class Taxonomy(NS_Node):
             return '{} - {}'.format(self.get_parent().__str__(), self.name)
         else:
             return '{}'.format(self.name)
+
+    def add_new_taxonomy_item(self, new_name, root=False):
+        newname = new_name
+        newid = new_name.split()[0]
+
+        if not root:
+            self.add_child(name=newname, tax_id=newid)
+        else:
+            Taxonomy.add_root(name=newname, tax_id=newid)
+        Taxonomy.reload()
+
 
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')
@@ -47,7 +57,6 @@ class Standards(models.Model):
     qualityManagement = models.CharField(max_length=100, default='', choices=[('yes', 'yes'), ('no', 'no'), ('unknown', 'unknown')])
     certificates = models.CharField(max_length=100, default='', choices=[('CLARIN Certificate B', 'CLARIN Certificate B'), ('DIN 31644', 'DIN 31644'), ('DINI Certificate', 'DINI Certificate'), ('DRAMBORA', 'DRAMBORA'), ('DSA', 'DSA'), ('ISO 16363', 'ISO 16363'), ('ISO 16919', 'ISO 16919'), ('RatSWD', 'RatSWD'), ('TRAC', 'TRAC'), ('Trusted Digital Repository', 'Trusted Digital Repository'), ('WDS', 'WDS'), ('other', 'other')])
     syndicationTypes = models.CharField(max_length=100, default='', choices=[('ATOM', 'ATOM'), ('RSS', 'RSS')])
-
 
     node_order_by = ['name']
 
@@ -87,6 +96,6 @@ class Repository(models.Model):
 
     class Meta:
         ordering = ('date_operational',)
-    
+
     def __str__(self):
         return str(self.name)

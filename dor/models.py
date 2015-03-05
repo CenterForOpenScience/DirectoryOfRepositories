@@ -29,11 +29,16 @@ class Taxonomy(NS_Node):
         newname = new_name
         newid = new_name.split()[0]
 
-        if not root:
-            self.add_child(name=newname, tax_id=newid)
-        else:
-            Taxonomy.add_root(name=newname, tax_id=newid)
-        Taxonomy.reload()
+        try:
+            if not root:
+                self.add_child(name=newname, tax_id=newid)
+            else:
+                Taxonomy.add_root(name=newname, tax_id=newid)
+            Taxonomy.reload()
+        except Exception as e:
+            print(e)
+            return False
+        return True
 
 
 class Standards(models.Model):

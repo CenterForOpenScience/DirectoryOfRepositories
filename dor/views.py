@@ -1,12 +1,14 @@
 from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
-from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer, JournalSerializer
+from dor.serializers import (UserSerializer, RepositorySerializer,
+                             TaxonomySerializer, StandardsSerializer,
+                             ContentTypeSerializer, JournalSerializer)
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, renderers, viewsets, filters
-from rest_framework.exceptions import APIException
-from rest_framework.decorators import api_view, detail_route
+from rest_framework import permissions, viewsets, filters
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+
 
 @api_view(('GET',))
 def api_root(request, format=None):
@@ -15,14 +17,16 @@ def api_root(request, format=None):
         'repos': reverse('repo-list', request=request, format=format)
     })
 
+
 class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all()
     serializer_class = JournalSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
-                          CanCreateOrReadOnly,]
+                          CanCreateOrReadOnly, ]
     filter_backends = (filters.SearchFilter,)
-    search_fields = ['name', 'repos_endorsed__name', 'repos_endorsed__standards__name']
+    search_fields = ['name', 'repos_endorsed__name',
+                     'repos_endorsed__standards__name']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -38,7 +42,8 @@ class StandardsViewSet(viewsets.ModelViewSet):
     serializer_class = StandardsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
-                          CanCreateOrReadOnly,]
+                          CanCreateOrReadOnly, ]
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -53,13 +58,13 @@ class RepositoryViewSet(viewsets.ModelViewSet):
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,]
+                          IsOwnerOrReadOnly, ]
     filter_backends = (filters.SearchFilter,)
     search_fields = ['name', 'accepted_taxonomy__name',
                      'accepted_content__name']
 
     def perform_create(self, serializer):
-       serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

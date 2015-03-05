@@ -9,8 +9,7 @@ $(document).ready(function() {
             });
     }
 
-    //IMPLEMENT REST API FIRST
-    function update_query(new_query){
+    function search_query(new_query){
         $.ajax({
             url: "/ajax_search/",
             type: "POST",
@@ -25,27 +24,19 @@ $(document).ready(function() {
         });
     }
 
-    function search_query(new_query){
-        var str = $("#results-view").text();
-        var newstr = $.trim(str.replace(/[\t\n]+/g,' '));
-        var strArray = newstr.split("  ");
-        var newArray = [];
-        for (var i = 0; i < strArray.length; i++){
-            if (strArray[i] != ""){
-                newArray.push(strArray[i])
+    function filter_query(new_query){
+        console.log(new_query);
+        $.ajax({
+            url: "/ajax_filter/",
+            type: "POST",
+            data: {
+                'filter_text' : new_query,
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function(result){
+                $("#results-view").html(result);
             }
-        }
-
-        filteredArray = $.grep(newArray, function(n, i){
-            return (n.indexOf(new_query) > -1);
         });
-
-        for (var j = 0; j< $("#results-view").find("div").length; j++){
-            $($("#results-view").find("div")[j]).css("display","none");
-        }
-        for (var k = 0; k<filteredArray.length; k++){
-            $("#results-view").find(":contains('"+filteredArray[k]+"')").css("display","block")
-        }
     }
 
     hoverBarResize();
@@ -53,23 +44,81 @@ $(document).ready(function() {
             hoverBarResize();
         });
 
+    search_query('');
 
-    update_query('');
+    $('#user-icon').popover({
+        html:true,
+        content:'<a href="/login/"><div class="popover-custom">Login</div></a>',
+        title: 'Welcome!'
+    });
+
+    $('#user-icon-auth').popover({
+        html:true,
+        content:'<a href="/manage/"><div class="popover-custom">Manage Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+    });
+
+    $('.taxonomy-dropdown').select2({
+        placeholder: "Filter Taxonomies",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('.standard-dropdown').select2({
+        placeholder: "Filter Standards",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('.content-dropdown').select2({
+        placeholder: "Filter Content-Types",
+        allowClear: true,
+        width: '100%'
+    });
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
+        var finalFilters = {};
+        var filterList = [];
         $(this).closest('.full-button').remove();
-        search_query($("#search-query").val());
+        var filterTags = $("#filter-button-area > div").text().split("x");
+            for (var i = 0; i < filterTags.length; i++){
+                if (filterTags[i] != ""){
+                    filterList.push(filterTags[i]);
+                }
+            }
+            finalFilters["tags"] = filterList;
+            filter_query(JSON.stringify(finalFilters));
     });
     $('#search-form').on('submit', function(event){
         event.preventDefault();
         new_query = $("#search-query").val();
-        update_query(new_query);
+        search_query(new_query);
     });
 
-    $(".dropdown-menu li a").click(function(){
-        var selText = $(this).text();
-        $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
-        search_query(selText);
+    $(".dropdown").change(function(e){
+        var finalFilters = {};
+        var filterList = [];
+        var selText = $("."+e.target.className).val();
+        if (selText!=""){
+            $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
+            var filterTags = $("#filter-button-area > div").find(".filter-button");
+            for (var i = 0; i < filterTags.length; i++){
+                if (filterTags[i] != ""){
+                    filterList.push(filterTags[i].innerHTML);
+                }
+            }
+            finalFilters["tags"] = filterList;
+            filter_query(JSON.stringify(finalFilters));
+        }
     });
 
+    $("#results-view").on('click','.toggle', function () {
+        $toggleBar = $(this);
+        $content = $toggleBar.parent().find(".repo-bottom");
+        $content.slideToggle(500, function () {
+            $toggleBar.children().attr('class', function () {
+                return $content.is(":visible") ? "fa fa-chevron-up" : "fa fa-chevron-down";
+            });
+        });
+
+    });
 });

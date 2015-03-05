@@ -126,15 +126,45 @@ h2{
 }
 
 #banner-nav{
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
-    font-size: 1.2em;
     color: #fff;
-    padding: 28px 15px;
 }
 
-.nav-button{
-    padding: 0 10px;
+.nav-icon{
+    display:inline;
+    font-size: 50px;
+    text-align: center;
+}
+
+.nav-icon:hover{
+    color: #C8E6C9;
+    cursor: pointer;
+}
+
+.popover-content{
+    padding: 0;
+}
+
+.popover-custom{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 1.3em;
+    color: #4CAF50;
+    background:#fff;
+    padding:10px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: all .10s ease-in-out;
+    -moz-transition: all .10s ease-in-out;
+    -webkit-transition: all .10s ease-in-out;
+}
+
+.popover-custom:hover{
+    color: #fff;
+    background:#4CAF50;
+}
+
+.popover-title{
+    background-color:#A5D6A7;
 }
 
 .hover-bar{
@@ -207,10 +237,12 @@ h2{
 
 #search-query{
     width:93%;
+    border-radius: 5px 0 0 5px;
 }
 
 #search-button{
     width:7%;
+    border-radius: 0 5px 5px 0;
 }
 
 #advance-form{
@@ -225,18 +257,44 @@ h2{
     padding: 20px;
 }
 
+.select2 {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.toggle{
+    text-align: center;
+    background: #A5D6A7;
+    position:absolute;
+    bottom:0;
+    width: 100%;
+    cursor: pointer;
+}
+
+.repo-bottom{
+    display:none;
+    padding-bottom: 10px;
+}
+
 #results-view{
     padding-top:20px;
 }
 
 .repo-result{
+    position:relative;
     background:#FFF;
     border-radius: 5px;
     border: solid;
     border-color: #A5D6A7;
     font-family: 'Lato', sans-serif;
-    padding: 10px;
+    padding: 0;
     margin-bottom:10px;
+}
+
+.repo-content{
+    padding: 5px;
 }
 
 .repo-result a{
@@ -295,7 +353,45 @@ table td{
     width: 100%;
 }
 
+#login-form-wrapper{
+    width: 100%;
+    padding: 100px;
+}
 
+#login-form{
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 1.3em;
+    margin-left:auto;
+    margin-right: auto;
+    background: #fff;
+    width: 30%;
+    text-align: center;
+    border: solid #A5D6A7 5px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#login-form img{
+    width:100%;
+}
+
+.login-form-content{
+    padding-top: 20px;
+}
+
+#submit-button{
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+
+#invalid-message{
+    padding-bottom: 20px;
+    color: red;
+}
 
 /* ==========================================================================
    Helper classes

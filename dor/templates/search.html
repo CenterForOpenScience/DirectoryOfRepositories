@@ -24,44 +24,35 @@
         <div id="advance-form" class="col-md-8 col-md-offset-2">
             <div id="taxonomy" class="col-md-4 filter-dropdown">
                 Taxonomy
-                <div class="dropdown" id="tax-drop">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="taxonomy-drop" data-toggle="dropdown" aria-expanded="true">
-                    Filter taxonomy
-                    <span class="caret"></span>
-                  </button>
-                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="taxonomy-dropdown" id="taxonomy-dropdown">
-                      {% for tax in taxes %}
-                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ tax.name }}</a></li>
-                      {% endfor %}
-                  </ul>
+                <div class="dropdown">
+                    <select class="taxonomy-dropdown">
+                            <option></option>
+                            {% for tax in taxes %}
+                                  <option value="{{ tax.name }}">{{ tax.name }}</option>
+                            {% endfor %}
+                        </select>
                 </div>
             </div>
             <div id="standards" class="col-md-4 filter-dropdown">
                 Standards
                 <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="standards-drop" data-toggle="dropdown" aria-expanded="true">
-                    Filter standards
-                    <span class="caret"></span>
-                  </button>
-                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="standards-dropdown" id="standards-dropdown">
-                      {% for standard in standards %}
-                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ standard.name }}</a></li>
-                      {% endfor %}
-                  </ul>
+                    <select class="standard-dropdown">
+                            <option></option>
+                            {% for standard in standards %}
+                                  <option value="{{ standard.name }}">{{ standard.name }}</option>
+                            {% endfor %}
+                    </select>
                 </div>
             </div>
             <div id="content-type" class="col-md-4 filter-dropdown">
                 Content-Type
                 <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="content-drop" data-toggle="dropdown" aria-expanded="true">
-                    Filter content-type
-                    <span class="caret"></span>
-                  </button>
-                  <ul id="drop-list" class="dropdown-menu" role="menu" aria-labelledby="content-type-dropdown" id="content-type-dropdown">
-                      {% for content_type in content_types %}
-                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="selected-taxonomy">{{ content_type.name }}</a></li>
-                      {% endfor %}
-                  </ul>
+                    <select class="content-dropdown">
+                            <option></option>
+                            {% for content_type in content_types %}
+                                  <option value="{{ content_type.name }}">{{ content_type.name }}</option>
+                            {% endfor %}
+                    </select>
                 </div>
             </div>
 

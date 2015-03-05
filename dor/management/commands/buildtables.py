@@ -82,89 +82,89 @@ STANDARDS = {
 }
 
 INDEX_TERMS = {
-    '1 Humanities and Social Sciences': {
-        '11 Humanities': {
-            '101 Ancient Cultures': {
-                '10101 Prehistory': [],
-                '10102 Classical Philology': [],
-                '10103 Ancient History': [],
-                '10104 Classical Archaeology': [],
-                '10105 Egyptology and Ancient Near Eastern Studies': [],
-            },
-            '102 History': {
-                '10201 Medieval History': [],
-                '10202 Early Modern History': [],
-                '10203 Modern and Current History': [],
-                '10204 History of Science': [],
-            },
-            '103 Fine Arts, Music, Theatre and Media Studies': {
-                '10301 Art History': [],
-                '10302 Musicology': [],
-                '10303 Theatre and Media Studies': [],
-            },
-            '104 Linguistics': {
-                '10401 General and Applied Linguistics': [],
-                '10402 Individual Linguistics': [],
-                '10403 Typology, Non-European Languages, Historical Linguistics': [],
-            },
-            '105 Literary Studies': {
-                '10501 Medieval German Literature': [],
-                '10502 Modern German Literature': [],
-                '10503 European and American Literature': [],
-                '10504 General and Comparative Literature and Cultural Studies': [],
-            },
-            '106 Non-European Languages and Cultures, Social and Cultural Anthropology, Jewish Studies and Religious Studies': {
-                '10601 Social and Cultural Anthropology and Ethnology/Folklore': [],
-                '10602 Asian Studies': [],
-                '10603 African, American and Oceania Studies': [],
-                '10604 Islamic Studies, Arabian Studies, Semitic Studies': [],
-                '10605 Religious Studies and Jewish Studies': [],
-            },
-            '107 Theology': {
-                '10701 Protestant Theology': [],
-                '10702 Roman Catholic Theology': [],
-            },
-            '108 Philosophy': {
-                '10801 History of Philosophy': [],
-                '10802 Theoretical Philosophy': [],
-                '10803 Practical Philosophy': [],
-            },
-        },
-        '12 Social and Behavioural Sciences': {
-            '109 Education Sciences': {
-                '10901 General Education and Historiy of Education': [],
-                '10902 Reasearch on Teaching, Learning and Tranining': [],
-                '10903 Research on Socialization and Educational Institutions and Professions': [],
-            },
-            '110 Psychology': {
-                '11001 General, Biological and Mathematical Psychology': [],
-                '11002 Developmental and Educational Psychology': [],
-                '11003 Social Psychology, Industrial and Organisational Psychology': [],
-                '11004 Differential Psychology, Clinical Psychology, Medical Psychology, Methodology': [],
-            },
-            '111 Social Sciences': {
-                '11101 Sociological Theory': [],
-                '11102 Empirical Social Research': [],
-                '11103 Communication Science': [],
-                '11104 Political Science': [],
-            },
-            '112 Economics': {
-                '11201 Economic Theory': [],
-                '11202 Economic and Social Policy': [],
-                '11203 Public Finance': [],
-                '11204 Business Administration': [],
-                '11205 Statistics and Econometrics': [],
-                '11206 Economic and Social History': [],
-            },
-            '113 Jurisprudence': {
-                '11301 Legal and Political Philosophy, Legal History, Legal Theory': [],
-                '11302 Private Law': [],
-                '11303 Public Law': [],
-                '11304 Criminal Law and Law of Criminal Procedure': [],
-                '11305 Criminology': [],
-            },
-        },
-    },
+    # '1 Humanities and Social Sciences': {
+    #     '11 Humanities': {
+    #         '101 Ancient Cultures': {
+    #             '10101 Prehistory': [],
+    #             '10102 Classical Philology': [],
+    #             '10103 Ancient History': [],
+    #             '10104 Classical Archaeology': [],
+    #             '10105 Egyptology and Ancient Near Eastern Studies': [],
+    #         },
+    #         '102 History': {
+    #             '10201 Medieval History': [],
+    #             '10202 Early Modern History': [],
+    #             '10203 Modern and Current History': [],
+    #             '10204 History of Science': [],
+    #         },
+    #         '103 Fine Arts, Music, Theatre and Media Studies': {
+    #             '10301 Art History': [],
+    #             '10302 Musicology': [],
+    #             '10303 Theatre and Media Studies': [],
+    #         },
+    #         '104 Linguistics': {
+    #             '10401 General and Applied Linguistics': [],
+    #             '10402 Individual Linguistics': [],
+    #             '10403 Typology, Non-European Languages, Historical Linguistics': [],
+    #         },
+    #         '105 Literary Studies': {
+    #             '10501 Medieval German Literature': [],
+    #             '10502 Modern German Literature': [],
+    #             '10503 European and American Literature': [],
+    #             '10504 General and Comparative Literature and Cultural Studies': [],
+    #         },
+    #         '106 Non-European Languages and Cultures, Social and Cultural Anthropology, Jewish Studies and Religious Studies': {
+    #             '10601 Social and Cultural Anthropology and Ethnology/Folklore': [],
+    #             '10602 Asian Studies': [],
+    #             '10603 African, American and Oceania Studies': [],
+    #             '10604 Islamic Studies, Arabian Studies, Semitic Studies': [],
+    #             '10605 Religious Studies and Jewish Studies': [],
+    #         },
+    #         '107 Theology': {
+    #             '10701 Protestant Theology': [],
+    #             '10702 Roman Catholic Theology': [],
+    #         },
+    #         '108 Philosophy': {
+    #             '10801 History of Philosophy': [],
+    #             '10802 Theoretical Philosophy': [],
+    #             '10803 Practical Philosophy': [],
+    #         },
+    #     },
+    #     '12 Social and Behavioural Sciences': {
+    #         '109 Education Sciences': {
+    #             '10901 General Education and Historiy of Education': [],
+    #             '10902 Reasearch on Teaching, Learning and Tranining': [],
+    #             '10903 Research on Socialization and Educational Institutions and Professions': [],
+    #         },
+    #         '110 Psychology': {
+    #             '11001 General, Biological and Mathematical Psychology': [],
+    #             '11002 Developmental and Educational Psychology': [],
+    #             '11003 Social Psychology, Industrial and Organisational Psychology': [],
+    #             '11004 Differential Psychology, Clinical Psychology, Medical Psychology, Methodology': [],
+    #         },
+    #         '111 Social Sciences': {
+    #             '11101 Sociological Theory': [],
+    #             '11102 Empirical Social Research': [],
+    #             '11103 Communication Science': [],
+    #             '11104 Political Science': [],
+    #         },
+    #         '112 Economics': {
+    #             '11201 Economic Theory': [],
+    #             '11202 Economic and Social Policy': [],
+    #             '11203 Public Finance': [],
+    #             '11204 Business Administration': [],
+    #             '11205 Statistics and Econometrics': [],
+    #             '11206 Economic and Social History': [],
+    #         },
+    #         '113 Jurisprudence': {
+    #             '11301 Legal and Political Philosophy, Legal History, Legal Theory': [],
+    #             '11302 Private Law': [],
+    #             '11303 Public Law': [],
+    #             '11304 Criminal Law and Law of Criminal Procedure': [],
+    #             '11305 Criminology': [],
+    #         },
+    #     },
+    # },
     '2 Life Sciences': {
         '21 Biology': {
             '201 Basic Biological and Medical Research': {

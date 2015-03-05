@@ -1,9 +1,10 @@
-#from django.forms import widgets
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from dor.models import Repository, Taxonomy, Standards,\
     ContentType, Journal
 from django.contrib.auth.models import User
 from collections import OrderedDict
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -17,6 +18,7 @@ class JournalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Journal
         fields = ('name', 'repos_endorsed', 'owner')
+
 
 class TaxonomySerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,7 +35,7 @@ class StandardsSerializer(serializers.ModelSerializer):
     aidSystems = serializers.MultipleChoiceField(choices=[('AuthorClaim', 'AuthorClaim'), ('ISNI ORCID', 'ISNI ORCID'), ('ResearchedID', 'ResearchedID'), ('other', 'other'), ('none', 'none')])
     certificates = serializers.MultipleChoiceField(choices=[('CLARIN Certificate B', 'CLARIN Certificate B'), ('DIN 31644', 'DIN 31644'), ('DINI Certificate', 'DINI Certificate'), ('DRAMBORA', 'DRAMBORA'), ('DSA', 'DSA'), ('ISO 16363', 'ISO 16363'), ('ISO 16919', 'ISO 16919'), ('RatSWD', 'RatSWD'), ('TRAC', 'TRAC'), ('Trusted Digital Repository', 'Trusted Digital Repository'), ('WDS', 'WDS'), ('other', 'other')])
     syndicationTypes = serializers.MultipleChoiceField(choices=[('ATOM', 'ATOM'), ('RSS', 'RSS')])
-    
+
     def to_representation(self, instance):
         if self.context['request'].method == 'POST':
             return super(StandardsSerializer, self).to_representation(instance)
@@ -41,15 +43,16 @@ class StandardsSerializer(serializers.ModelSerializer):
             ret = OrderedDict()
             fields = [field for field in self.fields.values() if not field.write_only]
             for field in fields:
-                #TODO: Find better way of doing this
+                # TODO: Find another better way of doing this
                 if field.field_name == 'owner':
-                    ret[field.field_name] = 'http://localhost:8000/users/' + str(field.to_representation(field.get_attribute(instance))) + '/'
+                    user = User.objects.get(id=field.to_representation(field.get_attribute(instance)))
+                    ret[field.field_name] = 'http://localhost:8000' + reverse('user-detail', [user.id])
                 else:
                     ret[field.field_name] = field.get_attribute(instance)
                     if ret[field.field_name][0] == '{':
                         ret[field.field_name] = eval(ret[field.field_name])
             return ret
-    
+
     class Meta:
         model = Standards
         fields = ('databaseAccessTypes', 'accessTypes', 'dataUploadTypes',

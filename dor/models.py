@@ -6,6 +6,7 @@ from treebeard.ns_tree import NS_Node
 class Journal(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='journals')
+    url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository',)
     # add embargo_period
 
@@ -26,6 +27,7 @@ class Taxonomy(NS_Node):
             return '{}'.format(self.name)
 
     def add_new_taxonomy_item(self, new_name, root=False):
+        # This functionality should be limited to super admins
         newname = new_name
         newid = new_name.split()[0]
 

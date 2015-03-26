@@ -17,6 +17,7 @@ class Journal(models.Model):
 class Taxonomy(NS_Node):
     name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
+    associated_content = models.ManyToManyField('ContentType',)
 
     node_order_by = ['tax_id', 'name']
 

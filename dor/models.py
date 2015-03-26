@@ -26,22 +26,6 @@ class Taxonomy(NS_Node):
         else:
             return '{}'.format(self.name)
 
-    def add_new_taxonomy_item(self, new_name, root=False):
-        # This functionality should be limited to super admins
-        newname = new_name
-        newid = new_name.split()[0]
-
-        try:
-            if not root:
-                self.add_child(name=newname, tax_id=newid)
-            else:
-                Taxonomy.add_root(name=newname, tax_id=newid)
-            Taxonomy.reload()
-        except Exception as e:
-            print(e)
-            return False
-        return True
-
 
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')

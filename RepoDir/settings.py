@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'treebeard',
     'rest_framework',
     'dor',
     'rest_framework_swagger',

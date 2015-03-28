@@ -17,7 +17,9 @@ class JournalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Journal
-        fields = ('name', 'repos_endorsed', 'owner')
+        fields = ('name', 'repos_endorsed', 'owner', 'remarks',
+                  'allows_embargo_period', 'doi_provided',
+                  'links_to_publications')
 
 
 class TaxonomySerializer(serializers.ModelSerializer):

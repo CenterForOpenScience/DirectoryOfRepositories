@@ -7,8 +7,11 @@ class Journal(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='journals')
     url = models.URLField()
-    repos_endorsed = models.ManyToManyField('Repository',)
-    # add embargo_period
+    repos_endorsed = models.ManyToManyField('Repository', blank=True)
+    remarks = models.CharField(max_length=10000, default='')
+    allows_embargo_period = models.BooleanField(default=False)
+    doi_provided = models.BooleanField(default=False)
+    links_to_publications = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)

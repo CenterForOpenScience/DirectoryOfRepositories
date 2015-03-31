@@ -19,7 +19,7 @@ def api_root(request, format=None):
 
 
 class JournalViewSet(viewsets.ModelViewSet):
-    queryset = Journal.objects.all()
+    queryset = Journal.objects.all().filter(is_visible=True)
     serializer_class = JournalSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
@@ -54,7 +54,7 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    queryset = Repository.objects.all()
+    queryset = Repository.objects.all().filter(is_visible=True)
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,

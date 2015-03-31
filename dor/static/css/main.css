@@ -113,6 +113,11 @@ h2{
     padding: 0;
     margin: 0;
 }
+
+.top ul{
+    margin:0;
+}
+
 #banner {
     background: #4CAF50;
 }
@@ -245,6 +250,23 @@ h2{
     border-radius: 0 5px 5px 0;
 }
 
+.title.col-md-12{
+    padding:0;
+}
+
+.title.col-md-3{
+    padding:0 0 5px;
+}
+
+.endorse{
+    padding:0;
+    text-align:right;
+}
+
+#checked-button{
+    background: #A5D6A7;
+}
+
 #advance-form{
     background:#A5D6A7;
     border-radius: 5px;
@@ -306,11 +328,11 @@ h2{
 }
 
 #filter-button-area{
-    padding:0px 20px 10px 20px;
+    padding:0 20px 10px 20px;
     display:inline-block;
 }
 
-table td{
+.full-button table td{
     border: solid;
     border-color: #4CAF50;
     padding: 5px;
@@ -341,7 +363,13 @@ table td{
     font-family: 'Lato', sans-serif;
     font-weight: 400;
     font-size: 2em;
-    padding: 20px;
+    padding: 20px 0;
+}
+
+#form-note{
+    font-style: italic;
+    color:red;
+    padding: 0 0 10px;
 }
 
 #submission-form{
@@ -391,6 +419,43 @@ table td{
 #invalid-message{
     padding-bottom: 20px;
     color: red;
+}
+
+#manage-wrapper{
+    padding: 0 50px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 1.3em;
+}
+
+#repo-table{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#repo-table table{
+    width: 100%;
+    background: white;
+}
+
+.table-bordered {
+    border: 2px solid #A5D6A7;
+}
+
+#repo-table tr{
+    width: 100%;
+}
+
+#repo-table td{
+    width: 100%;
+}
+
+#repo-table a{
+    color: #4CAF50;
+}
+
+#repo-table a:hover{
+    text-decoration: underline;
 }
 
 /* ==========================================================================

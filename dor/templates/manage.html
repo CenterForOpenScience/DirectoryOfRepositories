@@ -3,5 +3,15 @@
 {% block title %}Manage Repositories{% endblock %}
 
 {% block content %}
-    Hello
+    <div id="manage-wrapper">
+        <h3>Select a repository to change</h3>
+        <div id="repo-table">
+            <table class="table table-bordered table-hover">
+                {% for repo in repos %}
+                    <tr><td><a href="/manage/{{ repo.id }}/">{{ repo.name }}</a></td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
 {% endblock %}

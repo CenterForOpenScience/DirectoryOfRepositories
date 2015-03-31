@@ -33,13 +33,13 @@
                         </select>
                 </div>
             </div>
-            <div id="standards" class="col-md-4 filter-dropdown">
-                Standards
+            <div id="journals" class="col-md-4 filter-dropdown">
+                Journals
                 <div class="dropdown">
-                    <select class="standard-dropdown">
+                    <select class="journal-dropdown">
                             <option></option>
-                            {% for standard in standards %}
-                                  <option value="{{ standard.name }}">{{ standard.name }}</option>
+                            {% for journal in journals %}
+                                  <option value="{{ journal.name }}">{{ journal.name }}</option>
                             {% endfor %}
                     </select>
                 </div>

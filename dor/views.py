@@ -3,13 +3,14 @@ from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerial
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, RequestContext
+from django.shortcuts import render_to_response, RequestContext, get_object_or_404
 from sub_form import RepoSubmissionForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
 from django.db.models import Q
 from django.contrib import auth
+from django.http import Http404
 from rest_framework import permissions, viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -82,11 +83,11 @@ def index(request):
 
 def login(request):
     if request.user.is_authenticated():
-        return render_to_response('index.html')
+        return render_to_response('index.html', context_instance=RequestContext(request))
     else:
         c = {}
         c.update(csrf(request))
-        return render_to_response('login.html', c)
+        return render_to_response('login.html', c, context_instance=RequestContext(request))
 
 
 def auth_view(request):
@@ -103,35 +104,37 @@ def auth_view(request):
 
 def invalid_login(request):
     if request.user.is_authenticated():
-        return render_to_response('index.html')
+        return render_to_response('index.html', context_instance=RequestContext(request))
     else:
         invalid_log = "Incorrect username or password, please try again."
         args = {}
 
         args['invalid_message'] = invalid_log
-        return render_to_response('login.html', args)
+        return render_to_response('login.html', args, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def logout(request):
     auth.logout(request)
-    return render_to_response('index.html')
+    return render_to_response('index.html', context_instance=RequestContext(request))
 
 
 def repository_list(request):
     taxes = Taxonomy.objects.all()
-    standards = Standards.objects.all()
+    # standards = Standards.objects.all()
     content_types = ContentType.objects.all()
     repos = Repository.objects.all()
+    journals = Journal.objects.all()
 
     args = {}
     args.update(csrf(request))
 
     args['repos'] = repos
     args['taxes'] = taxes
-    args['standards'] = standards
+    # args['standards'] = standards
     args['content_types'] = content_types
+    args['journals'] = journals
 
-    return render_to_response('search.html', args)
+    return render_to_response('search.html', args, context_instance=RequestContext(request))
 
 def repositorySearch(request):
     if request.POST:
@@ -139,19 +142,28 @@ def repositorySearch(request):
     else:
         search_text = ''
 
-    repos = Repository.objects.filter(name__contains=search_text)
-    taxonomies = Repository.objects.filter(accepted_taxonomy__name=search_text)
-    standard = Repository.objects.filter(standards__name=search_text)
-    content_types = Repository.objects.filter(accepted_content__name=search_text)
+    journal_list = []
 
-    final_result = list(chain(repos, taxonomies, standard, content_types))
+    repos = Repository.objects.filter(name__contains=search_text)
+    taxonomies = Repository.objects.filter(accepted_taxonomy__name__contains=search_text)
+    content_types = Repository.objects.filter(accepted_content__name__contains=search_text)
+    journals_filter = Journal.objects.filter(name__contains=search_text)
+    journals = Journal.objects.all()
+
+    if journals_filter:
+        for jour in journals_filter:
+            for jour_repo in jour.repos_endorsed.all():
+                journal_list.append(jour_repo)
+
+    final_result = list(set(chain(repos, taxonomies, journal_list, content_types)))
 
     args = {}
     args.update(csrf(request))
 
     args['repos'] = final_result
+    args['journals'] = journals
 
-    return render_to_response('ajax_search.html', args)
+    return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
 
 def repositoryFilter(request):
     if request.POST:
@@ -161,54 +173,49 @@ def repositoryFilter(request):
 
     json_text = json.loads(filtered_text)
     tag_list = []
-    for tag in json_text["tags"]:
-        tag_list.append(tag)
+    for tag_pairs in json_text:
+        tag_list.append(tag_pairs)
 
-    tax_filter_qs = Q()
-    standards_filter_qs = Q()
-    content_filter_qs = Q()
-    final_result = Q()
+    tax_filter_qs = Repository.objects.all()
+    journal_list_qs = []
 
-    for tag in tag_list:
-        tax_filter_qs = tax_filter_qs | Q(accepted_taxonomy__name=tag)
-    tax_repos = Repository.objects.filter(tax_filter_qs)
-
-    for tag in tag_list:
-        standards_filter_qs = standards_filter_qs | Q(standards__name=tag)
-    standards_repos = Repository.objects.filter(standards_filter_qs)
-
-    for tag in tag_list:
-        content_filter_qs = content_filter_qs | Q(accepted_content__name=tag)
-    content_repos = Repository.objects.filter(content_filter_qs)
-
-    if not standards_repos and not content_repos:
-        final_result = tax_repos
-
-    elif not tax_repos and not standards_repos:
-        final_result = content_repos
-
-    elif not tax_repos and not content_repos:
-        final_result = standards_repos
-
-    elif not standards_repos:
-        final_result = tax_repos & content_repos
-
-    elif not content_repos:
-        final_result = tax_repos & standards_repos
-
-    elif not tax_repos:
-        final_result = content_repos & standards_repos
-
-    else:
-        final_result = tax_repos & standards_repos & content_repos
+    if tag_list != [{}]:
+        for tuples in tag_list:
+            if tuples['type'] == "taxonomy-dropdown":
+                tax_filter_qs = tax_filter_qs.filter(accepted_taxonomy__name=tuples['tag'])
+            if tuples['type'] == "content-dropdown":
+                tax_filter_qs = tax_filter_qs.filter(accepted_content__name=tuples['tag'])
+            if tuples['type'] == "journal-dropdown":
+                current_journal = Journal.objects.filter(name=tuples['tag'])
+                for jour_repos in current_journal.values('repos_endorsed'):
+                    for current_repos in tax_filter_qs.filter(id=jour_repos['repos_endorsed']):
+                        journal_list_qs.append(current_repos)
+                tax_filter_qs = Repository.objects.filter(id__in=[j_repo.id for j_repo in journal_list_qs])
+    tax_repos = list(tax_filter_qs)
 
     args = {}
     args.update(csrf(request))
 
-    args['repos'] = final_result
+    args['repos'] = tax_repos
+    args['journals'] = Journal.objects.all()
 
-    return render_to_response('ajax_search.html', args)
+    return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
 
+@login_required(login_url='/login')
+def endorse(request):
+    endorsed_repo = request.POST.get('repo_id', '')
+    journal_id = request.POST.get('jour_id', '')
+
+    r = Repository.objects.get(pk=endorsed_repo)
+    j = Journal.objects.get(pk=journal_id)
+    j.save()
+
+    if r in j.repos_endorsed.all():
+        j.repos_endorsed.remove(r)
+    else:
+        j.repos_endorsed.add(r)
+
+    return HttpResponse(endorsed_repo)
 
 @login_required(login_url='/login/')
 def submission(request):
@@ -227,8 +234,38 @@ def submission(request):
 
     args['form'] = form
 
-    return render_to_response('submission.html', args)
+    return render_to_response('submission.html', args, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def manage(request):
-    return render_to_response('manage.html', {}, context_instance=RequestContext(request))
+    repos = Repository.objects.all()
+
+    args = {}
+    args.update(csrf(request))
+
+    args['repos'] = repos
+    return render_to_response('manage.html', args, context_instance=RequestContext(request))
+
+@login_required(login_url='/login/')
+def manage_repo(request, pk):
+    repo_instance = get_object_or_404(Repository, pk=pk)
+    form = RepoSubmissionForm(instance=repo_instance)
+    if request.POST:
+        form = RepoSubmissionForm(request.POST, instance=repo_instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/manage/')
+        else:
+            args = {}
+            args.update(csrf(request))
+
+            args['form'] = form
+            return render_to_response('manage_repo.html', args, context_instance=RequestContext(request))
+
+    args = {}
+    args.update(csrf(request))
+
+    args['form'] = form
+    args['repo'] = Repository.objects.get(pk=pk)
+
+    return render_to_response('manage_repo.html', args, context_instance=RequestContext(request))

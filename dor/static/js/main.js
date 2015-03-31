@@ -25,7 +25,6 @@ $(document).ready(function() {
     }
 
     function filter_query(new_query){
-        console.log(new_query);
         $.ajax({
             url: "/ajax_filter/",
             type: "POST",
@@ -35,6 +34,21 @@ $(document).ready(function() {
             },
             success: function(result){
                 $("#results-view").html(result);
+            }
+        });
+    }
+
+    function endorse_repo(repo_id, jour_id){
+        $.ajax({
+            url:"/endorse_repo/",
+            type: "POST",
+            data:{
+                'repo_id': repo_id,
+                'jour_id': jour_id,
+                'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function(result){
+                console.log(result)
             }
         });
     }
@@ -54,7 +68,7 @@ $(document).ready(function() {
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/manage/"><div class="popover-custom">Manage Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/submissions/"><div class="popover-custom">Submit Repositories</div></a><a href="/manage/"><div class="popover-custom">Manage Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('.taxonomy-dropdown').select2({
@@ -63,7 +77,7 @@ $(document).ready(function() {
         width: '100%'
     });
 
-    $('.standard-dropdown').select2({
+    $('.journal-dropdown').select2({
         placeholder: "Filter Standards",
         allowClear: true,
         width: '100%'
@@ -76,18 +90,21 @@ $(document).ready(function() {
     });
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
-        var finalFilters = {};
-        var filterList = [];
+        var finalFilters = [];
         $(this).closest('.full-button').remove();
-        var filterTags = $("#filter-button-area > div").text().split("x");
-            for (var i = 0; i < filterTags.length; i++){
-                if (filterTags[i] != ""){
-                    filterList.push(filterTags[i]);
+        var filterTags = $("#filter-button-area > div").find(".filter-button");
+            $.each(filterTags, function(index, value){
+                if ($(value).html() != ""){
+                    var filterTuple = {};
+                    filterTuple["type"] = (value.id);
+                    filterTuple["tag"] = (value.innerHTML);
+                    finalFilters.push(filterTuple);
                 }
-            }
-            finalFilters["tags"] = filterList;
+            });
+            console.log(JSON.stringify(finalFilters));
             filter_query(JSON.stringify(finalFilters));
     });
+
     $('#search-form').on('submit', function(event){
         event.preventDefault();
         new_query = $("#search-query").val();
@@ -95,18 +112,20 @@ $(document).ready(function() {
     });
 
     $(".dropdown").change(function(e){
-        var finalFilters = {};
-        var filterList = [];
+        var finalFilters = [];
         var selText = $("."+e.target.className).val();
         if (selText!=""){
-            $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
+            $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button" id="'+e.target.className+'">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
             var filterTags = $("#filter-button-area > div").find(".filter-button");
-            for (var i = 0; i < filterTags.length; i++){
-                if (filterTags[i] != ""){
-                    filterList.push(filterTags[i].innerHTML);
+            $.each(filterTags, function(index, value){
+                if ($(value).html() != ""){
+                    var filterTuple = {};
+                    filterTuple["type"] = (value.id);
+                    filterTuple["tag"] = (value.innerHTML);
+                    finalFilters.push(filterTuple);
                 }
-            }
-            finalFilters["tags"] = filterList;
+            });
+            console.log(JSON.stringify(finalFilters));
             filter_query(JSON.stringify(finalFilters));
         }
     });
@@ -121,4 +140,24 @@ $(document).ready(function() {
         });
 
     });
+
+    $("#results-view").on('click','.btn', function(){
+        var ids = $(this).attr("name");
+        var id_table = ids.split(" ");
+
+        var repository_id = id_table[0];
+        var journal_id = id_table[1];
+
+        endorse_repo(repository_id, journal_id);
+        
+        if($(this).attr('id') == "button"){
+            $(this).attr('id', "checked-button");
+            $($(this).find('div')[0]).html('<i class="fa fa-check-square-o fa-lg"></i> Endorse')
+        } else if($(this).attr('id') == "checked-button"){
+            $(this).attr('id', "button");
+            $($(this).find('div')[0]).html('<i class="fa fa-square-o fa-lg"></i> Endorse')
+        }
+    });
+
+
 });

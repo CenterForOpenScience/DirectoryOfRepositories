@@ -9,9 +9,6 @@ class Journal(models.Model):
     url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
     remarks = models.CharField(max_length=10000, default='')
-    allows_embargo_period = models.BooleanField(default=False)
-    doi_provided = models.BooleanField(default=False)
-    links_to_publications = models.BooleanField(default=False)
 
     is_visible = models.BooleanField(default=True)  # These should default to False in production
 
@@ -90,6 +87,9 @@ class Repository(models.Model):
     date_operational = models.DateField(default=datetime.date(1900, 1, 1))
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
+    allows_embargo_period = models.BooleanField(default=False)
+    doi_provided = models.BooleanField(default=False)
+    links_to_publications = models.BooleanField(default=False)
 
     is_visible = models.BooleanField(default=True)  # These should default to False in production
 

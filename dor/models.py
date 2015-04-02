@@ -1,9 +1,7 @@
 from django.db import models
 from django.shortcuts import render_to_response
 import datetime
-from rest_framework import fields
 from treebeard.ns_tree import NS_Node
-from dor.widgets import NestedCheckboxSelectMultiple
 
 
 class Journal(models.Model):
@@ -26,6 +24,22 @@ class Taxonomy(NS_Node):
             return '{} - {}'.format(self.get_parent().__str__(), self.name)
         else:
             return '{}'.format(self.name)
+
+    def add_new_taxonomy_item(self, new_name, root=False):
+        newname = new_name
+        newid = new_name.split()[0]
+
+        try:
+            if not root:
+                self.add_child(name=newname, tax_id=newid)
+            else:
+                Taxonomy.add_root(name=newname, tax_id=newid)
+            Taxonomy.reload()
+        except Exception as e:
+            print(e)
+            return False
+        return True
+
 
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')

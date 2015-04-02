@@ -28,3 +28,19 @@ class RepoSubmissionForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'cols':80, 'rows':10})
         }
+
+
+class TaxSubmissionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Taxonomy
+
+class ContentSubmissionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.ContentType
+
+class StandardSubmissionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Standards

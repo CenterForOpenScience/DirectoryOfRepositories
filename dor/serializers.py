@@ -24,7 +24,7 @@ class JournalSerializer(serializers.ModelSerializer):
 class TaxonomySerializer(serializers.ModelSerializer):
     class Meta:
         model = Taxonomy
-        fields = ('name', 'tax_id',)
+        fields = ('name', 'tax_id', 'associated_content')
 
 
 class StandardsSerializer(serializers.ModelSerializer):

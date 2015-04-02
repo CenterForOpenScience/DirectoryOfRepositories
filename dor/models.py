@@ -9,6 +9,7 @@ class Journal(models.Model):
     owner = models.ForeignKey('auth.User', related_name='journals')
     url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
+    is_visible = models.BooleanField(default=True)  # These should default to False in production
 
     def __str__(self):
         return str(self.name)
@@ -17,6 +18,7 @@ class Journal(models.Model):
 class Taxonomy(NS_Node):
     name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
+    associated_content = models.ManyToManyField('ContentType',)
 
     node_order_by = ['tax_id', 'name']
 
@@ -30,7 +32,6 @@ class Taxonomy(NS_Node):
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='standards')
-
     databaseAccessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed','closed'),])
     accessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('embargoed', 'embargoed'), ('restricted', 'restricted'), ('closed', 'closed')])
     dataUploadTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed', 'closed'),])
@@ -85,6 +86,7 @@ class Repository(models.Model):
     date_operational = models.DateField(default=datetime.date.today())
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
+    is_visible = models.BooleanField(default=True)  # These should default to False in production
     remarks = models.CharField(max_length=10000, default='')
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)

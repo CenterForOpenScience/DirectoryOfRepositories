@@ -1,37 +1,34 @@
 {% extends "base.html" %}
 
-{% block title %}Manage Repositories{% endblock %}
+{% block title %}Site Administration{% endblock %}
 
 {% block content %}
     {% csrf_token %}
     <div id="manage-wrapper">
-        <h3>Select a repository to change</h3>
+        <h3>Directory of Repositories Management</h3>
         <div id="repo-table">
             <table class="table table-bordered table-hover">
-                <th>Repository Name:</th>
-                <th>Embargo</th>
-                {% for repo in repos %}
+                <th>Select group:</th>
                     <tr>
                         <td>
-                            <a href="/manage/{{ repo.id }}/">{{ repo.name }}</a>
+                            <a href="/manage/Repositories/">Repositories</a>
                         </td>
-                    <td>
-                        {% if repo.allows_embargo_period %}
-                        <button type="button" class="btn btn-default btn-md" id="button" name="{{ repo.id }}">
-                            <div id="button-content-check">
-                                <i class="fa fa-square-o fa-lg"></i> Approve
-                            </div>
-                        </button>
-                        {% else %}
-                            <button type="button" class="btn btn-default btn-md" id="checked-button" name="{{ repo.id }}">
-                                <div id="button-content-check">
-                                    <i class="fa fa-check-square-o fa-lg"></i> Approved
-                                </div>
-                            </button>
-                        {% endif %}
-                    </td>
                     </tr>
-                {% endfor %}
+                    <tr>
+                        <td>
+                            <a href="/manage/Data-Types/">Data-Types</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="/manage/Standards/">Standards</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="/manage/Taxonomies/">Taxonomies</a>
+                        </td>
+                    </tr>
             </table>
         </div>
     </div>

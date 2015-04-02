@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Manage {{ title }}{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <div id="manage-wrapper">
+        <h3>Select from {{ title }}</h3>
+        <div id="repo-table">
+            <table class="table table-bordered table-hover">
+                <th>Name:</th>
+                <th>Add</th>
+                {% for group in groups %}
+                    <tr>
+                        <td>
+                            <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
+                        </td>
+                        <td>
+                            Test
+                        </td>
+{#                    <td>#}
+{#                        {% if group.allows_embargo_period %}#}
+{#                        <button type="button" class="btn btn-default btn-md" id="button" name="{{ repo.id }}">#}
+{#                            <div id="button-content-check">#}
+{#                                <i class="fa fa-square-o fa-lg"></i> Approve#}
+{#                            </div>#}
+{#                        </button>#}
+{#                        {% else %}#}
+{#                            <button type="button" class="btn btn-default btn-md" id="checked-button" name="{{ repo.id }}">#}
+{#                                <div id="button-content-check">#}
+{#                                    <i class="fa fa-check-square-o fa-lg"></i> Approved#}
+{#                                </div>#}
+{#                            </button>#}
+{#                        {% endif %}#}
+{#                    </td>#}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

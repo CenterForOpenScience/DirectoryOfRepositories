@@ -5,7 +5,7 @@
 {% block content %}
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">Manage Form</div>
-        <form action="/manage/{{ repo.id }}/" method="post" class="form-horizontal" role="form">
+        <form action="/manage/{{ title }}/{{ group.id }}/" method="post" class="form-horizontal" role="form">
         {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">

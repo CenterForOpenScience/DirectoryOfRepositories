@@ -4,7 +4,7 @@ from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import RepoSubmissionForm
+from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -25,7 +25,7 @@ def api_root(request, format=None):
 
 
 class JournalViewSet(viewsets.ModelViewSet):
-    queryset = Journal.objects.all()
+    queryset = Journal.objects.filter(is_visible=True)
     serializer_class = JournalSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
@@ -60,7 +60,7 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    queryset = Repository.objects.all()
+    queryset = Repository.objects.filter(is_visible=True)
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,
@@ -239,13 +239,32 @@ def submission(request):
 
 @login_required(login_url='/login/')
 def manage(request):
-    repos = Repository.objects.all()
+    return render_to_response('manage.html', context_instance=RequestContext(request))
+
+def manage_group(request, title):
+
+    if title == 'Repositories':
+        groups = Repository.objects.all()
+        this_title = 'Repositories'
+    elif title == 'Data-Types':
+        groups = ContentType.objects.all()
+        this_title = 'Data-Types'
+    elif title == 'Standards':
+        groups = Standards.objects.all()
+        this_title = 'Standards'
+    elif title == 'Taxonomies':
+        groups = Taxonomy.objects.all()
+        this_title = 'Taxonomies'
+    else:
+        return HttpResponseRedirect('/manage/')
 
     args = {}
     args.update(csrf(request))
 
-    args['repos'] = repos
-    return render_to_response('manage.html', args, context_instance=RequestContext(request))
+    args['groups'] = groups
+    args['title'] = this_title
+
+    return render_to_response('manage_template.html', args, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def approve_embargo(request):
@@ -263,25 +282,80 @@ def approve_embargo(request):
     return HttpResponse(approved_repo)
 
 @login_required(login_url='/login/')
-def manage_repo(request, pk):
-    repo_instance = get_object_or_404(Repository, pk=pk)
-    form = RepoSubmissionForm(instance=repo_instance)
-    if request.POST:
-        form = RepoSubmissionForm(request.POST, instance=repo_instance)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/manage/')
-        else:
-            args = {}
-            args.update(csrf(request))
+def manage_form(request, title, pk):
 
-            args['form'] = form
-            return render_to_response('manage_repo.html', args, context_instance=RequestContext(request))
+    if title == 'Repositories':
+        this_title = 'Repositories'
+        repo_instance = get_object_or_404(Repository, pk=pk)
+        group = Repository.objects.get(pk=pk)
+        form = RepoSubmissionForm(instance=repo_instance)
+        if request.POST:
+            form = RepoSubmissionForm(request.POST, instance=repo_instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/manage/'+title+"/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+    elif title == 'Data-Types':
+        this_title = 'Data-Types'
+        content_instance = get_object_or_404(ContentType, pk=pk)
+        group = ContentType.objects.get(pk=pk)
+        form = ContentSubmissionForm(instance=content_instance)
+        if request.POST:
+            form = ContentSubmissionForm(request.POST, instance=content_instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/manage/'+title+"/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+    elif title == 'Standards':
+        this_title = 'Standards'
+        standard_instance = get_object_or_404(Standards, pk=pk)
+        group = Standards.objects.get(pk=pk)
+        form = StandardSubmissionForm(instance=standard_instance)
+        if request.POST:
+            form = StandardSubmissionForm(request.POST, instance=standard_instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/manage/'+title+"/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+    elif title == 'Taxonomies':
+        this_title = 'Taxonomies'
+        tax_instance = get_object_or_404(Taxonomy, pk=pk)
+        group = Taxonomy.objects.get(pk=pk)
+        form = TaxSubmissionForm(instance=tax_instance)
+        if request.POST:
+            form = TaxSubmissionForm(request.POST, instance=tax_instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/manage/'+title+"/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/manage/'+title+'/')
 
     args = {}
     args.update(csrf(request))
 
     args['form'] = form
-    args['repo'] = Repository.objects.get(pk=pk)
+    args['group'] = group
+    args['title'] = this_title
 
-    return render_to_response('manage_repo.html', args, context_instance=RequestContext(request))
+    return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))

@@ -254,7 +254,7 @@ h2{
     padding:0;
 }
 
-.title.col-md-3{
+.title.col-md-4{
     padding:0 0 5px;
 }
 
@@ -431,6 +431,11 @@ h2{
 #repo-table{
     margin-left:auto;
     margin-right:auto;
+}
+
+#repo-table th{
+    color:black;
+    background: #A5D6A7;
 }
 
 #repo-table table{

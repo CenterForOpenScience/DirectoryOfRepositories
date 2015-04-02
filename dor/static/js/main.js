@@ -53,6 +53,20 @@ $(document).ready(function() {
         });
     }
 
+    function approve_embargo_repo(repo_id){
+        $.ajax({
+            url:"/approve_embargo_repo/",
+            type: "POST",
+            data:{
+                'repo_id': repo_id,
+                'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function(result){
+                console.log(result)
+            }
+        });
+    }
+
     hoverBarResize();
     $(window).resize(function(){
             hoverBarResize();
@@ -84,7 +98,7 @@ $(document).ready(function() {
     });
 
     $('.content-dropdown').select2({
-        placeholder: "Filter Content-Types",
+        placeholder: "Filter Accepted Data-Types",
         allowClear: true,
         width: '100%'
     });
@@ -152,10 +166,24 @@ $(document).ready(function() {
         
         if($(this).attr('id') == "button"){
             $(this).attr('id', "checked-button");
-            $($(this).find('div')[0]).html('<i class="fa fa-check-square-o fa-lg"></i> Endorse')
+            $($(this).find('div')[0]).html('<i class="fa fa-check-square-o fa-lg"></i> Endorsed')
         } else if($(this).attr('id') == "checked-button"){
             $(this).attr('id', "button");
             $($(this).find('div')[0]).html('<i class="fa fa-square-o fa-lg"></i> Endorse')
+        }
+    });
+
+    $("#manage-wrapper").on('click','.btn', function(){
+        var id = $(this).attr("name");
+
+        approve_embargo_repo(id);
+
+        if($(this).attr('id') == "button"){
+            $(this).attr('id', "checked-button");
+            $($(this).find('div')[0]).html('<i class="fa fa-check-square-o fa-lg"></i> Approved')
+        } else if($(this).attr('id') == "checked-button"){
+            $(this).attr('id', "button");
+            $($(this).find('div')[0]).html('<i class="fa fa-square-o fa-lg"></i> Approve')
         }
     });
 

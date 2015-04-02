@@ -201,7 +201,7 @@ def repositoryFilter(request):
 
     return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
 
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 def endorse(request):
     endorsed_repo = request.POST.get('repo_id', '')
     journal_id = request.POST.get('jour_id', '')
@@ -245,6 +245,21 @@ def manage(request):
 
     args['repos'] = repos
     return render_to_response('manage.html', args, context_instance=RequestContext(request))
+
+@login_required(login_url='/login/')
+def approve_embargo(request):
+    approved_repo = request.POST.get('repo_id', '')
+
+    r = Repository.objects.get(pk=approved_repo)
+
+    if r.allows_embargo_period:
+        r.allows_embargo_period = False
+        r.save()
+    else:
+        r.allows_embargo_period = True
+        r.save()
+
+    return HttpResponse(approved_repo)
 
 @login_required(login_url='/login/')
 def manage_repo(request, pk):

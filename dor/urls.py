@@ -46,5 +46,6 @@ urlpatterns = (
     url(r'^manage/(?P<pk>[0-9]+)/$', 'dor.views.manage_repo'),
     url(r'^api/repos/$', api.RepoList.as_view()),
     url(r'^api/repos/(?P<pk>[0-9]+)/$', api.RepoDetail.as_view()),
-    url(r'^endorse_repo/$', 'dor.views.endorse')
+    url(r'^endorse_repo/$', 'dor.views.endorse'),
+    url(r'^approve_embargo_repo/$', 'dor.views.approve_embargo')
 )

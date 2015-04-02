@@ -14,7 +14,7 @@ class RepoSubmissionForm(forms.ModelForm):
             'url': 'Url*',
             'persistent_url': 'Persistent Url*',
             'accepted_taxonomy': 'Accepted Taxonomy*',
-            'accepted_content': 'Accepted Content*',
+            'accepted_content': 'Accepted Data-Types*',
             'standards': 'Standards*',
             'hosting_institution': 'Hosting Institution',
             'institution_country': 'Institution Country',

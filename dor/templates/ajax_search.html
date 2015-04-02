@@ -1,20 +1,21 @@
 {% for repo in repos %}
+   {% if not repo.allows_embargo_period %}
     <div class="row">
         <div class="repo-result col-md-12 animated fadeIn" id={{ repo }}>
             <div class="repo-content">
                 <div class="top">
                     <div class="title col-md-12">
-                        <div class="title col-md-3">
+                        <div class="title col-md-4">
                             <h2>{{ repo }}</h2>
                         </div>
                         {% if user.is_authenticated %}
-                            <div class="endorse col-md-2 col-md-offset-7">
+                            <div class="endorse col-md-2 col-md-offset-6">
                             {% for journal in journals %}
                                 {% if journal.owner == user %}
                                     {% if repo in journal.repos_endorsed.all %}
                                         <button type="button" class="btn btn-default btn-md" id="checked-button" name="{{ repo.id }} {{ journal.id }}">
                                             <div id="button-content-check">
-                                                <i class="fa fa-check-square-o fa-lg"></i> Endorse
+                                                <i class="fa fa-check-square-o fa-lg"></i> Endorsed
                                             </div>
                                         </button>
                                     {% else %}
@@ -44,7 +45,7 @@
                     <br><strong>Owner</strong>: {{ repo.owner }}
                     <br><strong>Date Operational</strong>: {{ repo.date_operational }}
                     <br><strong>Contact</strong>: {{ repo.contact }}
-                    <br><strong>Content-Types</strong>:
+                    <br><strong>Accepted Data-Types</strong>:
                         <ul>
                             {% for content in repo.accepted_content.all %}
                                 <li>{{ content }}</li>
@@ -75,6 +76,7 @@
             <div class="toggle"><i class="fa fa-chevron-down"></i></div>
         </div>
     </div>
+    {% endif %}
 {% endfor %}
 
 <script>

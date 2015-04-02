@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ad55401-9cf9-408a-b362-34b18c08665d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/management/commands/buildtables.py" afterPath="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/models.py" afterPath="$PROJECT_DIR$/dor/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/views.py" afterPath="$PROJECT_DIR$/dor/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/widgets.py" afterPath="$PROJECT_DIR$/dor/widgets.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/serializers.py" afterPath="$PROJECT_DIR$/dor/serializers.py" />
     </list>
     <ignored path="DirectoryOfRepositories.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,12 +35,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dor/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1171875" vertical-offset="45" max-vertical-offset="4395">
-              <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="4395">
+              <caret line="29" column="64" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
+              <folding>
+                <element signature="e#0#76#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -68,8 +70,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dor/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1770">
+              <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -89,12 +91,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ajax_search.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dor/templates/ajax_search.html">
+      <file leaf-file-name="serializers.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dor/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="1425">
-              <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="302" max-vertical-offset="1335">
+              <caret line="32" column="92" selection-start-line="32" selection-start-column="92" selection-end-line="32" selection-end-column="92" />
+              <folding>
+                <element signature="e#34#72#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -119,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="buildtables.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="buildtables.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9480">
-              <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+            <state vertical-scroll-proportion="8.872767" vertical-offset="0" max-vertical-offset="9435">
+              <caret line="530" column="44" selection-start-line="530" selection-start-column="44" selection-end-line="530" selection-end-column="44" />
               <folding>
                 <element signature="e#0#65#0" expanded="true" />
               </folding>
@@ -167,7 +171,6 @@
         <option value="$PROJECT_DIR$/dor/templates/templatetags/__init__.py" />
         <option value="$PROJECT_DIR$/dor/templates/templatetags/repo_tags.py" />
         <option value="$PROJECT_DIR$/dor/templates/submission.html" />
-        <option value="$PROJECT_DIR$/dor/serializers.py" />
         <option value="$PROJECT_DIR$/dor/urls.py" />
         <option value="$PROJECT_DIR$/dor/templates/manage.html" />
         <option value="$PROJECT_DIR$/dor/static/css/main.css" />
@@ -176,11 +179,12 @@
         <option value="$PROJECT_DIR$/dor/templates/search.html" />
         <option value="$PROJECT_DIR$/dor/static/js/main.js" />
         <option value="$PROJECT_DIR$/dor/templates/base.html" />
-        <option value="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
-        <option value="$PROJECT_DIR$/dor/models.py" />
         <option value="$PROJECT_DIR$/dor/permissions.py" />
         <option value="$PROJECT_DIR$/dor/widgets.py" />
         <option value="$PROJECT_DIR$/dor/views.py" />
+        <option value="$PROJECT_DIR$/dor/serializers.py" />
+        <option value="$PROJECT_DIR$/dor/models.py" />
+        <option value="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
       </list>
     </option>
   </component>
@@ -775,7 +779,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="1065">
           <caret line="47" column="69" selection-start-line="47" selection-start-column="69" selection-end-line="47" selection-end-column="69" />
-          <folding />
+          <folding>
+            <element signature="e#0#76#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -816,7 +822,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="1065">
           <caret line="47" column="69" selection-start-line="47" selection-start-column="69" selection-end-line="47" selection-end-column="69" />
-          <folding />
+          <folding>
+            <element signature="e#0#76#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -857,7 +865,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="1065">
           <caret line="47" column="69" selection-start-line="47" selection-start-column="69" selection-end-line="47" selection-end-column="69" />
-          <folding />
+          <folding>
+            <element signature="e#0#76#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1050,14 +1060,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dor/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="467" max-vertical-offset="1200">
-          <caret line="63" column="15" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dor/sub_form.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
@@ -1108,32 +1110,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9480">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dor/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dor/permissions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
           <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dor/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="4395">
+          <caret line="29" column="64" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#76#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1146,11 +1138,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dor/views.py">
+    <entry file="file://$PROJECT_DIR$/dor/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1171875" vertical-offset="45" max-vertical-offset="4395">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="302" max-vertical-offset="1335">
+          <caret line="32" column="92" selection-start-line="32" selection-start-column="92" selection-end-line="32" selection-end-column="92" />
+          <folding>
+            <element signature="e#34#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dor/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1770">
+          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="8.872767" vertical-offset="0" max-vertical-offset="9435">
+          <caret line="530" column="44" selection-start-line="530" selection-start-column="44" selection-end-line="530" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

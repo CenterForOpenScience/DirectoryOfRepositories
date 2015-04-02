@@ -7,6 +7,7 @@ from treebeard.ns_tree import NS_Node
 class Journal(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='journals')
+    url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
 
     def __str__(self):

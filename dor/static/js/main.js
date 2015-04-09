@@ -2,7 +2,6 @@ $(document).ready(function() {
 
     function hoverBarResize(){
         $(".hover-bar").css("top", function(){
-                console.log($("#landing-image").css("height"));
                 var fullheight =  $("#landing-image").css("height");
                 var finalheight = parseInt(fullheight) + 30;
                 return finalheight + "px"
@@ -53,12 +52,29 @@ $(document).ready(function() {
         });
     }
 
-    function approve_embargo_repo(repo_id){
+    function approve_embargo_repo(repo_id_list){
+        console.log("???");
         $.ajax({
             url:"/approve_embargo_repo/",
             type: "POST",
             data:{
-                'repo_id': repo_id,
+                'repo_id_list': repo_id_list,
+                'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function(result){
+                console.log(result)
+            }
+        });
+    }
+
+    function delete_item(selected_group, deleted_group_list){
+        console.log(deleted_group_list);
+        $.ajax({
+            url:"/delete_item/",
+            type: "POST",
+            data:{
+                'selected_group': selected_group,
+                'deleted_group_list': deleted_group_list,
                 'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
             },
             success: function(result){
@@ -76,13 +92,13 @@ $(document).ready(function() {
 
     $('#user-icon').popover({
         html:true,
-        content:'<a href="/login/"><div class="popover-custom">Login</div></a>',
+        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a>',
         title: 'Welcome!'
     });
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/submissions/"><div class="popover-custom">Submit Repositories</div></a><a href="/manage/"><div class="popover-custom">Site Administration</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/manage/"><div class="popover-custom">Site Administration</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('.taxonomy-dropdown').select2({
@@ -115,7 +131,6 @@ $(document).ready(function() {
                     finalFilters.push(filterTuple);
                 }
             });
-            console.log(JSON.stringify(finalFilters));
             filter_query(JSON.stringify(finalFilters));
     });
 
@@ -173,10 +188,10 @@ $(document).ready(function() {
         }
     });
 
-    $("#manage-wrapper").on('click','.btn', function(){
-        var id = $(this).attr("name");
+    $("#manage-wrapper").on('click','.approve-button', function(){
+        var id = [$(this).attr("name")];
 
-        approve_embargo_repo(id);
+        approve_embargo_repo(JSON.stringify(id));
 
         if($(this).attr('id') == "button"){
             $(this).attr('id', "checked-button");
@@ -187,5 +202,50 @@ $(document).ready(function() {
         }
     });
 
+    $("#trash-button").on('click', function(){
+        var trash_id = [$(this).closest("tr").find("input").attr("class")];
+        var trash_group = $(this).closest("tr").find("input").attr("id");
+
+        $(this).closest('tr').remove();
+        delete_item(trash_group, JSON.stringify(trash_id));
+    });
+
+    var selected = [];
+    var selected_group = "";
+
+    $("#button-apply").on('click', function(){
+        if ($("#button-apply").prev().val() == "delete"){
+            $('input:checkbox').each(function() {
+                selected_group = $(this).attr('id');
+                if (this.checked){
+                    selected.push($(this).attr('class'));
+                    $(this).closest('tr').remove();
+                }
+            });
+
+            delete_item(selected_group, JSON.stringify(selected));
+            selected = [];
+        }
+
+        else if($("#button-apply").prev().val() == "toggle-approval"){
+            $('input:checkbox').each(function() {
+                selected_group = $(this).attr('id');
+                if (this.checked){
+                    selected.push($(this).attr('class'));
+
+                    var closest_btn = $(this).closest("tr").find(".btn")
+                    if(closest_btn.attr('id') == "button"){
+                        closest_btn.attr('id', "checked-button");
+                        $(closest_btn.find('div')[0]).html('<i class="fa fa-check-square-o fa-lg"></i> Approved')
+                    } else if(closest_btn.attr('id') == "checked-button"){
+                        closest_btn.attr('id', "button");
+                        $(closest_btn.find('div')[0]).html('<i class="fa fa-square-o fa-lg"></i> Approve')
+                    }
+                }
+            });
+            approve_embargo_repo(JSON.stringify(selected));
+            selected = [];
+        }
+    });
 
 });

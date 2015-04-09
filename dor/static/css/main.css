@@ -428,6 +428,14 @@ h2{
     font-size: 1.3em;
 }
 
+#manage-wrapper h3 a{
+    color: #4CAF50;
+}
+
+#manage-wrapper h3 a:hover{
+    text-decoration: underline;
+}
+
 #repo-table{
     margin-left:auto;
     margin-right:auto;
@@ -461,6 +469,36 @@ h2{
 
 #repo-table a:hover{
     text-decoration: underline;
+}
+
+#repo-table .add-icon{
+    text-align: center;
+}
+
+#button-add{
+    float: right;
+    margin-bottom: 10px;
+}
+
+#dropdown-button-action{
+    text-align:right;
+}
+
+#button-apply{
+    color:#4CAF50;
+}
+
+.approve-button{
+    margin-top: 5px;
+}
+
+#trash-button{
+    line-height: 45px;
+}
+
+#trash-button:hover{
+    cursor: pointer;
+    color: #4CAF50;
 }
 
 /* ==========================================================================

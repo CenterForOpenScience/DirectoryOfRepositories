@@ -1,5 +1,5 @@
 from django.db import models
-from django.shortcuts import render_to_response
+from treebeard.mp_tree import MP_Node
 import datetime
 from treebeard.ns_tree import NS_Node
 
@@ -15,7 +15,7 @@ class Journal(models.Model):
         return str(self.name)
 
 
-class Taxonomy(NS_Node):
+class Taxonomy(MP_Node):
     name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
     associated_content = models.ManyToManyField('ContentType',)
@@ -67,7 +67,7 @@ class ContentType(NS_Node):
 
 
 class Repository(models.Model):
-    name = models.CharField(max_length=100, blank=True, default='')
+    name = models.CharField(max_length=100, default='')
     alt_names = models.CharField(max_length=200, blank=True, default='')
     url = models.URLField()
     persistent_url = models.URLField(null=True, default='')
@@ -88,7 +88,7 @@ class Repository(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     is_visible = models.BooleanField(default=True)  # These should default to False in production
     remarks = models.CharField(max_length=10000, default='')
-    allows_embargo_period = models.BooleanField(default=False)
+    allows_embargo_period = models.BooleanField(default=True) # Default to True?
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
 

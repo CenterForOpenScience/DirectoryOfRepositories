@@ -4,7 +4,7 @@ from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm
+from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -218,29 +218,74 @@ def endorse(request):
 
     return HttpResponse(endorsed_repo)
 
-@login_required(login_url='/login/')
-def submission(request):
-    if request.POST:
-        form = RepoSubmissionForm(request.POST)
-        if form.is_valid():
-            form.save()
 
-            return HttpResponseRedirect('/search/')
+def submit(request, title):
+    if request.user.is_authenticated():
+        if title == 'Repositories':
+            if request.POST:
+                form = RepoSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/'+title+'/')
+            else:
+                form = RepoSubmissionForm()
 
+        elif title == 'Data-Types':
+            if request.POST:
+                form = ContentSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/'+title+'/')
+            else:
+                form = ContentSubmissionForm()
+
+        elif title == 'Standards':
+            if request.POST:
+                form = StandardSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/'+title+'/')
+            else:
+                form = StandardSubmissionForm()
+
+        elif title == 'Taxonomies':
+            if request.POST:
+                form = TaxSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/'+title+'/')
+            else:
+                form = TaxSubmissionForm()
+        else:
+            return HttpResponseRedirect('/manage/')
     else:
-        form = RepoSubmissionForm()
+        if title == 'Repositories':
+            if request.POST:
+                form = AnonymousRepoSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+
+                    return render_to_response('search.html', {"submitted_note": "Successfully submitted the repository."}, context_instance=RequestContext(request))
+            else:
+                form = AnonymousRepoSubmissionForm()
+        else:
+            return HttpResponseRedirect('/search/')
 
     args = {}
     args.update(csrf(request))
 
     args['form'] = form
+    args['title'] = title
 
-    return render_to_response('submission.html', args, context_instance=RequestContext(request))
+    return render_to_response('submit.html', args, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/login/')
 def manage(request):
     return render_to_response('manage.html', context_instance=RequestContext(request))
 
+
+@login_required(login_url='/login/')
 def manage_group(request, title):
 
     if title == 'Repositories':
@@ -268,18 +313,24 @@ def manage_group(request, title):
 
 @login_required(login_url='/login/')
 def approve_embargo(request):
-    approved_repo = request.POST.get('repo_id', '')
+    approved_repo_list = request.POST.get('repo_id_list', '')
 
-    r = Repository.objects.get(pk=approved_repo)
+    json_text = json.loads(approved_repo_list)
+    id_list = []
+    for id_item in json_text:
+        id_list.append(id_item)
 
-    if r.allows_embargo_period:
-        r.allows_embargo_period = False
-        r.save()
-    else:
-        r.allows_embargo_period = True
-        r.save()
+    for id_repo in id_list:
+        r = Repository.objects.get(pk=id_repo)
 
-    return HttpResponse(approved_repo)
+        if r.allows_embargo_period:
+            r.allows_embargo_period = False
+            r.save()
+        else:
+            r.allows_embargo_period = True
+            r.save()
+
+    return HttpResponse(id_list)
 
 @login_required(login_url='/login/')
 def manage_form(request, title, pk):
@@ -359,3 +410,33 @@ def manage_form(request, title, pk):
     args['title'] = this_title
 
     return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/')
+def delete_item(request):
+    selected_group = request.POST.get('selected_group', '')
+    deleted_group_list = request.POST.get('deleted_group_list', '')
+
+    json_text = json.loads(deleted_group_list)
+    id_list = []
+    for id_item in json_text:
+        id_list.append(id_item)
+
+    if selected_group == "Repositories":
+        for repo_id in id_list:
+            Repository.objects.filter(id=repo_id).delete()
+        return HttpResponse("Repository Success")
+    elif selected_group == "Data-Types":
+        for repo_id in id_list:
+            ContentType.objects.filter(id=repo_id).delete()
+        return HttpResponse("Data-Type Success")
+    elif selected_group == "Taxonomies":
+        for repo_id in id_list:
+            Taxonomy.objects.filter(id=repo_id).delete()
+        return HttpResponse("Taxonomy Success")
+    elif selected_group == "Standards":
+        for repo_id in id_list:
+            Standards.objects.filter(id=repo_id).delete()
+        return HttpResponse("Standards Success")
+    else:
+        return HttpResponse("Wrong Group")

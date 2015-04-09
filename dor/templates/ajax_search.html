@@ -41,10 +41,14 @@
                             {% endfor %}
                         </div>
                     <strong>URL</strong>: <a href="{{ repo.url }}">{{ repo.url }}</a>
-                    <br><strong>Description</strong>: {{ repo.description }}
+                    {% if repo.description %}
+                        <br><strong>Description</strong>: {{ repo.description }}
+                    {% endif %}
                     <br><strong>Owner</strong>: {{ repo.owner }}
                     <br><strong>Date Operational</strong>: {{ repo.date_operational }}
-                    <br><strong>Contact</strong>: {{ repo.contact }}
+                    {% if repo.contact %}
+                        <br><strong>Contact</strong>: {{ repo.contact }}
+                    {% endif %}
                     <br><strong>Accepted Data-Types</strong>:
                         <ul>
                             {% for content in repo.accepted_content.all %}
@@ -53,15 +57,25 @@
                         </ul>
                     <strong>Database Access Type</strong>: {{ repo.standards.databaseAccessTypes }}
                     <br><strong>PID System</strong>: {{ repo.standards.pidSystems }}
-                    <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}
+                    {% if repos.standards.enhancedPublications %}
+                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}
+                    {% endif %}
                     <br><strong>Metadata Standard URL</strong>: {{ repo.metadataStandardName }}
                 </div>
-                <strong>Alternate Name</strong>: {{ repo.alt_names }}
+                {% if repo.alt_names %}
+                    <strong>Alternate Name</strong>: {{ repo.alt_names }}
+                {% endif %}
                 <div class="repo-bottom">
                     <strong>Size</strong>: {{ repo.size }}
+                {% if repo.hosting_institution %}
                     <br><strong>Hosting Institute</strong>: {{ repo.hosting_institution }}
+                {% endif %}
+                {% if repo_institution_country %}
                     <br><strong>Institution Country</strong>: {{ repo.institution_country }}
+                {% endif %}
+                {% if repo.databaseLicenseNames %}
                     <br><strong>Database License Name</strong>: {{ repo.databaseLicenseNames }}
+                {% endif %}
                     <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}
                     <br><strong>Certificate</strong>: {{ repo.standards.certificates }}
                     <br><strong>Metadata Standard Name</strong>: {{ repo.metadataStandardName }}
@@ -80,7 +94,6 @@
 {% endfor %}
 
 <script>
-    console.log($($(".endorsed_repo")[2]).text().replace(/\r?\n|\r/g,'') == "");
     for (var i = 0; i < $(".endorsed_repo").length; i++){
         if ($($(".endorsed_repo")[i]).text().replace(/\s/g, '') == 0){
             $($(".endorsed_repo")[i]).html("<ul><li><b>No Journal Endorsements</b></li></ul>");

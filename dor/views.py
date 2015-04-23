@@ -13,6 +13,7 @@ from rest_framework import permissions, viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from treebeard.models import Node
 import json
 
 
@@ -303,11 +304,14 @@ def manage_group(request, title):
     else:
         return HttpResponseRedirect('/manage/')
 
+    annotated_list = Taxonomy.get_annotated_list()
+
     args = {}
     args.update(csrf(request))
 
     args['groups'] = groups
     args['title'] = this_title
+    args['taxes'] = annotated_list
 
     return render_to_response('manage_template.html', args, context_instance=RequestContext(request))
 

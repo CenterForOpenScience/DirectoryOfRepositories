@@ -42,40 +42,60 @@
                         </div>
                     </div>
                 </th>
-                {% for group in groups %}
-                    <tr>
-                        <td>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" class="{{ group.id }}" id="{{ title }}">
-                                    <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
-                                </label>
-                            </div>
-                        </td>
-                        {% if title == "Repositories" %}
-                             <td>
-                                {% if group.allows_embargo_period %}
-                                <button type="button" class="btn btn-default btn-md approve-button" id="button" name="{{ group.id }}">
-                                    <div id="button-content-check">
-                                        <i class="fa fa-square-o fa-lg"></i> Approve
-                                    </div>
-                                </button>
-                                {% else %}
-                                    <button type="button" class="btn btn-default btn-md approve-button" id="checked-button" name="{{ group.id }}">
+                {% if title == "Taxonomies" %}
+                    {% for item, info in taxes %}
+                        <tr>
+                            <td>
+                                <div class="checkbox" id={{ info.level }}>
+                                    <label>
+                                        <input type="checkbox" class="{{ item.id }}" id="{{ title }}">
+                                        <a href="/manage/{{ title }}/{{ item.id }}/">{{ item.name }}</a>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div id="trash-button">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for group in groups %}
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="{{ group.id }}" id="{{ title }}">
+                                        <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
+                                    </label>
+                                </div>
+                            </td>
+                            {% if title == "Repositories" %}
+                                 <td>
+                                    {% if group.allows_embargo_period %}
+                                    <button type="button" class="btn btn-default btn-md approve-button" id="button" name="{{ group.id }}">
                                         <div id="button-content-check">
-                                            <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            <i class="fa fa-square-o fa-lg"></i> Approve
                                         </div>
                                     </button>
-                                {% endif %}
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md approve-button" id="checked-button" name="{{ group.id }}">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td>
+                                <div id="trash-button">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </div>
                             </td>
-                        {% endif %}
-                        <td>
-                            <div id="trash-button">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endif %}
             </table>
         </div>
     </div>

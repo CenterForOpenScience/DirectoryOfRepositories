@@ -202,7 +202,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#trash-button").on('click', function(){
+    $("#repo-table").on('click', '#trash-button', function(){
         var trash_id = [$(this).closest("tr").find("input").attr("class")];
         var trash_group = $(this).closest("tr").find("input").attr("id");
 
@@ -246,6 +246,11 @@ $(document).ready(function() {
             approve_embargo_repo(JSON.stringify(selected));
             selected = [];
         }
+    });
+
+    $(".checkbox").each(function(){
+        var node_tab = $(this).attr('id');
+        $(this).css("padding-left", node_tab * 25 + "px");
     });
 
 });

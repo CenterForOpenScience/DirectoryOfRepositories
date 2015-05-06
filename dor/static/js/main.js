@@ -53,7 +53,6 @@ $(document).ready(function() {
     }
 
     function approve_embargo_repo(repo_id_list){
-        console.log("???");
         $.ajax({
             url:"/approve_embargo_repo/",
             type: "POST",
@@ -68,7 +67,6 @@ $(document).ready(function() {
     }
 
     function delete_item(selected_group, deleted_group_list){
-        console.log(deleted_group_list);
         $.ajax({
             url:"/delete_item/",
             type: "POST",
@@ -79,6 +77,21 @@ $(document).ready(function() {
             },
             success: function(result){
                 console.log(result)
+            }
+        });
+    }
+
+    function add_data_type(data_type_value){
+        $.ajax({
+            url:"/add_data_type/",
+            type: "POST",
+            data:{
+                'data_type_value': data_type_value,
+                'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function(result){
+                $("#data-scroll").prepend('<div class="row"> <div class="col-md-12"><label><input name="accepted_content" type="checkbox" value="'+result.id+'"> '+result.name+'</label></div></div>');
+                $("#dataTypeEntry").val("");
             }
         });
     }
@@ -251,6 +264,63 @@ $(document).ready(function() {
     $(".checkbox").each(function(){
         var node_tab = $(this).attr('id');
         $(this).css("padding-left", node_tab * 25 + "px");
+    });
+
+    var labels = $("#tax-scroll").find("label");
+    for (var i = 0; i < labels.length; i++) {
+        var label_split = $(labels[i]).text().split("-");
+        var current_tax = $("#id_accepted_taxonomy_" + [i]);
+        current_tax.parent().css("padding-left", label_split.length * 18 + "px");
+        current_tax.parent()[0].innerHTML = '<input id="' + current_tax.attr("id") + '" name="' + current_tax.attr("name") + '" type="' + current_tax.attr("type") + '" value="' + current_tax.attr("value") + '"></input>' + label_split[label_split.length - 1];
+
+        //console.log(label_split[label_split.length-1].replace(/\D+$/g,""));
+        var label_index = $.trim(label_split[label_split.length - 1].replace(/\D+$/g, "").toString());
+
+        if (label_index.length >= 1) {
+            var next_length = $.trim($(labels[i]).parent().parent().next().text()).split("-").length;
+            if (next_length > label_index.length) {
+                $(labels[i]).addClass("parent");
+                $(labels[i]).attr("cus_id", $.trim(label_split[label_index.length-2]));
+                $(labels[i]).attr("level", label_index.length);
+            } else {
+                $(labels[i]).addClass("child");
+                $(labels[i]).attr("cus_id", $.trim(label_split[label_index.length-3]));
+                $(labels[i]).attr("level", label_index.length);
+            }
+            if($(labels[i]).attr("class") == "parent"){
+                $(labels[i]).parent().parent().append('<div class="arrow-toggle col-md-2"> <i class="fa fa-chevron-down tax-toggle"></i> </div>');
+            }
+        }
+
+        if(label_index.length > 1){
+            $(labels[i]).parent().parent().hide();
+        }
+    }
+
+    $(".tax-toggle").on('click', function(){
+        var current_parent = $.trim($(this.parentElement.previousElementSibling).text());
+        var current_level = $(this.parentElement.previousElementSibling.children).attr("level");
+
+        console.log(current_level);
+
+        if ($('[cus_id="'+current_parent+'"]').parent().parent().css("display") == "none"){
+            $(this).attr("class", "fa fa-chevron-up tax-toggle");
+            $('[cus_id="'+current_parent+'"]').parent().parent().show();
+        } else if ($('[cus_id="'+current_parent+'"]').parent().parent().css("display") == "block"){
+            $(this).attr("class", "fa fa-chevron-down tax-toggle");
+            for (var i = 5; i > current_level; i--) {
+                $('[level="'+i+'"]').parent().parent().hide();
+                for (var j = 0; j < $('[level="'+i+'"]').parent().parent().length; j++){
+                    if ($('[level="'+i+'"]').parent().parent()[j].children[1]){
+                        $($('[level="'+i+'"]').parent().parent()[j].children[1].children[0]).attr("class", "fa fa-chevron-down tax-toggle");
+                    }
+                }
+            }
+        }
+    });
+
+    $("#data-input-button").on('click', function(){
+       add_data_type($("#dataTypeEntry").val());
     });
 
 });

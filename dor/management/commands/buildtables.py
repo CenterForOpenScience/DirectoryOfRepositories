@@ -463,9 +463,9 @@ INDEX_TERMS = {
             '504 Geochemistry': {
                 '50401 Biogeochemistry': [],
                 '50402 Geochemistry': [],
-                '50403 High-Temperature Geochemistry': [],
+                '50403 High Temperature Geochemistry': [],
                 '50404 Igneous Petrology': [],
-                '50405 Low-temperature geochemistry': [],
+                '50405 Low temperature geochemistry': [],
                 '50406 Metamorphic Petrology': [],
                 '50407 Mineralogy': [],
                 '50408 Petrology': [],

@@ -1,5 +1,6 @@
 from django import forms
 from treebeard.forms import MoveNodeForm
+from models import Taxonomy
 
 from dor import models
 
@@ -27,7 +28,11 @@ class RepoSubmissionForm(forms.ModelForm):
             'remarks': 'Remarks*'
         }
         widgets = {
-            'description': forms.Textarea(attrs={'cols':80, 'rows':10})
+            'accepted_taxonomy': forms.CheckboxSelectMultiple(),
+            'accepted_content': forms.CheckboxSelectMultiple(),
+            'description': forms.Textarea(attrs={'cols':80, 'rows':10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols':80, 'rows':10}),
+            'remarks': forms.Textarea(attrs={'cols':80, 'rows':10})
         }
 
 class AnonymousRepoSubmissionForm(forms.ModelForm):
@@ -53,7 +58,11 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'remarks': 'Remarks*'
         }
         widgets = {
-            'description': forms.Textarea(attrs={'cols':80, 'rows':10})
+            'accepted_taxonomy': forms.CheckboxSelectMultiple(),
+            'accepted_content': forms.CheckboxSelectMultiple(),
+            'description': forms.Textarea(attrs={'cols':80, 'rows':10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols':80, 'rows':10}),
+            'remarks': forms.Textarea(attrs={'cols':80, 'rows':10})
         }
         exclude = ('allows_embargo_period',)
 

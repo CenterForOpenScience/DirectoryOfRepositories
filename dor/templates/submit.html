@@ -18,16 +18,319 @@
                 </div>
             {% endfor %}
             <input type="submit" value="Submit"/>
-        {% else %}
-            {% for field in form %}
+        {% elif title == "Repositories"%}
+                {{ form.non_field_errors }}
                 <div class="form-group">
-                    <label class="control-label col-md-3">{{ field.label_tag }} </label>
-                    <div class="col-md-9">
-                        {{ field }}
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Repository name that will be displayed to users.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.name.id_for_label }}" class="control-label col-md-3">Name*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.name }}
+                            </div>
+                            {% for err in form.name.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">The home page or main page for accessing or entering data.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.url.id_for_label }}" class="control-label col-md-3">Web Address/URL*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.url }}
+                            </div>
+                            {% for err in form.url.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.persistent_url.id_for_label }}" class="control-label col-md-3">Persistent Url: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.persistent_url }}
+                            </div>
+                            {% for err in form.persistent_url.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Select the terms that best describe your repository scope.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.accepted_taxonomy.id_for_label }}" class="control-label col-md-3">Accepted Taxonomy*: </label>
+                            <div class="form-field-box col-md-6">
+                                <div id="tax-scroll">
+                                    {% for term in form.accepted_taxonomy %}
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                {{ term }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% for err in form.accepted_taxonomy.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Enter key words or phrases that describe the data and data types you allow; click add after each entry; can also list data types or sources you do not accept if that provides important clarity.</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-6">
+                                <div id="data-input-form">
+                                    <input type="text" class="form-control" id="dataTypeEntry" placeholder="Can't find a specified datatype? Enter one here.">
+                                </div>
+                                <div id="data-input-button">
+                                    <i class="fa fa-plus-square-o fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.accepted_content.id_for_label }}" class="control-label col-md-3">Accepted Data Types*: </label>
+                            <div class="form-field-box col-md-6">
+                                <div id="data-scroll">
+                                    {% for term in form.accepted_content %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {{ term }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% for err in form.accepted_content.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.standards.id_for_label }}" class="control-label col-md-3">Standards: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.standards }}
+                            </div>
+                            {% for err in form.standards.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide a description of your repository.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.description.id_for_label }}" class="control-label col-md-3">Description: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.description }}
+                            </div>
+                            {% for err in form.description.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">List the hosting institution for the repository if appropriate.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.hosting_institution.id_for_label }}" class="control-label col-md-3">Hosting Institution: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.hosting_institution }}
+                            </div>
+                            {% for err in form.hosting_institution.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.institution_country.id_for_label }}" class="control-label col-md-3">Country: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.institution_country }}
+                            </div>
+                            {% for err in form.institution_country.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.owner.id_for_label }}" class="control-label col-md-3">Owner*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.owner }}
+                            </div>
+                            {% for err in form.owner.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Email address for inquiries.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.contact.id_for_label }}" class="control-label col-md-3">Contact: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.contact }}
+                            </div>
+                            {% for err in form.contact.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.metadataStandardName.id_for_label }}" class="control-label col-md-3">Metadata Standard Name*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.metadataStandardName }}
+                            </div>
+                            {% for err in form.metadataStandardName.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">URL to metadata information or instructions required as part of deposition. If there is no URL leave blank.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.metadataStandardURL.id_for_label }}" class="control-label col-md-3">Metadata Standard URL*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.metadataStandardURL }}
+                            </div>
+                            {% for err in form.metadataStandardURL.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide key information to help alert or instruct users regarding data deposition.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.metadataRemarks.id_for_label }}" class="control-label col-md-3">Metadata Remarks: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.metadataRemarks }}
+                            </div>
+                            {% for err in form.metadataRemarks.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Input the approximate number of data entries in the repository currently.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.size.id_for_label }}" class="control-label col-md-3">Size: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.size }}
+                            </div>
+                            {% for err in form.size.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide any further information.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.remarks.id_for_label }}" class="control-label col-md-3">Remarks*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.remarks }}
+                            </div>
+                            {% for err in form.remarks.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.date_operational.id_for_label }}" class="control-label col-md-3">Date Operational: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.date_operational }}
+                            </div>
+                            {% for err in form.date_operational.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if your repository can sync data release to publication date and allows reviewers secure access.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.allows_embargo_period.id_for_label }}" class="control-label col-md-3">Embargo Period: </label>
+                            <div class="form-field-box col-md-6">
+                                {% if form.allows_embargo_period %}
+                                    {{ form.allows_embargo_period }}
+                                {% else %}
+                                    <i class="fa fa-check-square"></i>
+                                {% endif %}
+                            </div>
+                            {% for err in form.allows_embargo_period.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if a doi or other permanent identifier is provided for data sets.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.doi_provided.id_for_label }}" class="control-label col-md-3">DOI Provided: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.doi_provided }}
+                            </div>
+                            {% for err in form.doi_provided.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if you link data sets to publication DOI’s.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.links_to_publications.id_for_label }}" class="control-label col-md-3">Links to Publications: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.links_to_publications }}
+                            </div>
+                            {% for err in form.links_to_publications.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
             <input type="submit" value="Submit"/>
+        {% else %}
+            {% for field in form %}
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ field.label_tag }} </label>
+                        <div class="col-md-9">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Submit"/>
         {% endif %}
         </form>
 

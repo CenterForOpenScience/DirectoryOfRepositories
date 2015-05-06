@@ -277,6 +277,7 @@ def submit(request, title):
 
     args['form'] = form
     args['title'] = title
+    args['taxes'] = Taxonomy.get_annotated_list()
 
     return render_to_response('submit.html', args, context_instance=RequestContext(request))
 
@@ -354,7 +355,7 @@ def manage_form(request, title, pk):
                 args.update(csrf(request))
 
                 args['form'] = form
-                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Data-Types':
         this_title = 'Data-Types'
         content_instance = get_object_or_404(ContentType, pk=pk)
@@ -370,7 +371,7 @@ def manage_form(request, title, pk):
                 args.update(csrf(request))
 
                 args['form'] = form
-                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Standards':
         this_title = 'Standards'
         standard_instance = get_object_or_404(Standards, pk=pk)
@@ -386,7 +387,7 @@ def manage_form(request, title, pk):
                 args.update(csrf(request))
 
                 args['form'] = form
-                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Taxonomies':
         this_title = 'Taxonomies'
         tax_instance = get_object_or_404(Taxonomy, pk=pk)
@@ -402,7 +403,7 @@ def manage_form(request, title, pk):
                 args.update(csrf(request))
 
                 args['form'] = form
-                return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/manage/'+title+'/')
 
@@ -413,7 +414,7 @@ def manage_form(request, title, pk):
     args['group'] = group
     args['title'] = this_title
 
-    return render_to_response('manage_form_template.html', args, context_instance=RequestContext(request))
+    return render_to_response('submit.html', args, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login/')
@@ -444,3 +445,19 @@ def delete_item(request):
         return HttpResponse("Standards Success")
     else:
         return HttpResponse("Wrong Group")
+
+
+def add_data_type(request):
+    if request.POST:
+        data_type_value = request.POST['data_type_value']
+    else:
+        data_type_value = ''
+
+    new_data = ContentType.create(data_type_value)
+    new_data.save()
+
+    response_data = {}
+    response_data['id'] = new_data.id
+    response_data['name'] = new_data.name
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

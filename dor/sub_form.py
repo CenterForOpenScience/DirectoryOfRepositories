@@ -9,6 +9,7 @@ class RepoSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = models.Repository
+        fields = "__all__"
         labels = {
             'name': "Name*",
             'alt_names': 'Alternate Names',
@@ -92,3 +93,4 @@ class StandardSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = models.Standards
+        fields = "__all__"

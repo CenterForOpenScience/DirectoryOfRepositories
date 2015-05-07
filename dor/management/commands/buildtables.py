@@ -425,7 +425,7 @@ INDEX_TERMS = {
 #        },
 #    },
     ############### AGU Terms ###############
-    '5 AGU Terms': {
+    '1 All Terms': {
         '51 Geoscience': {
             '501 Antarctic and Arctic Sciences': {
                 '50101 Antarctic Science': [],

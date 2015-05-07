@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ad55401-9cf9-408a-b362-34b18c08665d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/templates/ajax_search.html" afterPath="$PROJECT_DIR$/dor/templates/ajax_search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/templates/manage_template.html" afterPath="$PROJECT_DIR$/dor/templates/manage_template.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/models.py" afterPath="$PROJECT_DIR$/dor/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/sub_form.py" afterPath="$PROJECT_DIR$/dor/sub_form.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/templates/submit.html" afterPath="$PROJECT_DIR$/dor/templates/submit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/views.py" afterPath="$PROJECT_DIR$/dor/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dor/management/commands/buildtables.py" afterPath="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
     </list>
     <ignored path="DirectoryOfRepositories.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -59,13 +53,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sub_form.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sub_form.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dor/sub_form.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2053572" vertical-offset="315" max-vertical-offset="1500">
-              <caret line="66" column="29" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="1500">
+              <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="buildtables.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.21428572" vertical-offset="6375" max-vertical-offset="9435">
+              <caret line="433" column="39" selection-start-line="433" selection-start-column="39" selection-end-line="433" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#65#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -168,7 +174,6 @@
         <option value="$PROJECT_DIR$/dor/templates/search.html" />
         <option value="$PROJECT_DIR$/dor/admin.py" />
         <option value="$PROJECT_DIR$/RepoDir/settings.py" />
-        <option value="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
         <option value="$PROJECT_DIR$/dor/urls.py" />
         <option value="$PROJECT_DIR$/dor/static/css/main.css" />
         <option value="$PROJECT_DIR$/dor/static/js/main.js" />
@@ -178,6 +183,7 @@
         <option value="$PROJECT_DIR$/dor/templates/submit.html" />
         <option value="$PROJECT_DIR$/dor/models.py" />
         <option value="$PROJECT_DIR$/dor/sub_form.py" />
+        <option value="$PROJECT_DIR$/dor/management/commands/buildtables.py" />
       </list>
     </option>
   </component>
@@ -352,7 +358,7 @@
     <property name="options.lastSelected" value="configurable.group.project" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="SearchEverywhereHistoryKey" value="aj&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/ajax_search.html&#10;searc&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/search.html&#10;aja&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/ajax_search.html&#10;buil&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/management/commands/buildtables.py&#10;api&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="buil&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/management/commands/buildtables.py&#10;aj&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/ajax_search.html&#10;searc&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/search.html&#10;aja&#9;FILE&#9;file:///Users/huynh/Documents/DirectoryOfRepositories/dor/templates/ajax_search.html&#10;api&#9;null&#9;null" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -1010,13 +1016,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6768" max-vertical-offset="9405">
-          <caret line="463" column="20" selection-start-line="463" selection-start-column="20" selection-end-line="463" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dor/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.85554" vertical-offset="95" max-vertical-offset="825">
@@ -1101,10 +1100,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dor/sub_form.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2053572" vertical-offset="315" max-vertical-offset="1500">
-          <caret line="66" column="29" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="1500">
+          <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dor/management/commands/buildtables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21428572" vertical-offset="6375" max-vertical-offset="9435">
+          <caret line="433" column="39" selection-start-line="433" selection-start-column="39" selection-end-line="433" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
           </folding>
         </state>
       </provider>

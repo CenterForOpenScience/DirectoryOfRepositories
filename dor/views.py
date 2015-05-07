@@ -240,14 +240,14 @@ def submit(request, title):
             else:
                 form = ContentSubmissionForm()
 
-        elif title == 'Standards':
-            if request.POST:
-                form = StandardSubmissionForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return HttpResponseRedirect('/manage/'+title+'/')
-            else:
-                form = StandardSubmissionForm()
+        # elif title == 'Standards':
+        #     if request.POST:
+        #         form = StandardSubmissionForm(request.POST)
+        #         if form.is_valid():
+        #             form.save()
+        #             return HttpResponseRedirect('/manage/'+title+'/')
+        #     else:
+        #         form = StandardSubmissionForm()
 
         elif title == 'Taxonomies':
             if request.POST:
@@ -296,9 +296,9 @@ def manage_group(request, title):
     elif title == 'Data-Types':
         groups = ContentType.objects.all()
         this_title = 'Data-Types'
-    elif title == 'Standards':
-        groups = Standards.objects.all()
-        this_title = 'Standards'
+    # elif title == 'Standards':
+    #     groups = Standards.objects.all()
+    #     this_title = 'Standards'
     elif title == 'Taxonomies':
         groups = Taxonomy.objects.all()
         this_title = 'Taxonomies'
@@ -372,22 +372,22 @@ def manage_form(request, title, pk):
 
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
-    elif title == 'Standards':
-        this_title = 'Standards'
-        standard_instance = get_object_or_404(Standards, pk=pk)
-        group = Standards.objects.get(pk=pk)
-        form = StandardSubmissionForm(instance=standard_instance)
-        if request.POST:
-            form = StandardSubmissionForm(request.POST, instance=standard_instance)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect('/manage/'+title+"/")
-            else:
-                args = {}
-                args.update(csrf(request))
-
-                args['form'] = form
-                return render_to_response('submit.html', args, context_instance=RequestContext(request))
+    # elif title == 'Standards':
+    #     this_title = 'Standards'
+    #     standard_instance = get_object_or_404(Standards, pk=pk)
+    #     group = Standards.objects.get(pk=pk)
+    #     form = StandardSubmissionForm(instance=standard_instance)
+    #     if request.POST:
+    #         form = StandardSubmissionForm(request.POST, instance=standard_instance)
+    #         if form.is_valid():
+    #             form.save()
+    #             return HttpResponseRedirect('/manage/'+title+"/")
+    #         else:
+    #             args = {}
+    #             args.update(csrf(request))
+    #
+    #             args['form'] = form
+    #             return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Taxonomies':
         this_title = 'Taxonomies'
         tax_instance = get_object_or_404(Taxonomy, pk=pk)
@@ -439,10 +439,10 @@ def delete_item(request):
         for repo_id in id_list:
             Taxonomy.objects.filter(id=repo_id).delete()
         return HttpResponse("Taxonomy Success")
-    elif selected_group == "Standards":
-        for repo_id in id_list:
-            Standards.objects.filter(id=repo_id).delete()
-        return HttpResponse("Standards Success")
+    # elif selected_group == "Standards":
+    #     for repo_id in id_list:
+    #         Standards.objects.filter(id=repo_id).delete()
+    #     return HttpResponse("Standards Success")
     else:
         return HttpResponse("Wrong Group")
 

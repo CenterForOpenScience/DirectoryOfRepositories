@@ -20,7 +20,6 @@ class RepoSubmissionForm(forms.ModelForm):
             'standards': 'Standards*',
             'hosting_institution': 'Hosting Institution',
             'institution_country': 'Institution Country',
-            'owner': 'Owner*',
             'metadataStandardName': 'Metadata Standard Name*',
             'metadataStandardURL': 'Metadata Standard URL*',
             'metadataRemarks': 'Metadata Remarks',
@@ -31,10 +30,11 @@ class RepoSubmissionForm(forms.ModelForm):
         widgets = {
             'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
-            'description': forms.Textarea(attrs={'cols':80, 'rows':10}),
-            'metadataRemarks': forms.Textarea(attrs={'cols':80, 'rows':10}),
-            'remarks': forms.Textarea(attrs={'cols':80, 'rows':10})
+            'description': forms.Textarea(attrs={'cols':60, 'rows':10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols':60, 'rows':10}),
+            'remarks': forms.Textarea(attrs={'cols':60, 'rows':10})
         }
+        #exclude = ('standards','owner',)
 
 class AnonymousRepoSubmissionForm(forms.ModelForm):
 
@@ -50,7 +50,6 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'standards': 'Standards*',
             'hosting_institution': 'Hosting Institution',
             'institution_country': 'Institution Country',
-            'owner': 'Owner*',
             'metadataStandardName': 'Metadata Standard Name*',
             'metadataStandardURL': 'Metadata Standard URL*',
             'metadataRemarks': 'Metadata Remarks',
@@ -61,9 +60,9 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
         widgets = {
             'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
-            'description': forms.Textarea(attrs={'cols':80, 'rows':10}),
-            'metadataRemarks': forms.Textarea(attrs={'cols':80, 'rows':10}),
-            'remarks': forms.Textarea(attrs={'cols':80, 'rows':10})
+            'description': forms.Textarea(attrs={'cols':60, 'rows':10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols':60, 'rows':10}),
+            'remarks': forms.Textarea(attrs={'cols':60, 'rows':10})
         }
         exclude = ('allows_embargo_period',)
 

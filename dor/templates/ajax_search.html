@@ -5,11 +5,11 @@
             <div class="repo-content">
                 <div class="top">
                     <div class="title col-md-12">
-                        <div class="title col-md-4">
+                        <div class="title col-md-6">
                             <h2>{{ repo }}</h2>
                         </div>
                         {% if user.is_authenticated %}
-                            <div class="endorse col-md-2 col-md-offset-6">
+                            <div class="endorse col-md-2 col-md-offset-4">
                             {% for journal in journals %}
                                 {% if journal.owner == user %}
                                     {% if repo in journal.repos_endorsed.all %}
@@ -44,7 +44,7 @@
                     {% if repo.description %}
                         <br><strong>Description</strong>: {{ repo.description }}
                     {% endif %}
-                    <br><strong>Owner</strong>: {{ repo.owner }}
+{#                    <br><strong>Owner</strong>: {{ repo.owner }}#}
                     <br><strong>Date Operational</strong>: {{ repo.date_operational }}
                     {% if repo.contact %}
                         <br><strong>Contact</strong>: {{ repo.contact }}
@@ -55,12 +55,12 @@
                                 <li>{{ content }}</li>
                             {% endfor %}
                         </ul>
-                    <strong>Database Access Type</strong>: {{ repo.standards.databaseAccessTypes }}
-                    <br><strong>PID System</strong>: {{ repo.standards.pidSystems }}
-                    {% if repos.standards.enhancedPublications %}
-                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}
-                    {% endif %}
-                    <br><strong>Metadata Standard URL</strong>: {{ repo.metadataStandardName }}
+{#                    <strong>Database Access Type</strong>: {{ repo.standards.databaseAccessTypes }}#}
+{#                    <br><strong>PID System</strong>: {{ repo.standards.pidSystems }}#}
+{#                    {% if repos.standards.enhancedPublications %}#}
+{#                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}#}
+{#                    {% endif %}#}
+                    <strong>Metadata Standard URL</strong>: {{ repo.metadataStandardName }}
                 </div>
                 {% if repo.alt_names %}
                     <strong>Alternate Name</strong>: {{ repo.alt_names }}
@@ -76,8 +76,8 @@
                 {% if repo.databaseLicenseNames %}
                     <br><strong>Database License Name</strong>: {{ repo.databaseLicenseNames }}
                 {% endif %}
-                    <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}
-                    <br><strong>Certificate</strong>: {{ repo.standards.certificates }}
+{#                    <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}#}
+{#                    <br><strong>Certificate</strong>: {{ repo.standards.certificates }}#}
                     <br><strong>Metadata Standard Name</strong>: {{ repo.metadataStandardName }}
                     <br><strong>Taxonomies</strong>:
                     <ul>
@@ -87,7 +87,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="toggle"><i class="fa fa-chevron-down"></i></div>
+            <div class="toggle"><i class="toggle-button fa fa-chevron-down"></i></div>
         </div>
     </div>
     {% endif %}

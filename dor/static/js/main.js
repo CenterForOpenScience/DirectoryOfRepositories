@@ -121,7 +121,7 @@ $(document).ready(function() {
     });
 
     $('.journal-dropdown').select2({
-        placeholder: "Filter Standards",
+        placeholder: "Filter Journals",
         allowClear: true,
         width: '100%'
     });
@@ -177,7 +177,7 @@ $(document).ready(function() {
         $content = $toggleBar.parent().find(".repo-bottom");
         $content.slideToggle(500, function () {
             $toggleBar.children().attr('class', function () {
-                return $content.is(":visible") ? "fa fa-chevron-up" : "fa fa-chevron-down";
+                return $content.is(":visible") ? "toggle-button fa fa-chevron-up" : "toggle-button fa fa-chevron-down";
             });
         });
 

@@ -93,7 +93,8 @@ class Repository(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     is_visible = models.BooleanField(default=True)  # These should default to False in production
     remarks = models.CharField(max_length=10000, default='')
-    allows_embargo_period = models.BooleanField(default=True) # Default to True?
+    embargoed = models.BooleanField(default=True) # Default to True?
+    allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
 

@@ -64,7 +64,7 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': forms.Textarea(attrs={'cols':60, 'rows':10}),
             'remarks': forms.Textarea(attrs={'cols':60, 'rows':10})
         }
-        exclude = ('allows_embargo_period',)
+        exclude = ('embargoed',)
 
 
 class TaxSubmissionForm(MoveNodeForm):

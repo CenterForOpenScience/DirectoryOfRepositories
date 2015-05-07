@@ -328,11 +328,11 @@ def approve_embargo(request):
     for id_repo in id_list:
         r = Repository.objects.get(pk=id_repo)
 
-        if r.allows_embargo_period:
-            r.allows_embargo_period = False
+        if r.embargoed:
+            r.embargoed = False
             r.save()
         else:
-            r.allows_embargo_period = True
+            r.embargoed = True
             r.save()
 
     return HttpResponse(id_list)

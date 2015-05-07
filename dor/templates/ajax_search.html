@@ -1,5 +1,5 @@
 {% for repo in repos %}
-   {% if not repo.allows_embargo_period %}
+   {% if not repo.embargoed %}
     <div class="row">
         <div class="repo-result col-md-12 animated fadeIn" id={{ repo }}>
             <div class="repo-content">

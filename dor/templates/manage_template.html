@@ -73,7 +73,7 @@
                             </td>
                             {% if title == "Repositories" %}
                                  <td>
-                                    {% if group.allows_embargo_period %}
+                                    {% if group.embargoed %}
                                     <button type="button" class="btn btn-default btn-md approve-button" id="button" name="{{ group.id }}">
                                         <div id="button-content-check">
                                             <i class="fa fa-square-o fa-lg"></i> Approve

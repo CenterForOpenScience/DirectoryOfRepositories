@@ -1,6 +1,7 @@
 from rest_framework import permissions
 from django.core.exceptions import PermissionDenied
 
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
@@ -22,10 +23,13 @@ class CanCreateOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if not request.method == 'POST':
             return True
-        if not ((len(request.user.journals.all()) + len(request.user.repositorys.all()) <= 1) or request.user.username == 'admin'):
+        if not ((len(request.user.journals.all()) +
+                len(request.user.repositorys.all()) <= 1)
+                or request.user.username == 'admin'):
             obj.delete()
             raise PermissionDenied("Can create only 1 object instance per user")
-        if not ((len(request.user.standards.all()) <= 1) or request.user.username == 'admin'):
+        if not ((len(request.user.standards.all()) <= 1) or
+                request.user.username == 'admin'):
             obj.delete()
             raise PermissionDenied("Can create only 1 standards instance per user")
         else:

@@ -76,7 +76,7 @@ class TaxSubmissionForm(MoveNodeForm):
             'associated_content': 'Associated Content*',
             'position': 'Position*'
         }
-        exclude = ('path', 'depth', 'numchild')
+        exclude = ('depth', 'numchild')
 
 class ContentSubmissionForm(MoveNodeForm):
 

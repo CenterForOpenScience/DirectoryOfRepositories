@@ -9,6 +9,7 @@ class Journal(models.Model):
     owner = models.ForeignKey('auth.User', related_name='journals')
     url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
+
     is_visible = models.BooleanField(default=True)  # These should default to False in production
 
     def __str__(self):
@@ -49,7 +50,6 @@ class Standards(models.Model):
     qualityManagement = models.CharField(max_length=100, default='', choices=[('yes', 'yes'), ('no', 'no'), ('unknown', 'unknown')])
     certificates = models.CharField(max_length=100, default='', choices=[('CLARIN Certificate B', 'CLARIN Certificate B'), ('DIN 31644', 'DIN 31644'), ('DINI Certificate', 'DINI Certificate'), ('DRAMBORA', 'DRAMBORA'), ('DSA', 'DSA'), ('ISO 16363', 'ISO 16363'), ('ISO 16919', 'ISO 16919'), ('RatSWD', 'RatSWD'), ('TRAC', 'TRAC'), ('Trusted Digital Repository', 'Trusted Digital Repository'), ('WDS', 'WDS'), ('other', 'other')])
     syndicationTypes = models.CharField(max_length=100, default='', choices=[('ATOM', 'ATOM'), ('RSS', 'RSS')])
-
 
     node_order_by = ['name']
 
@@ -98,9 +98,8 @@ class Repository(models.Model):
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
 
-
     class Meta:
         ordering = ('name',)
-    
+
     def __str__(self):
         return str(self.name)

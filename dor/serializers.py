@@ -1,4 +1,3 @@
-#from django.forms import widgets
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from dor.models import Repository, Taxonomy, Standards,\
@@ -18,7 +17,7 @@ class JournalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Journal
-        fields = ('name', 'repos_endorsed', 'owner')
+        fields = ('name', 'repos_endorsed', 'owner', 'remarks')
 
 
 class TaxonomySerializer(serializers.ModelSerializer):
@@ -53,7 +52,6 @@ class StandardsSerializer(serializers.ModelSerializer):
                     if ret[field.field_name][0] == '{':
                         ret[field.field_name] = eval(ret[field.field_name])
             return ret
-
 
     class Meta:
         model = Standards

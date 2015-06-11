@@ -1,5 +1,7 @@
 from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
-from dor.serializers import UserSerializer, RepositorySerializer, TaxonomySerializer, StandardsSerializer, ContentTypeSerializer, JournalSerializer
+from dor.serializers import (UserSerializer, RepositorySerializer,
+                             TaxonomySerializer, StandardsSerializer,
+                             ContentTypeSerializer, JournalSerializer)
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -13,7 +15,6 @@ from rest_framework import permissions, viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from treebeard.models import Node
 import json
 
 
@@ -26,7 +27,7 @@ def api_root(request, format=None):
 
 
 class JournalViewSet(viewsets.ModelViewSet):
-    queryset = Journal.objects.filter(is_visible=True)
+    queryset = Journal.objects.all().filter(is_visible=True)
     serializer_class = JournalSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,
@@ -61,7 +62,7 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    queryset = Repository.objects.filter(is_visible=True)
+    queryset = Repository.objects.all().filter(is_visible=True)
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,

@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from dor.models import Taxonomy, Standards, ContentType
 from pprint import pprint
 
+
 def build_taxonomy():
     for tax in INDEX_TERMS:
         root = Taxonomy.add_root(name=tax, tax_id=int(tax.split()[0]))
@@ -511,7 +512,7 @@ INDEX_TERMS = {
                 '50806 Marine Geochemistry': [],
                 '50807 Marine Geology and Geophysics': [],
                 '50808 Marine Microbiology': [],
-                '50809 Oceanomics': [],
+                '50809 Ocean ‘omics': [],
                 '50810 Ocean biogeochemistry': [],
                 '50811 Ocean Ecology': [],
                 '50812 Ocean Modeling and Simulation': [],

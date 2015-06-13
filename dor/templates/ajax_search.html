@@ -1,5 +1,5 @@
 {% for repo in repos %}
-   {% if not repo.embargoed %}
+    {% if not repo.embargoed %}
     <div class="row">
         <div class="repo-result col-md-12 animated fadeIn" id={{ repo }}>
             <div class="repo-content">
@@ -60,7 +60,7 @@
 {#                    {% if repos.standards.enhancedPublications %}#}
 {#                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}#}
 {#                    {% endif %}#}
-                    <strong>Metadata Standard URL</strong>: {{ repo.metadataStandardName }}
+                    <strong>Metadata Information URL</strong>: {{ repo.metadataInformationUrl }}
                 </div>
                 {% if repo.alt_names %}
                     <strong>Alternate Name</strong>: {{ repo.alt_names }}
@@ -78,7 +78,6 @@
                 {% endif %}
 {#                    <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}#}
 {#                    <br><strong>Certificate</strong>: {{ repo.standards.certificates }}#}
-                    <br><strong>Metadata Standard Name</strong>: {{ repo.metadataStandardName }}
                     <br><strong>Taxonomies</strong>:
                     <ul>
                         {% for tax in repo.accepted_taxonomy.all %}

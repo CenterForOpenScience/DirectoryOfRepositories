@@ -197,25 +197,14 @@
                     </div>
                     <div class="form-block">
                         <div class="row">
-                            <label for="{{ form.metadataStandardName.id_for_label }}" class="control-label col-md-3">Metadata Standard Name*: </label>
-                            <div class="form-field-box col-md-6">
-                                {{ form.metadataStandardName }}
-                            </div>
-                            {% for err in form.metadataStandardName.errors %}
-                                <div class="form-description col-md-3">{{ err }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="form-block">
-                        <div class="row">
                             <div class="form-description col-md-offset-3 col-md-6">URL to metadata information or instructions required as part of deposition. If there is no URL leave blank.</div>
                         </div>
                         <div class="row">
-                            <label for="{{ form.metadataStandardURL.id_for_label }}" class="control-label col-md-3">Metadata Standard URL*: </label>
+                            <label for="{{ form.metadataInformationURL.id_for_label }}" class="control-label col-md-3">Metadata Information URL*: </label>
                             <div class="form-field-box col-md-6">
-                                {{ form.metadataStandardURL }}
+                                {{ form.metadataInformationURL }}
                             </div>
-                            {% for err in form.metadataStandardURL.errors %}
+                            {% for err in form.metadataInformationURL.errors %}
                                 <div class="form-description col-md-3">{{ err }}</div>
                             {% endfor %}
                         </div>

@@ -20,8 +20,7 @@ class RepoSubmissionForm(forms.ModelForm):
             'standards': 'Standards*',
             'hosting_institution': 'Hosting Institution',
             'institution_country': 'Institution Country',
-            'metadataStandardName': 'Metadata Standard Name*',
-            'metadataStandardURL': 'Metadata Standard URL*',
+            'metadataInformationURL': 'Metadata Information URL*',
             'metadataRemarks': 'Metadata Remarks',
             'size': 'Size*',
             'date_operational': 'Date Operational*',
@@ -30,9 +29,9 @@ class RepoSubmissionForm(forms.ModelForm):
         widgets = {
             'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
-            'description': forms.Textarea(attrs={'cols':60, 'rows':10}),
-            'metadataRemarks': forms.Textarea(attrs={'cols':60, 'rows':10}),
-            'remarks': forms.Textarea(attrs={'cols':60, 'rows':10})
+            'description': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
+            'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
         #exclude = ('standards','owner',)
 
@@ -50,8 +49,7 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'standards': 'Standards*',
             'hosting_institution': 'Hosting Institution',
             'institution_country': 'Institution Country',
-            'metadataStandardName': 'Metadata Standard Name*',
-            'metadataStandardURL': 'Metadata Standard URL*',
+            'metadataInformationURL': 'Metadata Information URL*',
             'metadataRemarks': 'Metadata Remarks',
             'size': 'Size*',
             'date_operational': 'Date Operational*',
@@ -78,6 +76,7 @@ class TaxSubmissionForm(MoveNodeForm):
         }
         exclude = ('depth', 'numchild')
 
+
 class ContentSubmissionForm(MoveNodeForm):
 
     class Meta:
@@ -87,6 +86,7 @@ class ContentSubmissionForm(MoveNodeForm):
             'position': 'Position*'
         }
         exclude = ('lft', 'rgt', 'tree_id', 'depth')
+
 
 class StandardSubmissionForm(forms.ModelForm):
 

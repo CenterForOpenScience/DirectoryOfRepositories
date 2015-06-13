@@ -60,12 +60,12 @@
 {#                    {% if repos.standards.enhancedPublications %}#}
 {#                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}#}
 {#                    {% endif %}#}
-                    <strong>Metadata Information URL</strong>: {{ repo.metadataInformationUrl }}
                 </div>
                 {% if repo.alt_names %}
                     <strong>Alternate Name</strong>: {{ repo.alt_names }}
                 {% endif %}
                 <div class="repo-bottom">
+                    <strong>Metadata Information URL</strong>: <a href="{{ repo.metadataInformationURL }}"> {{ repo.metadataInformationURL }} </a>
                     <br><strong>Database Certifications</strong>:
                         <ul>
                             {% for content in repo.db_certifications.all %}

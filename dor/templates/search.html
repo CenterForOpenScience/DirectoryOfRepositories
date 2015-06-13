@@ -11,6 +11,15 @@
 
 {#    {{ submitted_note }}#}
 
+    <style>
+        a.tip {
+            text-decoration: underline;
+            color: white;
+            font-size: 80%;
+            vertical-align: top;
+        }
+    </style>
+
     <div class="row">
         <div id="search-form" class="col-md-8 col-md-offset-2">
             <form class="form-inline" action="/search/" method="POST" id="search-form">
@@ -26,6 +35,9 @@
         <div id="advance-form" class="col-md-8 col-md-offset-2">
             <div id="taxonomy" class="col-md-4 filter-dropdown">
                 Taxonomy
+                <a href="#" data-toggle="tooltip" class="tip" title="Filter repositories by subject area;  You can select multiple areas.">
+                    ?
+                </a>
                 <div class="dropdown">
                     <select class="taxonomy-dropdown">
                             <option></option>
@@ -37,6 +49,9 @@
             </div>
             <div id="journals" class="col-md-4 filter-dropdown">
                 Journals
+                <a href="#" data-toggle="tooltip" class="tip" title="Filter or find repositories that are recommended or endorsed by a journal or publisher. Data may still be accepted in a repository even if not endorsed; if you have a question, please check with that journal.">
+                    ?
+                </a>
                 <div class="dropdown">
                     <select class="journal-dropdown">
                             <option></option>
@@ -48,6 +63,9 @@
             </div>
             <div id="content-type" class="col-md-4 filter-dropdown">
                 Accepted Data-Type
+                <a href="#" data-toggle="tooltip" class="tip" title="Filter of find repositories by the types of data they accept.">
+                    ?
+                </a>
                 <div class="dropdown">
                     <select class="content-dropdown">
                             <option></option>

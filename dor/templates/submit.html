@@ -304,6 +304,23 @@
                             {% endfor %}
                         </div>
                     </div>
+                    <div class="row">
+                            <label for="{{ form.db_certifications.id_for_label }}" class="control-label col-md-3">Database Certifications*: </label>
+                            <div class="form-field-box col-md-6">
+                                <div id="data-scroll">
+                                    {% for term in form.db_certifications %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {{ term }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% for err in form.db_certifications.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
                 </div>
             <input type="submit" value="Submit"/>
         {% else %}

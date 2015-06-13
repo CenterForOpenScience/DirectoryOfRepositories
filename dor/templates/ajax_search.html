@@ -66,6 +66,12 @@
                     <strong>Alternate Name</strong>: {{ repo.alt_names }}
                 {% endif %}
                 <div class="repo-bottom">
+                    <br><strong>Database Certifications</strong>:
+                        <ul>
+                            {% for content in repo.db_certifications.all %}
+                                <li>{{ content }}</li>
+                            {% endfor %}
+                        </ul>
                     <strong>Size</strong>: {{ repo.size }}
                 {% if repo.hosting_institution %}
                     <br><strong>Hosting Institute</strong>: {{ repo.hosting_institution }}

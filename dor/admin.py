@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from dor.models import Repository, Journal, Taxonomy, ContentType, Standards
+from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
 from dor.widgets import NestedCheckboxSelectMultiple
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
@@ -36,6 +36,12 @@ class StandardAdmin(admin.ModelAdmin):
         models.ManyToManyField: {'widget': NestedCheckboxSelectMultiple},
     }
     search_fields = ['name']
+
+
+class CertificationAdmin(TreeAdmin):
+    form = movenodeform_factory(Certification)
+    search_fields = ['name']
+
 
 admin.site.register(Repository, RepoAdmin)
 admin.site.register(Journal, JournalAdmin)

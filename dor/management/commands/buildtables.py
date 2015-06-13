@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from dor.models import Taxonomy, Standards, ContentType
+from dor.models import Taxonomy, Standards, ContentType, Certification
 from pprint import pprint
 
 
@@ -35,6 +35,14 @@ def build_content():
 
     pprint(ContentType.dump_bulk())
 
+def build_certs():
+    for item in CERTIFICATIONS:
+        root = Certification.add_root(name=item)
+        while(bool(CERTIFICATIONS[item])):
+            ext = root.add_child(name=CERTIFICATIONS[item].pop())
+
+    pprint(Certification.dump_bulk())
+
 
 class Command(BaseCommand):
     help = 'Builds the db table for the taxonomy tree'
@@ -43,7 +51,17 @@ class Command(BaseCommand):
         build_taxonomy()
 #        build_standards()
         build_content()
+        build_certs()
 
+
+CERTIFICATIONS = {
+    'Member, Council of data facilities': [],
+    'Certified, xxxx': [],
+    'CMMI DMM level 1': [],
+    'CMMI DMM level 2': [],
+    'CMMI DMM level 3': [],
+    'CMMI DMM level 4  ': [],
+}
 
 CONTENT_TYPE = {
     'Standard office documents': [],  # [file_extensions]
@@ -512,7 +530,7 @@ INDEX_TERMS = {
                 '50806 Marine Geochemistry': [],
                 '50807 Marine Geology and Geophysics': [],
                 '50808 Marine Microbiology': [],
-                '50809 Ocean ‘omics': [],
+                '50809 Oceanomics': [],
                 '50810 Ocean biogeochemistry': [],
                 '50811 Ocean Ecology': [],
                 '50812 Ocean Modeling and Simulation': [],

@@ -24,11 +24,13 @@ class RepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': 'Metadata Remarks',
             'size': 'Size*',
             'date_operational': 'Date Operational*',
-            'remarks': 'Remarks*'
+            'remarks': 'Remarks*',
+            'db_certifications': 'Database Certificaions*',
         }
         widgets = {
             'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
+            'db_certifications': forms.CheckboxSelectMultiple(),
             'description': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
             'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
             'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
@@ -53,14 +55,16 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': 'Metadata Remarks',
             'size': 'Size*',
             'date_operational': 'Date Operational*',
-            'remarks': 'Remarks*'
+            'remarks': 'Remarks*',
+            'db_certifications': 'Database Certificaions*',
         }
         widgets = {
             'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
-            'description': forms.Textarea(attrs={'cols':60, 'rows':10}),
-            'metadataRemarks': forms.Textarea(attrs={'cols':60, 'rows':10}),
-            'remarks': forms.Textarea(attrs={'cols':60, 'rows':10})
+            'db_certifications': forms.CheckboxSelectMultiple(),
+            'description': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
+            'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
+            'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
         exclude = ('embargoed',)
 
@@ -81,6 +85,17 @@ class ContentSubmissionForm(MoveNodeForm):
 
     class Meta:
         model = models.ContentType
+        labels = {
+            'name': 'Name*',
+            'position': 'Position*'
+        }
+        exclude = ('lft', 'rgt', 'tree_id', 'depth')
+
+
+class CertificationSubmissionForm(MoveNodeForm):
+
+    class Meta:
+        model = models.Certification
         labels = {
             'name': 'Name*',
             'position': 'Position*'

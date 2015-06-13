@@ -1,12 +1,13 @@
-from dor.models import Repository, Taxonomy, Standards, ContentType, Journal
+from dor.models import Repository, Taxonomy, Standards, ContentType, Journal, Certification
 from dor.serializers import (UserSerializer, RepositorySerializer,
                              TaxonomySerializer, StandardsSerializer,
-                             ContentTypeSerializer, JournalSerializer)
+                             ContentTypeSerializer, JournalSerializer,
+                             CertificationSerializer)
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm
+from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -16,7 +17,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 import json
-
 
 
 @api_view(('GET',))
@@ -44,6 +44,11 @@ class JournalViewSet(viewsets.ModelViewSet):
 class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ContentType.objects.all()
     serializer_class = ContentTypeSerializer
+
+
+class CertificationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Certification.objects.all()
+    serializer_class = CertificationSerializer
 
 
 class StandardsViewSet(viewsets.ModelViewSet):
@@ -116,6 +121,7 @@ def invalid_login(request):
         args['invalid_message'] = invalid_log
         return render_to_response('login.html', args, context_instance=RequestContext(request))
 
+
 @login_required(login_url='/login/')
 def logout(request):
     auth.logout(request)
@@ -139,6 +145,7 @@ def repository_list(request):
     args['journals'] = journals
 
     return render_to_response('search.html', args, context_instance=RequestContext(request))
+
 
 def repositorySearch(request):
     if request.POST:
@@ -168,6 +175,7 @@ def repositorySearch(request):
     args['journals'] = journals
 
     return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
+
 
 def repositoryFilter(request):
     if request.POST:
@@ -205,6 +213,7 @@ def repositoryFilter(request):
 
     return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
 
+
 @login_required(login_url='/login/')
 def endorse(request):
     endorsed_repo = request.POST.get('repo_id', '')
@@ -229,7 +238,7 @@ def submit(request, title):
                 form = RepoSubmissionForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return HttpResponseRedirect('/manage/'+title+'/')
+                    return HttpResponseRedirect('/manage/' + title + '/')
             else:
                 form = RepoSubmissionForm()
 
@@ -238,9 +247,18 @@ def submit(request, title):
                 form = ContentSubmissionForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return HttpResponseRedirect('/manage/'+title+'/')
+                    return HttpResponseRedirect('/manage/' + title + '/')
             else:
                 form = ContentSubmissionForm()
+
+        elif title == 'Certifications':
+            if request.POST:
+                form = CertificationSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/' + title + '/')
+            else:
+                form = CertificationSubmissionForm()
 
         # elif title == 'Standards':
         #     if request.POST:
@@ -256,7 +274,7 @@ def submit(request, title):
                 form = TaxSubmissionForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return HttpResponseRedirect('/manage/'+title+'/')
+                    return HttpResponseRedirect('/manage/' + title + '/')
             else:
                 form = TaxSubmissionForm()
         else:
@@ -304,6 +322,9 @@ def manage_group(request, title):
     elif title == 'Taxonomies':
         groups = Taxonomy.objects.all()
         this_title = 'Taxonomies'
+    elif title == 'Certifications':
+        groups = Certification.objects.all()
+        this_title = 'Certifications'
     else:
         return HttpResponseRedirect('/manage/')
 
@@ -351,7 +372,7 @@ def manage_form(request, title, pk):
             form = RepoSubmissionForm(request.POST, instance=repo_instance)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect('/manage/'+title+"/")
+                return HttpResponseRedirect('/manage/' + title + "/")
             else:
                 args = {}
                 args.update(csrf(request))
@@ -367,7 +388,7 @@ def manage_form(request, title, pk):
             form = ContentSubmissionForm(request.POST, instance=content_instance)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect('/manage/'+title+"/")
+                return HttpResponseRedirect('/manage/' + title + "/")
             else:
                 args = {}
                 args.update(csrf(request))
@@ -399,7 +420,23 @@ def manage_form(request, title, pk):
             form = TaxSubmissionForm(request.POST, instance=tax_instance)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect('/manage/'+title+"/")
+                return HttpResponseRedirect('/manage/' + title + "/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
+    elif title == 'Certifications':
+        this_title = 'Certifications'
+        cert_instance = get_object_or_404(Certification, pk=pk)
+        group = Certification.objects.get(pk=pk)
+        form = CertificationSubmissionForm(instance=tax_instance)
+        if request.POST:
+            form = CertificationSubmissionForm(request.POST, instance=cert_instance)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/manage/' + title + "/")
             else:
                 args = {}
                 args.update(csrf(request))
@@ -407,7 +444,7 @@ def manage_form(request, title, pk):
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect('/manage/'+title+'/')
+        return HttpResponseRedirect('/manage/' + title + '/')
 
     args = {}
     args.update(csrf(request))
@@ -441,6 +478,10 @@ def delete_item(request):
         for repo_id in id_list:
             Taxonomy.objects.filter(id=repo_id).delete()
         return HttpResponse("Taxonomy Success")
+    elif selected_group == "Certifications":
+        for repo_id in id_list:
+            Certification.objects.filter(id=repo_id).delete()
+        return HttpResponse("Certification Success")
     # elif selected_group == "Standards":
     #     for repo_id in id_list:
     #         Standards.objects.filter(id=repo_id).delete()
@@ -461,5 +502,21 @@ def add_data_type(request):
     response_data = {}
     response_data['id'] = new_data.id
     response_data['name'] = new_data.name
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def add_cert(request):
+    if request.POST:
+        cert_value = request.POST['cert_value']
+    else:
+        cert_value = ''
+
+    new_cert = Certification.create(cert_value)
+    new_cert.save()
+
+    response_data = {}
+    response_data['id'] = new_cert.id
+    response_data['name'] = new_cert.name
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")

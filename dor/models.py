@@ -57,6 +57,20 @@ class Standards(models.Model):
         return '{0} Standards'.format(self.name)
 
 
+class Certification(NS_Node):
+    name = models.CharField(max_length=100, default='')
+
+    node_order_by = ['name']
+
+    def __str__(self):
+        return '{0}'.format(self.name)
+
+    @classmethod
+    def create(cls, name):
+        data_type = cls(name=name, lft=1, rgt=1, tree_id=0, depth=1)
+        return data_type
+
+
 class ContentType(NS_Node):
     name = models.CharField(max_length=100, default='')
 
@@ -96,6 +110,7 @@ class Repository(models.Model):
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
+    db_certifications = models.ManyToManyField('Certification',)
 
     class Meta:
         ordering = ('name',)

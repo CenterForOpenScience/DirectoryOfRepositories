@@ -11,8 +11,11 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="inheritedJdk" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/RepoDir/static/bower_components" />
+      <excludeFolder url="file://$MODULE_DIR$/static/vendor" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 2.7.9 virtualenv at ~/.virtualenvs/dor" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">

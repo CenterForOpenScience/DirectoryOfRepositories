@@ -36,42 +36,42 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'treebeard',
     'rest_framework',
-    'dor',
     'rest_framework_swagger',
-    'pipeline'
+    'dor',
+    # 'treebeard',
+    # 'pipeline'
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
-
-AWS_PRELOAD_METADATA = True
-
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
-PIPELINE_CSSMIN_BINARY = 'cssmin'
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.slimit.SlimItCompressor'
-
-PIPELINE_CSS = {
-    'dor_css': {
-        'source_filenames': (
-            'bower_components/bootstrap/dist/css/bootstrap.css',
-            'css/main.css',
-            'css/normalize.css',
-        ),
-        'output_filename': 'min.css',
-        'variant': 'datauri',
-    },
-}
-PIPELINE_JS = {
-    'dor_js': {
-        'source_filenames': (
-            'bower_components/jquery/dist/jquery.js',
-            'bower_components/bootstrap/dist/css/bootstrap.js',
-            'js/plugins.js',
-        ),
-        'output_filename': 'min.js',
-    }
-}
+# STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+#
+# AWS_PRELOAD_METADATA = True
+#
+# PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
+# PIPELINE_CSSMIN_BINARY = 'cssmin'
+# PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.slimit.SlimItCompressor'
+#
+# PIPELINE_CSS = {
+#     'dor_css': {
+#         'source_filenames': (
+#             'bower_components/bootstrap/dist/css/bootstrap.css',
+#             'css/main.css',
+#             'css/normalize.css',
+#         ),
+#         'output_filename': 'min.css',
+#         'variant': 'datauri',
+#     },
+# }
+# PIPELINE_JS = {
+#     'dor_js': {
+#         'source_filenames': (
+#             'bower_components/jquery/dist/jquery.js',
+#             'bower_components/bootstrap/dist/css/bootstrap.js',
+#             'js/plugins.js',
+#         ),
+#         'output_filename': 'min.js',
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
@@ -122,13 +122,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATIC_ROOT = '../DirectoryOfRepositories/dor/static/min'
-STATICFILES_DIRS = (
-    '../DirectoryOfRepositories/dor/static/bower_components',
-    '../DirectoryOfRepositories/dor/static/css',
-    '../DirectoryOfRepositories/dor/static/js'
-)
-
+STATICFILES_DIRS = (os.path.join(os.path.dirname(__file__),'static'),)

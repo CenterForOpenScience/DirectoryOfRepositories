@@ -10,5 +10,6 @@ dor/migrations/*
 .idea
 **/bower_components
 node_modules
+local.py
 
 !.gitkeep

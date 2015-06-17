@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ad55401-9cf9-408a-b362-34b18c08665d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/RepoDir/settings/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/RepoDir/settings/local-dist.py" />
+    <list default="true" id="5ad55401-9cf9-408a-b362-34b18c08665d" name="Default" comment="remove .idea from project">
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/DirectoryOfRepositories.iml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
@@ -14,8 +12,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/RepoDir/settings.py" afterPath="$PROJECT_DIR$/RepoDir/settings/defaults.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <ignored path="DirectoryOfRepositories.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -536,7 +532,19 @@
       <option name="project" value="LOCAL" />
       <updated>1434493026827</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="remove .idea from project">
+      <created>1434550979450</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1434550979450</updated>
+    </task>
+    <task id="LOCAL-00004" summary="allow for local.py settings override">
+      <created>1434551016737</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1434551016737</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -603,7 +611,9 @@
     </option>
     <MESSAGE value="remove .idea folders" />
     <MESSAGE value="static files for production" />
-    <option name="LAST_COMMIT_MESSAGE" value="static files for production" />
+    <MESSAGE value="remove .idea from project" />
+    <MESSAGE value="allow for local.py settings override" />
+    <option name="LAST_COMMIT_MESSAGE" value="allow for local.py settings override" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

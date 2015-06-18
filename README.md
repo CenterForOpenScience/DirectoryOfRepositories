@@ -32,6 +32,7 @@ Alternatively, to build the database, run:
 
 ```bash
 python manage.py makemigrations
+python manage.py migrate auth
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py buildtables

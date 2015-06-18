@@ -7,7 +7,9 @@
 db.sqlite3
 dor/migrations/*
 
-#Ignore bower components.
-bower_components
+.idea
+**/bower_components
+node_modules
+local.py
 
 !.gitkeep

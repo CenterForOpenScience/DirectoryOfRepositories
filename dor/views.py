@@ -236,6 +236,7 @@ def submit(request, title):
         if title == 'Repositories':
             if request.POST:
                 form = RepoSubmissionForm(request.POST)
+                # import ipdb; ipdb.set_trace()  # override form.something() to build correct list? Waiting on AGU feedback
                 if form.is_valid():
                     form.save()
                     return HttpResponseRedirect('/manage/' + title + '/')

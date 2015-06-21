@@ -110,7 +110,7 @@ class Repository(models.Model):
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
-    db_certifications = models.ManyToManyField('Certification',)
+    db_certifications = models.ManyToManyField('Certification', blank=True)
 
     class Meta:
         ordering = ('name',)

@@ -55,12 +55,17 @@ class Command(BaseCommand):
 
 
 CERTIFICATIONS = {
-    'Member, Council of data facilities': [],
+    'Member of ESIP': [],
+    'Member of CDF': [],
+    'Member of RDA': [],
+    'Member of ICSU WDS ': [],
     'Certified, xxxx': [],
     'CMMI DMM level 1': [],
     'CMMI DMM level 2': [],
     'CMMI DMM level 3': [],
     'CMMI DMM level 4  ': [],
+    'ISO certified': [],
+
 }
 
 CONTENT_TYPE = {

@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'robots',
     'dor',
-    # 'treebeard',
+    'treebeard',
     # 'pipeline'
 )
 

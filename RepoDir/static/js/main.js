@@ -111,7 +111,7 @@ $(document).ready(function() {
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/manage/"><div class="popover-custom">Site Administration</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/admin/"><div class="popover-custom">Site Administration</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('.taxonomy-dropdown').select2({

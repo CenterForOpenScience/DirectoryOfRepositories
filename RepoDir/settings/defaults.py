@@ -22,14 +22,13 @@ SECRET_KEY = 'd370j#0dz6xa%^p7ym(9#=q64jej(r*5e#c4p$^$@r8q_geplv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = (
+    'dor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +39,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'robots',
-    'dor',
     'treebeard',
     # 'pipeline'
 )
@@ -83,10 +81,29 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
 
-TEMPLATE_CONTEXT_PROCESSORS = {
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.request'
-}
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

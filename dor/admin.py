@@ -1,10 +1,14 @@
 from django.contrib import admin
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
 from dor.widgets import NestedCheckboxSelectMultiple
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
+#from RepoDir.settings import TEMPLATES
 
+#ADMIN_TEMPLATES = '{}{}'.format(TEMPLATES[0].get('DIRS')[0], '/admin/')
 
 class RepoAdmin(admin.ModelAdmin):
     model = Repository
@@ -43,9 +47,18 @@ class CertificationAdmin(TreeAdmin):
     search_fields = ['name']
 
 
-admin.site.register(Repository, RepoAdmin)
-admin.site.register(Journal, JournalAdmin)
-admin.site.register(Taxonomy, TaxAdmin)
-admin.site.register(ContentType, ContentAdmin)
-admin.site.register(Standards, StandardAdmin)
-admin.site.register(Certification, CertificationAdmin)
+class DORAdminSite(admin.AdminSite):
+    site_title = "COPDESS"
+    #site_title = "Site Administration"
+    site_header = "COPDESS Administrative Interface"
+
+
+admin_site = DORAdminSite(name='admin')
+
+admin_site.register(User, UserAdmin)
+admin_site.register(Repository, RepoAdmin)
+admin_site.register(Journal, JournalAdmin)
+admin_site.register(Taxonomy, TaxAdmin)
+admin_site.register(ContentType, ContentAdmin)
+admin_site.register(Standards, StandardAdmin)
+admin_site.register(Certification, CertificationAdmin)

@@ -81,7 +81,8 @@ class RepositorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Repository
         fields = ('name', 'alt_names', 'url', 'persistent_url', 'accepted_taxonomy',
-                  'standards', 'owner', 'accepted_content', 'description', 'hosting_institution',
+                  #'standards', 
+                  'owner', 'accepted_content', 'description', 'hosting_institution',
                   'institution_country', 'contact', 'size', 'date_operational',
                   'metadataInformationURL', 'metadataRemarks', 'remarks',
                   'allows_embargo_period', 'doi_provided', 'links_to_publications')

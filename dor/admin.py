@@ -17,7 +17,7 @@ class RepoAdmin(admin.ModelAdmin):
 
 class JournalAdmin(admin.ModelAdmin):
     model = Journal
-    search_fields = ['name', 'repos_endorsed__name', 'repos_endorsed__standards__name']
+    search_fields = ['name', 'repos_endorsed__name'] #, 'repos_endorsed__standards__name']
 
 
 class TaxAdmin(TreeAdmin):

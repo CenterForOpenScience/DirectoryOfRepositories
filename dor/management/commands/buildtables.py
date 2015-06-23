@@ -64,7 +64,7 @@ CERTIFICATIONS = {
     'CMMI DMM level 2': [],
     'CMMI DMM level 3': [],
     'CMMI DMM level 4  ': [],
-    'ISO certified': [],
+    'ISO Certified': [],
 
 }
 

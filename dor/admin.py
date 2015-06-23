@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.forms.widgets import CheckboxSelectMultiple
 from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
 from dor.widgets import NestedCheckboxSelectMultiple
 from treebeard.admin import TreeAdmin
@@ -13,7 +14,7 @@ from treebeard.forms import movenodeform_factory
 class RepoAdmin(admin.ModelAdmin):
     model = Repository
     formfield_overrides = {
-        models.ManyToManyField: {'widget': NestedCheckboxSelectMultiple},
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
     search_fields = ['name', 'accepted_taxonomy__name',
                      'accepted_content__name']
@@ -49,7 +50,6 @@ class CertificationAdmin(TreeAdmin):
 
 class DORAdminSite(admin.AdminSite):
     site_title = "COPDESS"
-    #site_title = "Site Administration"
     site_header = "COPDESS Administrative Interface"
 
 

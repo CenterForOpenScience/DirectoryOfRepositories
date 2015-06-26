@@ -1,51 +1,43 @@
 from django.contrib import admin
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from django.forms.widgets import CheckboxSelectMultiple
 from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
 from dor.widgets import NestedCheckboxSelectMultiple
-from treebeard.admin import TreeAdmin
-from treebeard.forms import movenodeform_factory
-#from RepoDir.settings import TEMPLATES
-
-#ADMIN_TEMPLATES = '{}{}'.format(TEMPLATES[0].get('DIRS')[0], '/admin/')
+from django_mptt_admin.admin import DjangoMpttAdmin
+from mptt.models import TreeManyToManyField
 
 class RepoAdmin(admin.ModelAdmin):
     model = Repository
     formfield_overrides = {
-        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+        TreeManyToManyField: {'widget': NestedCheckboxSelectMultiple},
     }
-    search_fields = ['name', 'accepted_taxonomy__name',
-                     'accepted_content__name']
+    search_fields = ['name', 'accepted_taxonomy__obj_name',
+                     'accepted_content__obj_name']
 
 
 class JournalAdmin(admin.ModelAdmin):
     model = Journal
-    search_fields = ['name', 'repos_endorsed__name'] #, 'repos_endorsed__standards__name']
+    search_fields = ['name', 'repos_endorsed__name']  # , 'repos_endorsed__standards__name']
 
 
-class TaxAdmin(TreeAdmin):
-    form = movenodeform_factory(Taxonomy)
-    search_fields = ['name', 'tax_id']
+class TaxAdmin(DjangoMpttAdmin):
+    search_fields = ['obj_name', 'tax_id']
 
 
-class ContentAdmin(TreeAdmin):
-    form = movenodeform_factory(ContentType)
-    search_fields = ['name']
-
+class ContentAdmin(DjangoMpttAdmin):
+    search_fields = ['obj_name']
 
 class StandardAdmin(admin.ModelAdmin):
     model = Standards
-    formfield_overrides = {
-        models.ManyToManyField: {'widget': NestedCheckboxSelectMultiple},
-    }
+    #formfield_overrides = {
+    #    models.ManyToManyField: {'widget': NestedCheckboxSelectMultiple},
+    #}
     search_fields = ['name']
 
 
-class CertificationAdmin(TreeAdmin):
-    form = movenodeform_factory(Certification)
-    search_fields = ['name']
+class CertificationAdmin(DjangoMpttAdmin):
+    #form = movenodeform_factory(Certification)
+    search_fields = ['obj_name']
 
 
 class DORAdminSite(admin.AdminSite):

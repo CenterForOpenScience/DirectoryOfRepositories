@@ -1,5 +1,5 @@
 from django import forms
-from treebeard.forms import MoveNodeForm
+from mptt.forms import MoveNodeForm
 from models import Taxonomy
 
 from dor import models

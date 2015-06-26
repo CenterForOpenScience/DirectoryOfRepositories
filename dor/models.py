@@ -1,7 +1,6 @@
 from django.db import models
-from treebeard.mp_tree import MP_Node
+from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
 import datetime
-from treebeard.ns_tree import NS_Node
 
 
 class Journal(models.Model):
@@ -16,18 +15,20 @@ class Journal(models.Model):
         return str(self.name)
 
 
-class Taxonomy(MP_Node):
-    name = models.CharField(max_length=100, default='')
+class Taxonomy(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
-    associated_content = models.ManyToManyField('ContentType',)
-
-    node_order_by = ['tax_id', 'name']
+    associated_content = models.ManyToManyField('ContentType', blank=True)
 
     def __str__(self):
-        if not self.is_root():
-            return '{} - {}'.format(self.get_parent().__str__(), self.name)
-        else:
-            return '{}'.format(self.name)
+        return '{}'.format(self.obj_name)
+
+    class Meta:
+        verbose_name_plural = 'Taxonomies'
+
+    class MPTTMeta:
+        order_insertion_by = ['obj_name']
 
 
 class Standards(models.Model):
@@ -56,33 +57,28 @@ class Standards(models.Model):
     def __str__(self):
         return '{0} Standards'.format(self.name)
 
-
-class Certification(NS_Node):
-    name = models.CharField(max_length=100, default='')
-
-    node_order_by = ['name']
-
-    def __str__(self):
-        return '{0}'.format(self.name)
-
-    @classmethod
-    def create(cls, name):
-        data_type = cls(name=name, lft=1, rgt=1, tree_id=0, depth=1)
-        return data_type
+    class Meta:
+        verbose_name_plural = 'Standards'
 
 
-class ContentType(NS_Node):
-    name = models.CharField(max_length=100, default='')
+class Certification(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
 
-    node_order_by = ['name']
+    node_order_by = ['obj_name']
 
     def __str__(self):
-        return '{0}'.format(self.name)
+        return '{0}'.format(self.obj_name)
 
-    @classmethod
-    def create(cls, name):
-        data_type = cls(name=name, lft=1, rgt=1, tree_id=0, depth=1)
-        return data_type
+
+class ContentType(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
+
+    node_order_by = ['obj_name']
+
+    def __str__(self):
+        return '{0}'.format(self.obj_name)
 
 
 class Repository(models.Model):
@@ -90,8 +86,8 @@ class Repository(models.Model):
     alt_names = models.CharField(max_length=200, blank=True, default='')
     url = models.URLField()
     persistent_url = models.URLField(null=True, blank=True, default='')
-    accepted_taxonomy = models.ManyToManyField('Taxonomy',)
-    accepted_content = models.ManyToManyField('ContentType',)
+    accepted_taxonomy = TreeManyToManyField('Taxonomy',)
+    accepted_content = TreeManyToManyField('ContentType',)
     #standards = models.ForeignKey('Standards', related_name='standards', null=True)
     description = models.CharField(max_length=1000, blank=True, default='')
     hosting_institution = models.CharField(max_length=100, blank=True, default='')
@@ -106,14 +102,15 @@ class Repository(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     is_visible = models.BooleanField(default=True)  # These should default to False in production
     remarks = models.CharField(max_length=10000, default='')
-    embargoed = models.BooleanField(default=True) # Default to True?
+    embargoed = models.BooleanField(default=True)  # Default to True?
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
-    db_certifications = models.ManyToManyField('Certification', blank=True)
+    db_certifications = TreeManyToManyField('Certification', blank=True)
 
     class Meta:
         ordering = ('name',)
+        verbose_name_plural = 'Repositories'
 
     def __str__(self):
         return str(self.name)

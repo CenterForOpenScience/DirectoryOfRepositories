@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'robots',
-    'treebeard',
+    'mptt',
+    'django_mptt_admin',
     # 'pipeline'
 )
 

@@ -23,7 +23,7 @@ class JournalSerializer(serializers.ModelSerializer):
 class TaxonomySerializer(serializers.ModelSerializer):
     class Meta:
         model = Taxonomy
-        fields = ('name', 'tax_id', 'associated_content')
+        fields = ('obj_name', 'tax_id', 'associated_content')
 
 
 class StandardsSerializer(serializers.ModelSerializer):
@@ -66,13 +66,13 @@ class StandardsSerializer(serializers.ModelSerializer):
 class ContentTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentType
-        fields = ('name',)
+        fields = ('obj_name',)
 
 
 class CertificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certification
-        fields = ('name',)
+        fields = ('obj_name',)
 
 
 class RepositorySerializer(serializers.HyperlinkedModelSerializer):

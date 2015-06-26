@@ -133,11 +133,13 @@ $(document).ready(function() {
     });
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
+        debugger;
         var finalFilters = [];
         $(this).closest('.full-button').remove();
         var filterTags = $("#filter-button-area > div").find(".filter-button");
             $.each(filterTags, function(index, value){
                 if ($(value).html() != ""){
+                    debugger;
                     var filterTuple = {};
                     filterTuple["type"] = (value.id);
                     filterTuple["tag"] = (value.innerHTML);
@@ -154,13 +156,16 @@ $(document).ready(function() {
     });
 
     $(".dropdown").change(function(e){
+        debugger;
         var finalFilters = [];
         var selText = $("."+e.target.className).val();
         if (selText!=""){
             $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button" id="'+e.target.className+'">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
             var filterTags = $("#filter-button-area > div").find(".filter-button");
+            debugger;
             $.each(filterTags, function(index, value){
                 if ($(value).html() != ""){
+                    debugger;
                     var filterTuple = {};
                     filterTuple["type"] = (value.id);
                     filterTuple["tag"] = (value.innerHTML);

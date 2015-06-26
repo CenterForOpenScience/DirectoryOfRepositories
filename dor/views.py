@@ -74,8 +74,8 @@ class RepositoryViewSet(viewsets.ModelViewSet):
                           permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly, ]
     filter_backends = (filters.SearchFilter,)
-    search_fields = ['name', 'accepted_taxonomy__name',
-                     'accepted_content__name']
+    search_fields = ['name', 'accepted_taxonomy__obj_name',
+                     'accepted_content__obj_name']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -156,8 +156,8 @@ def repositorySearch(request):
     journal_list = []
 
     repos = Repository.objects.filter(name__contains=search_text)
-    taxonomies = Repository.objects.filter(accepted_taxonomy__name__contains=search_text)
-    content_types = Repository.objects.filter(accepted_content__name__contains=search_text)
+    taxonomies = Repository.objects.filter(accepted_taxonomy__obj_name__contains=search_text)
+    content_types = Repository.objects.filter(accepted_content__obj_name__contains=search_text)
     journals_filter = Journal.objects.filter(name__contains=search_text)
     journals = Journal.objects.all()
 
@@ -178,6 +178,8 @@ def repositorySearch(request):
 
 
 def repositoryFilter(request):
+    #import ipdb
+    #ipdb.set_trace()
     if request.POST:
         filtered_text = request.POST['filter_text']
     else:
@@ -190,13 +192,13 @@ def repositoryFilter(request):
 
     tax_filter_qs = Repository.objects.all()
     journal_list_qs = []
-
+    #ipdb.set_trace()
     if tag_list != [{}]:
         for tuples in tag_list:
             if tuples['type'] == "taxonomy-dropdown":
-                tax_filter_qs = tax_filter_qs.filter(accepted_taxonomy__name=tuples['tag'])
+                tax_filter_qs = tax_filter_qs.filter(accepted_taxonomy__obj_name=tuples['tag'])
             if tuples['type'] == "content-dropdown":
-                tax_filter_qs = tax_filter_qs.filter(accepted_content__name=tuples['tag'])
+                tax_filter_qs = tax_filter_qs.filter(accepted_content__obj_name=tuples['tag'])
             if tuples['type'] == "journal-dropdown":
                 current_journal = Journal.objects.filter(name=tuples['tag'])
                 for jour_repos in current_journal.values('repos_endorsed'):
@@ -298,7 +300,7 @@ def submit(request, title):
 
     args['form'] = form
     args['title'] = title
-    args['taxes'] = Taxonomy.get_annotated_list()
+    args['taxes'] = Taxonomy.objects.annotate()
 
     return render_to_response('submit.html', args, context_instance=RequestContext(request))
 
@@ -329,14 +331,12 @@ def manage_group(request, title):
     else:
         return HttpResponseRedirect('/manage/')
 
-    annotated_list = Taxonomy.get_annotated_list()
-
     args = {}
     args.update(csrf(request))
 
     args['groups'] = groups
     args['title'] = this_title
-    args['taxes'] = annotated_list
+    args['taxes'] = Taxonomy.objects.annotate()
 
     return render_to_response('manage_template.html', args, context_instance=RequestContext(request))
 

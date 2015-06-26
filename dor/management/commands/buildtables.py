@@ -1,47 +1,75 @@
-from django.core.management.base import BaseCommand, CommandError
-from dor.models import Taxonomy, Standards, ContentType, Certification
-from pprint import pprint
+from django.core.management.base import BaseCommand
+from dor.models import Taxonomy, ContentType, Certification  # , Standards,
 
 
 def build_taxonomy():
     for tax in INDEX_TERMS:
-        root = Taxonomy.add_root(name=tax, tax_id=int(tax.split()[0]))
+        root = Taxonomy(parent=None)
+        root.save()
+        root.obj_name = tax
+        root.tax_id = int(tax.split()[0])
+        root.save()
         for field in INDEX_TERMS[tax]:
-            node_x = root.add_child(name=field, tax_id=int(field.split()[0]))
+            node_x = Taxonomy(parent=root)
+            node_x.save()
+            node_x.obj_name = field
+            node_x.tax_id = int(field.split()[0])
+            node_x.save()
             for subfield in INDEX_TERMS[tax][field]:
-                node_y = node_x.add_child(name=subfield, tax_id=int(subfield.split()[0]))
+                node_y = Taxonomy(parent=node_x)
+                node_y.save()
+                node_y.obj_name = subfield
+                node_y.tax_id = int(subfield.split()[0])
+                node_y.save()
                 for subj in INDEX_TERMS[tax][field][subfield]:
-                    node_z = node_y.add_child(name=subj, tax_id=int(subj.split()[0]))
+                    node_z = Taxonomy(parent=node_y)
+                    node_z.save()
+                    node_z.obj_name = subj
+                    node_z.tax_id = int(subj.split()[0])
+                    node_z.save()
                     while bool(INDEX_TERMS[tax][field][subfield][subj]):
-                        datatype = node_z.add_child(name=INDEX_TERMS[tax][field][subfield][subj].pop())
+                        datatype = Taxonomy(parent=node_z)
+                        datatype.save
+                        datatype.obj_name = INDEX_TERMS[tax][field][subfield][subj].pop()
+                        datatype.save()
+    print([obj.obj_name for obj in Taxonomy.objects.all()])
 
-    print(Taxonomy.dump_bulk())
 
-
-def build_standards():
-    for std in STANDARDS:
-        root = Standards.add_root(name=std)
-        for option in STANDARDS[std]:
-            root.add_child(name=option)
-
-    pprint(Standards.dump_bulk())
+#def build_standards():
+#    for std in STANDARDS:
+#        root = Standards.add_root(name=std)
+#        for option in STANDARDS[std]:
+#            root.add_child(name=option)
+#
+#    pprint([obj.obj_name for obj in Standards.objects.all()])
 
 
 def build_content():
     for item in CONTENT_TYPE:
-        root = ContentType.add_root(name=item)
+        root = ContentType(parent=None)
+        root.save()
+        root.obj_name = item
+        root.save()
         while(bool(CONTENT_TYPE[item])):
-            ext = root.add_child(name=CONTENT_TYPE[item].pop())
+            ext = ContentType(parent=root)
+            ext.save()
+            ext.obj_name = CONTENT_TYPE[item].pop()
+            ext.save()
 
-    pprint(ContentType.dump_bulk())
+    print([obj.obj_name for obj in ContentType.objects.all()])
 
 def build_certs():
     for item in CERTIFICATIONS:
-        root = Certification.add_root(name=item)
+        root = Certification(parent=None)
+        root.save()
+        root.obj_name = item
+        root.save()
         while(bool(CERTIFICATIONS[item])):
-            ext = root.add_child(name=CERTIFICATIONS[item].pop())
-
-    pprint(Certification.dump_bulk())
+            ext = Certification(parent=root)
+            ext.save()
+            ext.obj_name = CERTIFICATIONS[item].pop()
+            ext.save()
+    print([obj.obj_name for obj in Certification.objects.all()])
 
 
 class Command(BaseCommand):

@@ -42,7 +42,7 @@
                     <select class="taxonomy-dropdown">
                             <option></option>
                             {% for tax in taxes %}
-                                  <option value="{{ tax.name }}">{{ tax.name }}</option>
+                                  <option value="{{ tax.obj_name }}">{{ tax.obj_name }}</option>
                             {% endfor %}
                         </select>
                 </div>
@@ -70,7 +70,7 @@
                     <select class="content-dropdown">
                             <option></option>
                             {% for content_type in content_types %}
-                                  <option value="{{ content_type.name }}">{{ content_type.name }}</option>
+                                  <option value="{{ content_type.obj_name }}">{{ content_type.obj_name }}</option>
                             {% endfor %}
                     </select>
                 </div>

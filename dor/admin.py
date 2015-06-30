@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.sites.models import Site
+from django.contrib.sites.admin import SiteAdmin
 from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
 from dor.widgets import NestedCheckboxSelectMultiple
 from django_mptt_admin.admin import DjangoMpttAdmin
@@ -51,6 +53,7 @@ admin_site = DORAdminSite(name='admin')
 
 admin_site.register(User, UserAdmin)
 admin_site.register(Rule, RuleAdmin)
+admin_site.register(Site, SiteAdmin)
 admin_site.register(Repository, RepoAdmin)
 admin_site.register(Journal, JournalAdmin)
 admin_site.register(Taxonomy, TaxAdmin)

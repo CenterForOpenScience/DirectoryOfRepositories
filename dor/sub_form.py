@@ -1,6 +1,5 @@
 from django import forms
 from mptt.forms import MoveNodeForm
-from models import Taxonomy
 
 from dor import models
 
@@ -28,7 +27,6 @@ class RepoSubmissionForm(forms.ModelForm):
             'db_certifications': 'Database Certificaions*',
         }
         widgets = {
-            'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
             'db_certifications': forms.CheckboxSelectMultiple(),
             'description': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
@@ -59,7 +57,6 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'db_certifications': 'Database Certificaions*',
         }
         widgets = {
-            'accepted_taxonomy': forms.CheckboxSelectMultiple(),
             'accepted_content': forms.CheckboxSelectMultiple(),
             'db_certifications': forms.CheckboxSelectMultiple(),
             'description': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
@@ -78,7 +75,7 @@ class TaxSubmissionForm(MoveNodeForm):
             'associated_content': 'Associated Content*',
             'position': 'Position*'
         }
-        exclude = ('depth', 'numchild')
+        exclude = ('lft', 'rght', 'tree_id', 'level')
 
 
 class ContentSubmissionForm(MoveNodeForm):
@@ -89,7 +86,7 @@ class ContentSubmissionForm(MoveNodeForm):
             'name': 'Name*',
             'position': 'Position*'
         }
-        exclude = ('lft', 'rgt', 'tree_id', 'depth')
+        exclude = ('lft', 'rght', 'tree_id', 'level')
 
 
 class CertificationSubmissionForm(MoveNodeForm):
@@ -100,7 +97,7 @@ class CertificationSubmissionForm(MoveNodeForm):
             'name': 'Name*',
             'position': 'Position*'
         }
-        exclude = ('lft', 'rgt', 'tree_id', 'depth')
+        exclude = ('lft', 'rght', 'tree_id', 'level')
 
 
 class StandardSubmissionForm(forms.ModelForm):

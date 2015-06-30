@@ -85,6 +85,14 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+def validate(form):
+    taxes = form.data.get("accepted_taxonomy")
+    if not taxes:
+        return form
+    form.data._mutable = True
+    form.data.setlist("accepted_taxonomy", taxes.strip('[]').split(','))
+    form.data._mutable = False
+    return form
 
 def index(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
@@ -235,7 +243,7 @@ def submit(request, title):
         if title == 'Repositories':
             if request.POST:
                 form = RepoSubmissionForm(request.POST)
-                # import ipdb; ipdb.set_trace()  # override form.something() to build correct list? Waiting on AGU feedback
+                form = validate(form)
                 if form.is_valid():
                     form.save()
                     return HttpResponseRedirect('/manage/' + title + '/')
@@ -283,6 +291,7 @@ def submit(request, title):
         if title == 'Repositories':
             if request.POST:
                 form = AnonymousRepoSubmissionForm(request.POST)
+                form = validate(form)
                 if form.is_valid():
                     form.save()
 

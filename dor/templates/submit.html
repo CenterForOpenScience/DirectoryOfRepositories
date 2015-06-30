@@ -3,10 +3,53 @@
 {% block title %}{{ title }} Submission{% endblock %}
 
 {% block content %}
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function submitForm()
+    {
+        var form = document.forms['submit-form'];
+        if ("{{ title }}" === "Repositories"){
+            var taxes = document.createElement("input");
+            taxes.name = "accepted_taxonomy";
+            taxes.value = $("#tax-container").jstree("get_selected");
+            form.appendChild(taxes)
+        }
+        form.action = "/submit/{{ title }}/"
+        form.submit();
+    }
+
+    $(document).ready(function (){
+        $.ajax({
+            url: "/routes/taxonomy/",
+            type: "GET",
+            success: function(result){
+                var full_tree=[];
+                for (var i = 0; i < result.length; i++) {
+                    var tree_item = {};
+                    tree_item["id"] = result[i]["id"].toString();
+                    tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
+                    tree_item["text"] = result[i]["obj_name"];
+                    tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
+                    tree_item["icon"] = false
+                    full_tree.push(tree_item);
+                };
+                $("#tax-container").jstree({
+                    "plugins": ["wholerow", "checkbox"],
+                    "core":
+                    {
+                        "data": full_tree
+                    }
+                });
+            }
+        });
+    });
+</script>
+
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">{{ title }} Submission Form</div>
         <div id="form-note">Starred (*) fields are required</div>
-        <form action="/submit/{{ title }}/" method="post" class="form-horizontal" role="form">
+        <form name="submit-form" method="post" class="form-horizontal" role="form">
         {% csrf_token %}
         {% if title == "Standards" %}
             {% for field in form %}
@@ -315,7 +358,7 @@
                             {% endfor %}
                         </div>
                 </div>
-            <input type="submit" value="Submit"/>
+            <button type="submit" onclick="submitForm()">Submit</button>
         {% else %}
             {% for field in form %}
                     <div class="form-group">
@@ -325,39 +368,10 @@
                         </div>
                     </div>
                 {% endfor %}
-                <input type="submit" value="Submit"/>
+                <button type="submit" onclick="submitForm()">Submit</button>
         {% endif %}
         </form>
 
     </div>
-
-<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function (){
-        $.ajax({
-            url: "/routes/taxonomy/",
-            type: "GET",
-            success: function(result){
-                var full_tree=[];
-                for (var i = 0; i < result.length; i++) {
-                    var tree_item = {};
-                    tree_item["id"] = result[i]["id"].toString();
-                    tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
-                    tree_item["text"] = result[i]["obj_name"];
-                    tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
-                    tree_item["icon"] = false
-                    full_tree.push(tree_item);
-                };
-                $("#tax-container").jstree({
-                    "plugins": ["wholerow", "checkbox"],
-                    "core":
-                    {
-                        "data": full_tree
-                    }
-                });
-            }
-        });
-    });
-</script>
 
 {% endblock %}

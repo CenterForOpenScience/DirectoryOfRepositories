@@ -53,4 +53,5 @@ urlpatterns = (
     url(r'^delete_item/$', 'dor.views.delete_item'),
     url(r'^add_data_type/$', 'dor.views.add_data_type'),
     url(r'^add_cert/$', 'dor.views.add_cert'),
+    url(r'^robots\.txt$', include('robots.urls')),
 )

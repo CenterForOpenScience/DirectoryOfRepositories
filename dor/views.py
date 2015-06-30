@@ -178,8 +178,6 @@ def repositorySearch(request):
 
 
 def repositoryFilter(request):
-    #import ipdb
-    #ipdb.set_trace()
     if request.POST:
         filtered_text = request.POST['filter_text']
     else:
@@ -192,7 +190,6 @@ def repositoryFilter(request):
 
     tax_filter_qs = Repository.objects.all()
     journal_list_qs = []
-    #ipdb.set_trace()
     if tag_list != [{}]:
         for tuples in tag_list:
             if tuples['type'] == "taxonomy-dropdown":

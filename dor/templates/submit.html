@@ -69,15 +69,8 @@
                         </div>
                         <div class="row">
                             <label for="{{ form.accepted_taxonomy.id_for_label }}" class="control-label col-md-3">Accepted Taxonomy*: </label>
-                            <div class="form-field-box col-md-6">
-                                <div id="tax-scroll">
-                                    {% for term in form.accepted_taxonomy %}
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                {{ term }}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
+                            <div class="col-md-6">
+                                <div id="tax-container" class="jstree jstree-default jstree-checkbox-selection" role="tree" aria-multiselectable="true">
                                 </div>
                             </div>
                             {% for err in form.accepted_taxonomy.errors %}
@@ -337,5 +330,34 @@
         </form>
 
     </div>
+
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function (){
+        $.ajax({
+            url: "/routes/taxonomy/",
+            type: "GET",
+            success: function(result){
+                var full_tree=[];
+                for (var i = 0; i < result.length; i++) {
+                    var tree_item = {};
+                    tree_item["id"] = result[i]["id"].toString();
+                    tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
+                    tree_item["text"] = result[i]["obj_name"];
+                    tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
+                    tree_item["icon"] = false
+                    full_tree.push(tree_item);
+                };
+                $("#tax-container").jstree({
+                    "plugins": ["wholerow", "checkbox"],
+                    "core":
+                    {
+                        "data": full_tree
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 {% endblock %}

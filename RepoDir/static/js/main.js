@@ -133,13 +133,11 @@ $(document).ready(function() {
     });
 
     $("#filter-button-area").on('click', 'td.x-button', function(){
-        debugger;
         var finalFilters = [];
         $(this).closest('.full-button').remove();
         var filterTags = $("#filter-button-area > div").find(".filter-button");
             $.each(filterTags, function(index, value){
                 if ($(value).html() != ""){
-                    debugger;
                     var filterTuple = {};
                     filterTuple["type"] = (value.id);
                     filterTuple["tag"] = (value.innerHTML);
@@ -156,23 +154,19 @@ $(document).ready(function() {
     });
 
     $(".dropdown").change(function(e){
-        debugger;
         var finalFilters = [];
-        var selText = $("."+e.target.className).val();
+        var selText = $("."+e.target.className.split(' ')[0]).val();
         if (selText!=""){
             $("#filter-button-area").append('<div class="full-button"><table><tr><td class="filter-button" id="'+e.target.className+'">'+selText+'</td><td class="x-button">x</td></tr></table></div>')
             var filterTags = $("#filter-button-area > div").find(".filter-button");
-            debugger;
-            $.each(filterTags, function(index, value){
-                if ($(value).html() != ""){
-                    debugger;
-                    var filterTuple = {};
-                    filterTuple["type"] = (value.id);
-                    filterTuple["tag"] = (value.innerHTML);
-                    finalFilters.push(filterTuple);
-                }
-            });
-            console.log(JSON.stringify(finalFilters));
+            for (var i = 0; i < $('td.filter-button').length; i++) {
+                console.log($($('td.filter-button')[i]).text());
+                var filterTuple = {};
+                filterTuple["type"] = e.target.className.split(' ')[0];
+                filterTuple["tag"] = ($($('td.filter-button')[i]).text());
+                finalFilters.push(filterTuple)
+            }
+
             filter_query(JSON.stringify(finalFilters));
         }
     });
@@ -269,59 +263,6 @@ $(document).ready(function() {
     $(".checkbox").each(function(){
         var node_tab = $(this).attr('id');
         $(this).css("padding-left", node_tab * 25 + "px");
-    });
-
-    var labels = $("#tax-scroll").find("label");
-    for (var i = 0; i < labels.length; i++) {
-        var label_split = $(labels[i]).text().split("-");
-        var current_tax = $("#id_accepted_taxonomy_" + [i]);
-        current_tax.parent().css("padding-left", label_split.length * 18 + "px");
-        current_tax.parent()[0].innerHTML = '<input id="' + current_tax.attr("id") + '" name="' + current_tax.attr("name") + '" type="' + current_tax.attr("type") + '" value="' + current_tax.attr("value") + '"></input>' + label_split[label_split.length - 1];
-
-        //console.log(label_split[label_split.length-1].replace(/\D+$/g,""));
-        var label_index = $.trim(label_split[label_split.length - 1].replace(/\D+$/g, "").toString());
-
-        if (label_index.length >= 1) {
-            var next_length = $.trim($(labels[i]).parent().parent().next().text()).split("-").length;
-            if (next_length > label_index.length) {
-                $(labels[i]).addClass("parent");
-                $(labels[i]).attr("cus_id", $.trim(label_split[label_index.length-2]));
-                $(labels[i]).attr("level", label_index.length);
-            } else {
-                $(labels[i]).addClass("child");
-                $(labels[i]).attr("cus_id", $.trim(label_split[label_index.length-3]));
-                $(labels[i]).attr("level", label_index.length);
-            }
-            if($(labels[i]).attr("class") == "parent"){
-                $(labels[i]).parent().parent().append('<div class="arrow-toggle col-md-2"> <i class="fa fa-chevron-down tax-toggle"></i> </div>');
-            }
-        }
-
-        if(label_index.length > 1){
-            $(labels[i]).parent().parent().hide();
-        }
-    }
-
-    $(".tax-toggle").on('click', function(){
-        var current_parent = $.trim($(this.parentElement.previousElementSibling).text());
-        var current_level = $(this.parentElement.previousElementSibling.children).attr("level");
-
-        console.log(current_level);
-
-        if ($('[cus_id="'+current_parent+'"]').parent().parent().css("display") == "none"){
-            $(this).attr("class", "fa fa-chevron-up tax-toggle");
-            $('[cus_id="'+current_parent+'"]').parent().parent().show();
-        } else if ($('[cus_id="'+current_parent+'"]').parent().parent().css("display") == "block"){
-            $(this).attr("class", "fa fa-chevron-down tax-toggle");
-            for (var i = 5; i > current_level; i--) {
-                $('[level="'+i+'"]').parent().parent().hide();
-                for (var j = 0; j < $('[level="'+i+'"]').parent().parent().length; j++){
-                    if ($('[level="'+i+'"]').parent().parent()[j].children[1]){
-                        $($('[level="'+i+'"]').parent().parent()[j].children[1].children[0]).attr("class", "fa fa-chevron-down tax-toggle");
-                    }
-                }
-            }
-        }
     });
 
     $("#data-input-button").on('click', function(){

@@ -84,7 +84,7 @@ class ContentType(MPTTModel):
 class Repository(models.Model):
     name = models.CharField(max_length=100, default='')
     alt_names = models.CharField(max_length=200, blank=True, default='')
-    url = models.URLField()
+    url = models.URLField(verbose_name="Repository URL")
     persistent_url = models.URLField(null=True, blank=True, default='')
     accepted_taxonomy = TreeManyToManyField('Taxonomy',)
     accepted_content = TreeManyToManyField('ContentType',)
@@ -94,15 +94,14 @@ class Repository(models.Model):
     institution_country = models.CharField(max_length=100, blank=True, default='')
     #owner = models.ForeignKey('auth.User', related_name='repositorys', null=True)
     contact = models.CharField(max_length=100, blank=True, default='')
-    metadataInformationURL = models.URLField()
-    metadataRemarks = models.CharField(max_length=1000, blank=True, default='')
+    metadataInformationURL = models.URLField(verbose_name="Metadata Information URL")
+    metadataRemarks = models.CharField(max_length=1000, blank=True, default='', verbose_name="Metadata Remarks")
     size = models.IntegerField(default=0)
     date_operational = models.DateField(default=datetime.date.today())
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
-    is_visible = models.BooleanField(default=True)  # These should default to False in production
     remarks = models.CharField(max_length=10000, default='')
-    embargoed = models.BooleanField(default=True)  # Default to True?
+    embargoed = models.BooleanField(default=True, verbose_name='Hidden on site')
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)

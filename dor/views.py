@@ -68,7 +68,7 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    queryset = Repository.objects.all().filter(is_visible=True)
+    queryset = Repository.objects.all().filter(embargoed=False)
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,

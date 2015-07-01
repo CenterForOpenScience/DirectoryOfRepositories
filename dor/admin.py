@@ -12,9 +12,9 @@ from mptt.models import TreeManyToManyField
 
 class RepoAdmin(admin.ModelAdmin):
     model = Repository
-    #formfield_overrides = {
-    #    TreeManyToManyField: {'widget': NestedCheckboxSelectMultiple},
-    #}
+    formfield_overrides = {
+        TreeManyToManyField: {'widget': NestedCheckboxSelectMultiple},
+    }
     search_fields = ['name', 'accepted_taxonomy__obj_name',
                      'accepted_content__obj_name']
 
@@ -30,6 +30,7 @@ class TaxAdmin(DjangoMpttAdmin):
 
 class ContentAdmin(DjangoMpttAdmin):
     search_fields = ['obj_name']
+
 
 class StandardAdmin(admin.ModelAdmin):
     model = Standards

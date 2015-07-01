@@ -12,10 +12,11 @@ from dor.admin import admin_site
 router = DefaultRouter()
 router.register(r'repos', views.RepositoryViewSet)
 router.register(r'journals', views.JournalViewSet)
-router.register(r'users', views.UserViewSet)
+#router.register(r'users', views.UserViewSet)
 router.register(r'taxonomy', views.TaxonomyViewSet)
-router.register(r'standards', views.StandardsViewSet)
+#router.register(r'standards', views.StandardsViewSet)
 router.register(r'contenttype', views.ContentTypeViewSet)
+router.register(r'certifications', views.CertificationViewSet)
 
 # Dictionary of models to be used in one template
 model_list = {

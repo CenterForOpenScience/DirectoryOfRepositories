@@ -4,7 +4,9 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="/static/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"></link>
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/jquery-ui/ui/jquery-ui.js"></script>
 <script type="text/javascript">
     function submitForm()
     {
@@ -43,6 +45,8 @@
                 });
             }
         });
+
+        $("#id_date_operational").datepicker();
     });
 </script>
 

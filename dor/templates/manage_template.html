@@ -3,6 +3,8 @@
 {% block title %}Manage {{ title }}{% endblock %}
 
 {% block content %}
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
     {% csrf_token %}
     <div id="manage-wrapper">
         <div class="row">

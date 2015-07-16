@@ -3,6 +3,8 @@
 {% block title %}Mange Repo{% endblock %}
 
 {% block content %}
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">Manage Form</div>
         <form action="/manage/{{ title }}/{{ group.id }}/" method="post" class="form-horizontal" role="form">

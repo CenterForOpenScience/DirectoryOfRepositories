@@ -74,8 +74,13 @@ class RepositoryViewSet(viewsets.ModelViewSet):
                           permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly, ]
     filter_backends = (filters.SearchFilter,)
-    search_fields = ['name', 'accepted_taxonomy__obj_name',
-                     'accepted_content__obj_name']
+    search_fields = ['name', 'alt_names',
+                     'description', 'remarks',
+                     'hosting_institution',
+                     'institution_country',
+                     'accepted_taxonomy__obj_name',
+                     'accepted_content__obj_name',
+                     'db_certifications__obj_name']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -158,29 +163,56 @@ def repository_list(request):
 def repositorySearch(request):
     if request.POST:
         search_text = request.POST['search_text']
+        filters = request.POST.getlist('filters[]')
     else:
         search_text = ''
+        filters = []
 
-    journal_list = []
+    filter_classes = {}
+    filter_classes['journal_list'] = []
 
-    repos = Repository.objects.filter(name__contains=search_text)
-    taxonomies = Repository.objects.filter(accepted_taxonomy__obj_name__contains=search_text)
-    content_types = Repository.objects.filter(accepted_content__obj_name__contains=search_text)
-    journals_filter = Journal.objects.filter(name__contains=search_text)
-    journals = Journal.objects.all()
+    if 'r_name' in filters:
+        filter_classes['repos'] = Repository.objects.filter(name__contains=search_text)
+    if 'r_tax' in filters:
+        filter_classes['taxonomies'] = Repository.objects.filter(accepted_taxonomy__obj_name__contains=search_text)
+    if 'r_content' in filters:
+        filter_classes['content_types'] = Repository.objects.filter(accepted_content__obj_name__contains=search_text)
+    if 'r_desc' in filters:
+        filter_classes['description'] = Repository.objects.filter(description__contains=search_text)
+    if 'r_remarks' in filters:
+        filter_classes['remarks'] = Repository.objects.filter(remarks__contains=search_text)
+    if 'r_certs' in filters:
+        filter_classes['db_certifications'] = Repository.objects.filter(db_certifications__obj_name__contains=search_text)
+    if 'j_name' in filters:
+        journals_filter = Journal.objects.filter(name__contains=search_text)
+        journals = Journal.objects.all()
+        if journals_filter:
+            for jour in journals_filter:
+                for jour_repo in jour.repos_endorsed.all():
+                    filter_classes['journal_list'].append(jour_repo)
+    if 'j_endorsed' in filters:
+        journals_filter = Journal.objects.filter(repos_endorsed__name__contains=search_text)
+        journals = Journal.objects.all()
+        if journals_filter:
+            for jour in journals_filter:
+                for jour_repo in jour.repos_endorsed.all():
+                    filter_classes['journal_list'].append(jour_repo)
 
-    if journals_filter:
-        for jour in journals_filter:
-            for jour_repo in jour.repos_endorsed.all():
-                journal_list.append(jour_repo)
+    final_queryset = []
+    for class_name in filter_classes:
+        for item in filter_classes[class_name]:
+            final_queryset.append(item)
 
-    final_result = list(set(chain(repos, taxonomies, journal_list, content_types)))
+    final_result = list(set(chain(final_queryset)))
 
     args = {}
     args.update(csrf(request))
 
     args['repos'] = final_result
-    args['journals'] = journals
+    try:
+        args['journals'] = journals
+    except UnboundLocalError:
+        args['journals'] = []
 
     return render_to_response('ajax_search.html', args, context_instance=RequestContext(request))
 

@@ -4,6 +4,17 @@
 
 {% block content %}
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        //Set default search fields
+        $("#r_name").prop('checked', true);
+        $("#r_tax").prop('checked', true);
+        $("#r_content").prop('checked', true);
+        $("#j_name").prop('checked', true);
+    });
+
+
+</script>
 
     <div class="row">
         <div id="search-header" class="col-md-8 col-md-offset-2">
@@ -28,6 +39,27 @@
                 <div class="form-group">
                     {% csrf_token %}
                     <input type="text" class="form-control" id="search-query" name="q"><button type="submit" id="search-button" class="btn btn-success">Search</button>
+                    <button id="adv-search-button" class='btn'>Advanced</button>
+                    <div id="adv-search-options" class="repo-result col-md-12 animated fadeIn" hidden="true">
+                        <div style="text-align: center"><strong>Search Criteria:</strong></div><hr/>
+                        <div id="adv-repos" class="col-sm-8"><strong class="col-md-6">Repositories</strong><br/>
+                            <div class="col-xs-6">
+                            <input type="checkbox" id="r_name">Name</input><br/>
+                            <input type="checkbox" id="r_tax">Taxonomy</input><br/>
+                            <input type="checkbox" id="r_content">Content Type</input><br/>
+                            <br/>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="checkbox" id="r_desc">Description</input><br/>
+                            <input type="checkbox" id="r_remarks">Remarks</input><br/>
+                            <input type="checkbox" id="r_certs">Certifications</input><br/>
+                        </div>
+                        </div>
+                        <div id="adv-jours" class="col-sm-4"><strong>Journals</strong><br/>
+                            <input type="checkbox" id="j_name">Names</input><br/>
+                            <input type="checkbox" id="j_endorsed">Endorsed Repositories</input><br/>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

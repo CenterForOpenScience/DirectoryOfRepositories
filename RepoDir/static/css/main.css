@@ -241,13 +241,20 @@ h2{
 }
 
 #search-query{
-    width:93%;
+    width:81%;
     border-radius: 5px 0 0 5px;
 }
 
 #search-button{
     width:7%;
-    padding: 6px 0;
+    padding: 6px;
+    border-radius: 0 0 0 0;
+}
+
+#adv-search-button{
+    width: :12%;
+    background-color: #cccccc;
+    padding: 6px 14px;
     border-radius: 0 5px 5px 0;
 }
 

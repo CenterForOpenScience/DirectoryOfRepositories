@@ -9,12 +9,38 @@ $(document).ready(function() {
     }
 
     function search_query(new_query){
+        filters = [];
+        if ($("#r_name").prop('checked')) {
+            filters.push('r_name');
+        }
+        if ($("#r_tax").prop('checked')) {
+            filters.push('r_tax');
+        }
+        if ($("#r_content").prop('checked')) {
+            filters.push('r_content');
+        }
+        if ($("#r_desc").prop('checked')) {
+            filters.push('r_desc');
+        }
+        if ($("#r_remarks").prop('checked')) {
+            filters.push('r_remarks');
+        }
+        if ($("#r_certs").prop('checked')) {
+            filters.push('r_certs');
+        }
+        if ($("#j_name").prop('checked')) {
+            filters.push('j_name');
+        }
+        if ($("#j_endorsed").prop('checked')) {
+            filters.push('j_endorsed');
+        }
         $.ajax({
             url: "/ajax_search/",
             type: "POST",
             data: {
                 'search_text' : new_query,
-                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val(),
+                'filters': filters
             },
             success: function(result){
                 $("#search-query").val('');
@@ -101,7 +127,9 @@ $(document).ready(function() {
             hoverBarResize();
         });
 
-    search_query('');
+    if (document.URL.endsWith("/search/")){
+        search_query('');
+    }
 
     $('#user-icon').popover({
         html:true,
@@ -147,10 +175,15 @@ $(document).ready(function() {
             filter_query(JSON.stringify(finalFilters));
     });
 
-    $('#search-form').on('submit', function(event){
+    $('#search-button').on('click', function(event){
         event.preventDefault();
         new_query = $("#search-query").val();
         search_query(new_query);
+    });
+
+    $('#adv-search-button').on('click', function(event){
+        event.preventDefault();
+        $("#adv-search-options").toggle();
     });
 
     $(".dropdown").change(function(e){

@@ -39,6 +39,7 @@ urlpatterns = (
     url(r'^login/$', 'dor.views.login'),
     url(r'^auth/$', 'dor.views.auth_view'),
     url(r'^logout/$', 'dor.views.logout'),
+    url(r'^register/$', 'dor.views.register'),
     url(r'^invalid/$', 'dor.views.invalid_login'),
     url(r'^ajax_search/', 'dor.views.repositorySearch'),
     url(r'^ajax_filter/', 'dor.views.repositoryFilter'),

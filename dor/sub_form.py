@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from mptt.forms import MoveNodeForm
 
 from dor import models
@@ -96,6 +97,14 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
         }
         exclude = ('embargoed',)
 
+    def save(self, user=None, commit=True):
+        inst = super(AnonymousRepoSubmissionForm, self).save(commit=False)
+        inst.owner = User.objects.filter(is_superuser=True)[0]
+        if commit:
+            inst.save()
+            self.save_m2m()
+        return inst
+
 
 class TaxSubmissionForm(MoveNodeForm):
 
@@ -136,3 +145,48 @@ class StandardSubmissionForm(forms.ModelForm):
     class Meta:
         model = models.Standards
         fields = "__all__"
+
+
+class UserSubmissionForm(forms.Form):
+    username = forms.CharField(max_length=30)
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    password = forms.CharField(max_length=30, widget=forms.PasswordInput())
+    password_again = forms.CharField(max_length=30, widget=forms.PasswordInput())
+    email = forms.EmailField()
+    user_type = forms.ChoiceField(choices=[('Repository Representative', 'Repository Representative'), ('Journal Representative', 'Journal Representative')])
+
+    class Meta:
+        model = User
+        fields = "__all__"
+        labels = {
+            'username': "Username",
+            'first_name': "First Name",
+            'last_name': "Last Name",
+            'password': "Password",
+            'password_again': "Password Again",
+            'email': "Email",
+            'user_type': "User Type",
+        }
+
+    def clean_username(self):
+        try:
+            User.objects.get(username=self.cleaned_data['username'])
+        except User.DoesNotExist:
+            return self.cleaned_data['username']
+        raise forms.ValidationError("This username is taken.")
+
+    def clean_password(self):
+        if 'password' in self.cleaned_data and 'password_again' in self.cleaned_data:
+            if self.cleaned_data['password'] != self.cleaned_data['password_again']:
+                raise forms.ValidationError("Passwords must match.")
+        return self.cleaned_data['password']
+
+    def save(self):
+        new_user = User.objects.create_user(username=self.cleaned_data['username'],
+                                        password=self.clean_password(),
+                                        email=self.cleaned_data['email'])
+        new_user.first_name = self.cleaned_data['first_name']
+        new_user.last_name = self.cleaned_data['last_name']
+        new_user.user_type = self.cleaned_data['user_type']
+        new_user.save()

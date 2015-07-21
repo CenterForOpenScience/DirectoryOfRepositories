@@ -92,7 +92,7 @@ class Repository(models.Model):
     description = models.CharField(max_length=1000, blank=True, default='')
     hosting_institution = models.CharField(max_length=100, blank=True, default='')
     institution_country = models.CharField(max_length=100, blank=True, default='')
-    owner = models.ForeignKey('auth.User', related_name='repositorys', null=True)
+    owner = models.ForeignKey('auth.User', related_name='repositorys', null=True, blank=True)
     contact = models.CharField(max_length=100, blank=True, default='')
     metadataInformationURL = models.URLField(verbose_name="Metadata Information URL")
     metadataRemarks = models.CharField(max_length=1000, blank=True, default='', verbose_name="Metadata Remarks")

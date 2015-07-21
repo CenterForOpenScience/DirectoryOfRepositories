@@ -6,8 +6,9 @@ from dor.serializers import (UserSerializer, RepositorySerializer,
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.forms import ValidationError
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
+from sub_form import UserSubmissionForm, RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -110,6 +111,35 @@ def login(request):
         c = {}
         c.update(csrf(request))
         return render_to_response('login.html', c, context_instance=RequestContext(request))
+
+
+def register(request):
+    if request.POST:
+        form = UserSubmissionForm(request.POST)
+        form = validate(form)
+        if form.is_valid():
+            try:
+                form.save()
+                username = request.POST.get('username', '')
+                password = request.POST.get('password1', '')
+                user = auth.authenticate(username=username, password=password)
+                log_req = request
+                auth.login(log_req, user)
+                if form.data['user_type'] == 'Repository Representative':
+                    return HttpResponseRedirect('/submit/Repositories/')
+                elif form.data['user_type'] == 'Journal Representative':
+                    return HttpResponseRedirect('/submit/Journals/')
+                else:
+                    return HttpResponseRedirect('/')
+            except ValidationError as e:
+                form.errors.update({u'': e[0]})
+    else:
+        form = UserSubmissionForm()
+
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    return render_to_response('register.html', args, context_instance=RequestContext(request))
 
 
 def auth_view(request):
@@ -275,7 +305,6 @@ def submit(request, title):
         if title == 'Journals':
             if request.POST:
                 form = JournalSubmissionForm(request.POST)
-                import ipdb; ipdb.set_trace()
                 form = validate(form)
                 if form.is_valid():
                     form.save(user=request.user)
@@ -363,10 +392,16 @@ def manage_group(request, title):
     args.update(csrf(request))
 
     if title == 'Journals':
-        args['groups'] = Journal.objects.all()
+        if request.user.is_staff:
+            args['groups'] = Journal.objects.all()
+        else:
+            args['groups'] = Journal.objects.filter(owner_id=request.user.id)
         args['title'] = 'Journals'
     elif title == 'Repositories':
-        args['groups'] = Repository.objects.all()
+        if request.user.is_staff:
+            args['groups'] = Repository.objects.all()
+        else:
+            args['groups'] = Repository.objects.filter(owner_id=request.user.id)
         args['title'] = 'Repositories'
         args['taxes'] = Taxonomy.objects.annotate()
     elif title == 'Data-Types':

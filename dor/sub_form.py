@@ -4,6 +4,29 @@ from mptt.forms import MoveNodeForm
 from dor import models
 
 
+class JournalSubmissionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Journal
+        fields = "__all__"
+        labels = {
+            'name': "Name*",
+            'url': 'Url*',
+            'repos_endorsed': "Endorsed Repositories"
+        }
+        widgets = {
+            'repos_endorsed': forms.CheckboxSelectMultiple(),
+        }
+        exclude = ('owner', 'is_visible',)
+
+    def save(self, user=None, commit=True):
+        inst = super(JournalSubmissionForm, self).save(commit=False)
+        inst.owner = user
+        if commit:
+            inst.save()
+            self.save_m2m()
+        return inst
+
 class RepoSubmissionForm(forms.ModelForm):
 
     class Meta:
@@ -33,7 +56,15 @@ class RepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
             'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
-        #exclude = ('standards','owner',)
+        exclude = ('owner',)
+
+    def save(self, user=None, commit=True):
+        inst = super(RepoSubmissionForm, self).save(commit=False)
+        inst.owner = user
+        if commit:
+            inst.save()
+            self.save_m2m()
+        return inst
 
 class AnonymousRepoSubmissionForm(forms.ModelForm):
 

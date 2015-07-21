@@ -7,7 +7,7 @@ from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm
+from sub_form import RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -272,7 +272,17 @@ def endorse(request):
 
 def submit(request, title):
     if request.user.is_authenticated():
-        if title == 'Repositories':
+        if title == 'Journals':
+            if request.POST:
+                form = JournalSubmissionForm(request.POST)
+                import ipdb; ipdb.set_trace()
+                form = validate(form)
+                if form.is_valid():
+                    form.save(user=request.user)
+                    return HttpResponseRedirect('/manage/' + title + '/')
+            else:
+                form = JournalSubmissionForm()
+        elif title == 'Repositories':
             if request.POST:
                 form = RepoSubmissionForm(request.POST)
                 form = validate(form)
@@ -281,7 +291,6 @@ def submit(request, title):
                     return HttpResponseRedirect('/manage/' + title + '/')
             else:
                 form = RepoSubmissionForm()
-
         elif title == 'Data-Types':
             if request.POST:
                 form = ContentSubmissionForm(request.POST)
@@ -350,31 +359,30 @@ def manage(request):
 
 @login_required(login_url='/login/')
 def manage_group(request, title):
-
-    if title == 'Repositories':
-        groups = Repository.objects.all()
-        this_title = 'Repositories'
-    elif title == 'Data-Types':
-        groups = ContentType.objects.all()
-        this_title = 'Data-Types'
-    # elif title == 'Standards':
-    #     groups = Standards.objects.all()
-    #     this_title = 'Standards'
-    elif title == 'Taxonomies':
-        groups = Taxonomy.objects.all()
-        this_title = 'Taxonomies'
-    elif title == 'Certifications':
-        groups = Certification.objects.all()
-        this_title = 'Certifications'
-    else:
-        return HttpResponseRedirect('/manage/')
-
     args = {}
     args.update(csrf(request))
 
-    args['groups'] = groups
-    args['title'] = this_title
-    args['taxes'] = Taxonomy.objects.annotate()
+    if title == 'Journals':
+        args['groups'] = Journal.objects.all()
+        args['title'] = 'Journals'
+    elif title == 'Repositories':
+        args['groups'] = Repository.objects.all()
+        args['title'] = 'Repositories'
+        args['taxes'] = Taxonomy.objects.annotate()
+    elif title == 'Data-Types':
+        args['groups'] = ContentType.objects.all()
+        args['title'] = 'Data-Types'
+    # elif title == 'Standards':
+    #     args['groups'] = Standards.objects.all()
+    #     args['title'] = 'Standards'
+    elif title == 'Taxonomies':
+        args['groups'] = Taxonomy.objects.all()
+        args['title'] = 'Taxonomies'
+    elif title == 'Certifications':
+        args['groups'] = Certification.objects.all()
+        args['title'] = 'Certifications'
+    else:
+        return HttpResponseRedirect('/manage/')
 
     return render_to_response('manage_template.html', args, context_instance=RequestContext(request))
 
@@ -402,7 +410,23 @@ def approve_embargo(request):
 @login_required(login_url='/login/')
 def manage_form(request, title, pk):
 
-    if title == 'Repositories':
+    if title == 'Journals':
+        this_title = 'Journals'
+        journal_instance = get_object_or_404(Journal, pk=pk)
+        group = Journal.objects.get(pk=pk)
+        form = JournalSubmissionForm(instance=journal_instance)
+        if request.POST:
+            form = JournalSubmissionForm(data=request.POST, instance=journal_instance)
+            if form.is_valid():
+                form.save(user=request.user)
+                return HttpResponseRedirect('/manage/' + title + "/")
+            else:
+                args = {}
+                args.update(csrf(request))
+
+                args['form'] = form
+                return render_to_response('submit.html', args, context_instance=RequestContext(request))
+    elif title == 'Repositories':
         this_title = 'Repositories'
         repo_instance = get_object_or_404(Repository, pk=pk)
         group = Repository.objects.get(pk=pk)

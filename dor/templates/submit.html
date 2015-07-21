@@ -8,6 +8,31 @@
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/static/bower_components/jquery-ui/ui/jquery-ui.js"></script>
 <script type="text/javascript">
+    function get_pk_or_title()
+    {
+        pk = document.location.toString().split('/');
+        return pk[pk.length-2]
+    }
+
+    function build_jstree(result, tree_ids)
+    {
+        full_tree = []
+        for (var i = 0; i < result.length; i++) {
+            var tree_item = {};
+            //TODO: Tree population from existing repo data iff exists
+            tree_item["id"] = result[i]["id"].toString();
+            tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
+            tree_item["text"] = result[i]["obj_name"];
+            tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
+            tree_item["icon"] = false
+            if (tree_ids.indexOf(tree_item["id"]) >= 0) {
+                tree_item["state"]["selected"] = true;
+            }
+            full_tree.push(tree_item);
+        };
+        return full_tree;
+    }
+
     function submitForm()
     {
         var form = document.forms['submit-form'];
@@ -15,36 +40,61 @@
             var taxes = document.createElement("input");
             taxes.name = "accepted_taxonomy";
             taxes.value = $("#tax-container").jstree("get_selected");
+            taxes.hidden = true;
             form.appendChild(taxes)
         }
-        form.action = "/submit/{{ title }}/"
+
+        pk = get_pk_or_title()
+        if (pk == "{{ title }}") {
+            form.action = "/submit/{{ title }}/";
+        } else {
+            form.action = "/manage/{{ title }}/" + pk + "/";
+        }
         form.submit();
     }
 
     $(document).ready(function (){
-        $.ajax({
-            url: "/routes/taxonomy/",
-            type: "GET",
-            success: function(result){
-                var full_tree=[];
-                for (var i = 0; i < result.length; i++) {
-                    var tree_item = {};
-                    tree_item["id"] = result[i]["id"].toString();
-                    tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
-                    tree_item["text"] = result[i]["obj_name"];
-                    tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
-                    tree_item["icon"] = false
-                    full_tree.push(tree_item);
-                };
-                $("#tax-container").jstree({
-                    "plugins": ["wholerow", "checkbox"],
-                    "core":
-                    {
-                        "data": full_tree
+        if ($("#tax-container").length){
+            $.ajax({
+                url: "/routes/taxonomy/",
+                type: "GET",
+                success: function(result){
+                    var full_tree=[];
+                    pk = get_pk_or_title()
+                    if (pk != "{{ title }}") {
+                        $.ajax({
+                            url: "/routes/repos/" + pk + "/",
+                            type: "GET",
+                            success: function(repo_result){
+                                var tree_data=[];
+                                tree_data = repo_result['accepted_taxonomy'];
+                                tree_ids = []
+                                for (datum of tree_data) {
+                                    datum = datum.split('/');
+                                    datum = datum[datum.length-2];
+                                    tree_ids.push(datum);
+                                }
+                                $("#tax-container").jstree({
+                                    "plugins": ["wholerow", "checkbox"],
+                                    "core":
+                                    {
+                                        "data": build_jstree(result, repo_result)
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        $("#tax-container").jstree({
+                            "plugins": ["wholerow", "checkbox"],
+                            "core":
+                            {
+                                "data": build_jstree(result, [])
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+            });
+        }
 
         $("#id_date_operational").datepicker();
     });

@@ -17,7 +17,7 @@ class JournalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Journal
-        fields = ('name', 'repos_endorsed', 'owner', 'remarks')
+        fields = ('name', 'repos_endorsed', 'owner')
 
 
 class TaxonomySerializer(serializers.ModelSerializer):
@@ -84,5 +84,5 @@ class RepositorySerializer(serializers.HyperlinkedModelSerializer):
                   #'standards', 
                   'owner', 'accepted_content', 'description', 'hosting_institution',
                   'institution_country', 'contact', 'size', 'date_operational',
-                  'metadataInformationURL', 'metadataRemarks', 'remarks',
+                  'metadataInformationURL', 'metadataRemarks', 'remarks', 'embargoed'
                   'allows_embargo_period', 'doi_provided', 'links_to_publications')

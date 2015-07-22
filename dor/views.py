@@ -1,4 +1,4 @@
-from dor.models import Repository, Taxonomy, Standards, ContentType, Journal, Certification
+from dor.models import Repository, Taxonomy, Standards, ContentType, Journal, Certification, UserProfile
 from dor.serializers import (UserSerializer, RepositorySerializer,
                              TaxonomySerializer, StandardsSerializer,
                              ContentTypeSerializer, JournalSerializer,
@@ -69,7 +69,7 @@ class TaxonomyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RepositoryViewSet(viewsets.ModelViewSet):
-    queryset = Repository.objects.all().filter(embargoed=False)
+    queryset = Repository.objects.all()
     serializer_class = RepositorySerializer
     permission_classes = [CanCreateOrReadOnly,
                           permissions.IsAuthenticatedOrReadOnly,
@@ -121,7 +121,7 @@ def register(request):
             try:
                 form.save()
                 username = request.POST.get('username', '')
-                password = request.POST.get('password1', '')
+                password = request.POST.get('password', '')
                 user = auth.authenticate(username=username, password=password)
                 log_req = request
                 auth.login(log_req, user)
@@ -308,7 +308,7 @@ def submit(request, title):
                 form = validate(form)
                 if form.is_valid():
                     form.save(user=request.user)
-                    return HttpResponseRedirect('/manage/' + title + '/')
+                    return HttpResponseRedirect('/manage/')
             else:
                 form = JournalSubmissionForm()
         elif title == 'Repositories':
@@ -316,8 +316,8 @@ def submit(request, title):
                 form = RepoSubmissionForm(request.POST)
                 form = validate(form)
                 if form.is_valid():
-                    form.save()
-                    return HttpResponseRedirect('/manage/' + title + '/')
+                    form.save(user=request.user)
+                    return HttpResponseRedirect('/manage/')
             else:
                 form = RepoSubmissionForm()
         elif title == 'Data-Types':
@@ -383,7 +383,16 @@ def submit(request, title):
 
 @login_required(login_url='/login/')
 def manage(request):
-    return render_to_response('manage.html', context_instance=RequestContext(request))
+    if request.user.is_staff:
+        return render_to_response('manage.html', context_instance=RequestContext(request))
+
+    profile = UserProfile.objects.get(user=request.user)
+    if 'Repository' in profile.user_type:
+        return HttpResponseRedirect('/manage/Repositories/')
+    elif 'Journal' in profile.user_type:
+        return HttpResponseRedirect('/manage/Journals/')
+    else:
+        return HttpResponseRedirect('/')
 
 
 @login_required(login_url='/login/')
@@ -391,11 +400,14 @@ def manage_group(request, title):
     args = {}
     args.update(csrf(request))
 
+    args['staff'] = request.user.is_staff
+
     if title == 'Journals':
         if request.user.is_staff:
             args['groups'] = Journal.objects.all()
         else:
             args['groups'] = Journal.objects.filter(owner_id=request.user.id)
+            args['repos'] = Repository.objects.filter(owner_id=request.user.id)
         args['title'] = 'Journals'
     elif title == 'Repositories':
         if request.user.is_staff:
@@ -549,6 +561,7 @@ def manage_form(request, title, pk):
 
     args['form'] = form
     args['group'] = group
+    args['staff'] = request.user.is_staff
     args['title'] = this_title
 
     return render_to_response('submit.html', args, context_instance=RequestContext(request))

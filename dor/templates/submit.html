@@ -28,6 +28,7 @@
             tree_item["icon"] = false
             if (tree_ids.indexOf(tree_item["id"]) >= 0) {
                 tree_item["state"]["selected"] = true;
+                tree_item["state"]["opened"] = false;
             }
             full_tree.push(tree_item);
         };
@@ -57,14 +58,14 @@
     $(document).ready(function (){
         if ($("#tax-container").length){
             $.ajax({
-                url: "/routes/taxonomy/",
+                url: "/api/taxonomy/",
                 type: "GET",
                 success: function(result){
                     var full_tree=[];
                     pk = get_pk_or_title()
                     if (pk != "{{ title }}") {
                         $.ajax({
-                            url: "/routes/repos/" + pk + "/",
+                            url: "/api/repos/" + pk + "/",
                             type: "GET",
                             success: function(repo_result){
                                 var tree_data=[];
@@ -79,7 +80,7 @@
                                     "plugins": ["wholerow", "checkbox"],
                                     "core":
                                     {
-                                        "data": build_jstree(result, repo_result)
+                                        "data": build_jstree(result, tree_ids)
                                     }
                                 });
                             }

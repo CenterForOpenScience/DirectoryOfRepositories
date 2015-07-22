@@ -33,7 +33,7 @@ model_list = {
 urlpatterns = (
     url(r'^admin/', include(admin_site.urls)),
     url(r'^swag/', include('rest_framework_swagger.urls')),
-    url(r'^routes/', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^$', 'dor.views.index'),
     url(r'^login/$', 'dor.views.login'),
@@ -48,8 +48,6 @@ urlpatterns = (
     url(r'^manage/$', 'dor.views.manage'),
     url(r'^manage/(?P<title>[-\w]+)/$', 'dor.views.manage_group'),
     url(r'^manage/(?P<title>[-\w]+)/(?P<pk>[0-9]+)/$', 'dor.views.manage_form'),
-    url(r'^api/repos/$', api.RepoList.as_view()),
-    url(r'^api/repos/(?P<pk>[0-9]+)/$', api.RepoDetail.as_view()),
     url(r'^endorse_repo/$', 'dor.views.endorse'),
     url(r'^approve_embargo_repo/$', 'dor.views.approve_embargo'),
     url(r'^delete_item/$', 'dor.views.delete_item'),

@@ -1,6 +1,16 @@
-from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
 import datetime
+from django.db import models
+from django.contrib.auth.models import User
+from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    user_type = models.CharField(max_length=100, default='', choices=[('Repository Representative', 'Repository Representative'), ('Journal Representative', 'Journal Representative')])
+    maintains_obj = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user.username)
 
 
 class Journal(models.Model):
@@ -9,7 +19,7 @@ class Journal(models.Model):
     url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
 
-    is_visible = models.BooleanField(default=True)  # These should default to False in production
+    is_visible = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)

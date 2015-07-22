@@ -40,7 +40,21 @@
                         {% if user.is_staff %}
                             <div class="nav-icon col-md-4" id = "user-icon-staff" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
                         {% elif user.is_authenticated %}
+                            {% if "Journal" in user.userprofile.user_type %}
+                                {% if user.userprofile.maintains_obj %}
+                                <div class="nav-icon col-md-4" id = "user-icon-auth-j" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% else %}
+                                <div class="nav-icon col-md-4" id = "user-icon-sub-j" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% endif %}
+                            {% elif "Repository" in user.userprofile.user_type %}
+                                {% if user.userprofile.maintains_obj %}
+                                <div class="nav-icon col-md-4" id = "user-icon-auth-r" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% else %}
+                                <div class="nav-icon col-md-4" id = "user-icon-sub-r" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% endif %}
+                            {% else %}
                             <div class="nav-icon col-md-4" id = "user-icon-auth" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                            {% endif %}
                         {% else %}
                             <div class="nav-icon col-md-4" id = "user-icon" data-container="body" data-toggle="popover" data-placement="bottom"><i class="fa fa-user fa-3"></i></div>
                         {% endif %}

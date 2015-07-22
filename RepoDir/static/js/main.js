@@ -133,19 +133,40 @@ $(document).ready(function() {
 
     $('#user-icon').popover({
         html:true,
-        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a>',
+        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/register/"><div class="popover-custom">Register</div></a><a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a>',
         title: 'Welcome!'
     });
 
     $('#user-icon-staff').popover({
         html:true,
-        content:'<a href="/admin/"><div class="popover-custom">Site Administration</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/admin/"><div class="popover-custom">Site Administration</div></a><a href="/manage/"><div class="popover-custom">Site Management</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/manage/"><div class="popover-custom">Site Management</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
+
+    $('#user-icon-auth-j').popover({
+        html:true,
+        content:'<a href="/manage/"><div class="popover-custom">Journal Management</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+    });
+
+    $('#user-icon-sub-j').popover({
+        html:true,
+        content:'<a href="/submit/Jounrals"><div class="popover-custom">Submit A Journal</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+    });
+
+    $('#user-icon-auth-r').popover({
+        html:true,
+        content:'<a href="/manage/"><div class="popover-custom">Repository Management</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+    });
+
+    $('#user-icon-sub-r').popover({
+        html:true,
+        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit A Repository</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+    });
+
 
     $('.taxonomy-dropdown').select2({
         placeholder: "Filter Taxonomies",

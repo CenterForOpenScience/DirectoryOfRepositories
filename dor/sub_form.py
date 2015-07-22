@@ -24,6 +24,8 @@ class JournalSubmissionForm(forms.ModelForm):
         inst = super(JournalSubmissionForm, self).save(commit=False)
         inst.owner = user
         if commit:
+            user.userprofile.maintains_obj = True
+            user.userprofile.save()
             inst.save()
             self.save_m2m()
         return inst
@@ -57,12 +59,14 @@ class RepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
             'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
-        exclude = ('owner',)
+        exclude = ('owner', 'embargoed')
 
     def save(self, user=None, commit=True):
         inst = super(RepoSubmissionForm, self).save(commit=False)
         inst.owner = user
         if commit:
+            user.userprofile.maintains_obj = True
+            user.userprofile.save()
             inst.save()
             self.save_m2m()
         return inst
@@ -95,7 +99,7 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'metadataRemarks': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
             'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
-        exclude = ('embargoed',)
+        exclude = ('owner', 'embargoed',)
 
     def save(self, user=None, commit=True):
         inst = super(AnonymousRepoSubmissionForm, self).save(commit=False)
@@ -168,6 +172,7 @@ class UserSubmissionForm(forms.Form):
             'email': "Email",
             'user_type': "User Type",
         }
+        exclude = ('maintains_obj')
 
     def clean_username(self):
         try:
@@ -190,3 +195,5 @@ class UserSubmissionForm(forms.Form):
         new_user.last_name = self.cleaned_data['last_name']
         new_user.user_type = self.cleaned_data['user_type']
         new_user.save()
+        new_profile = models.UserProfile.objects.create(user=new_user, user_type=self.cleaned_data['user_type'])
+        new_profile.save()

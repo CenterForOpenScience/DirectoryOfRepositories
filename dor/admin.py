@@ -7,7 +7,7 @@ from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Ce
 from dor.widgets import NestedCheckboxSelectMultiple
 from django_mptt_admin.admin import DjangoMpttAdmin
 from robots.admin import RuleAdmin
-from robots.models import Rule
+from robots.models import Rule, Url
 from mptt.models import TreeManyToManyField
 
 class RepoAdmin(admin.ModelAdmin):
@@ -54,6 +54,7 @@ admin_site = DORAdminSite(name='admin')
 
 admin_site.register(User, UserAdmin)
 admin_site.register(Rule, RuleAdmin)
+admin_site.register(Url)
 admin_site.register(Site, SiteAdmin)
 admin_site.register(Repository, RepoAdmin)
 admin_site.register(Journal, JournalAdmin)

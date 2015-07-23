@@ -494,7 +494,6 @@ def manage_form(request, title, pk):
         content_instance = get_object_or_404(ContentType, pk=pk)
         group = ContentType.objects.get(pk=pk)
         form = ContentSubmissionForm(instance=content_instance)
-        import ipdb; ipdb.set_trace()
         if request.POST:
             form = ContentSubmissionForm(request.POST, instance=content_instance)
             if form.is_valid():

@@ -463,7 +463,7 @@ def manage_form(request, title, pk):
         group = Journal.objects.get(pk=pk)
         form = JournalSubmissionForm(instance=journal_instance)
         if request.POST:
-            form = JournalSubmissionForm(data=request.POST, instance=journal_instance)
+            form = JournalSubmissionForm(request.POST, instance=journal_instance)
             if form.is_valid():
                 form.save(user=request.user)
                 return HttpResponseRedirect('/manage/' + title + "/")
@@ -494,6 +494,7 @@ def manage_form(request, title, pk):
         content_instance = get_object_or_404(ContentType, pk=pk)
         group = ContentType.objects.get(pk=pk)
         form = ContentSubmissionForm(instance=content_instance)
+        import ipdb; ipdb.set_trace()
         if request.POST:
             form = ContentSubmissionForm(request.POST, instance=content_instance)
             if form.is_valid():
@@ -607,12 +608,15 @@ def add_data_type(request):
     else:
         data_type_value = ''
 
-    new_data = ContentType.create(data_type_value)
+
+    new_data = ContentType(parent=None)
+    new_data.save()
+    new_data.obj_name = data_type_value
     new_data.save()
 
     response_data = {}
     response_data['id'] = new_data.id
-    response_data['name'] = new_data.name
+    response_data['name'] = new_data.obj_name
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 

@@ -110,35 +110,35 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
         return inst
 
 
-class TaxSubmissionForm(MoveNodeForm):
+class TaxSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = models.Taxonomy
         labels = {
-            'name': 'Name*',
+            'obj_name': 'Name*',
             'associated_content': 'Associated Content*',
             'position': 'Position*'
         }
         exclude = ('lft', 'rght', 'tree_id', 'level')
 
 
-class ContentSubmissionForm(MoveNodeForm):
+class ContentSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = models.ContentType
         labels = {
-            'name': 'Name*',
+            'obj_name': 'Name*',
             'position': 'Position*'
         }
         exclude = ('lft', 'rght', 'tree_id', 'level')
 
 
-class CertificationSubmissionForm(MoveNodeForm):
+class CertificationSubmissionForm(forms.ModelForm):
 
     class Meta:
         model = models.Certification
         labels = {
-            'name': 'Name*',
+            'obj_name': 'Name*',
             'position': 'Position*'
         }
         exclude = ('lft', 'rght', 'tree_id', 'level')

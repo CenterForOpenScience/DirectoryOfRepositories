@@ -48,78 +48,62 @@
                         {% endif %}
                     </div>
                 </th>
-                {% if title == "Taxonomies" %}
-                    {% for item, info in taxes %}
-                        <tr>
-                            <td>
-                                <div class="checkbox" id={{ info.level }}>
-                                    <label>
-                                        <input type="checkbox" class="{{ item.id }}" id="{{ title }}">
-                                        <a href="/manage/{{ title }}/{{ item.id }}/">{{ item.name }}</a>
-                                    </label>
-                                </div>
-                            </td>
-                            <td>
-                                <div id="trash-button">
-                                    <i class="fa fa-trash-o fa-lg"></i>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    {% for group in groups %}
-                        <tr>
-                            <td>
-                                <div class="checkbox">
-                                    <label>
-                                        {% if staff %}
-                                        <input type="checkbox" class="{{ group.id }}" id="{{ title }}">
-                                        {% endif %}
-                                        <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
-                                    </label>
-                                </div>
-                            </td>
-                            {% if title == "Repositories" %}
-                                 <td>
+                {% for group in groups %}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
                                     {% if staff %}
-                                        {% if group.embargoed %}
-                                        <button type="button" class="btn btn-default btn-md" id="button" name="{{ group.id }}">
-                                            <div id="button-content-check">
-                                                <i class="fa fa-square-o fa-lg"></i> Approve
-                                            </div>
-                                        </button>
-                                        {% else %}
-                                            <button type="button" class="btn btn-default btn-md approve-button" id="checked-button" name="{{ group.id }}">
-                                                <div id="button-content-check">
-                                                    <i class="fa fa-check-square-o fa-lg"></i> Approved
-                                                </div>
-                                            </button>
-                                        {% endif %}
-                                    {% else %}
-                                        {% if group.embargoed %}
-                                        <button type="button" class="btn btn-default btn-md approve-button disabled">
-                                            <div id="button-content-check">
-                                                <i class="fa fa-lg"></i> Pending Approval
-                                            </div>
-                                        </button>
-                                        {% else %}
-                                            <button type="button" class="btn btn-default btn-md approve-button disabled" style="background: #A5D6A7">
-                                                <div id="button-content-check">
-                                                    <i class="fa fa-check-square-o fa-lg"></i> Approved
-                                                </div>
-                                            </button>
-                                        {% endif %}
+                                    <input type="checkbox" class="{{ group.id }}" id="{{ title }}">
                                     {% endif %}
-                                </td>
-                            {% endif %}
-                            <td>
-                                <div id="trash-button">
-                                    <i class="fa fa-trash-o fa-lg"></i>
-                                </div>
+                                    {% if title == "Taxonomies" or "Data-Types" %}
+                                    <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.obj_name }}</a>
+                                    {% else %}
+                                    <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </td>
+                        {% if title == "Repositories" %}
+                             <td>
+                                {% if staff %}
+                                    {% if group.embargoed %}
+                                    <button type="button" class="btn btn-default btn-md" id="button" name="{{ group.id }}">
+                                        <div id="button-content-check">
+                                            <i class="fa fa-square-o fa-lg"></i> Approve
+                                        </div>
+                                    </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md approve-button" id="checked-button" name="{{ group.id }}">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    {% if group.embargoed %}
+                                    <button type="button" class="btn btn-default btn-md approve-button disabled">
+                                        <div id="button-content-check">
+                                            <i class="fa fa-lg"></i> Pending Approval
+                                        </div>
+                                    </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md approve-button disabled" style="background: #A5D6A7">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
                             </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
+                        {% endif %}
+                        <td>
+                            <div id="trash-button">
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
             {% if title = "Journals" %}
                 {% if repos %}

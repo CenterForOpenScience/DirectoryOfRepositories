@@ -202,26 +202,26 @@ def repositorySearch(request):
     filter_classes['journal_list'] = []
 
     if 'r_name' in filters:
-        filter_classes['repos'] = Repository.objects.filter(name__contains=search_text)
+        filter_classes['repos'] = Repository.objects.filter(name__icontains=search_text)
     if 'r_tax' in filters:
-        filter_classes['taxonomies'] = Repository.objects.filter(accepted_taxonomy__obj_name__contains=search_text)
+        filter_classes['taxonomies'] = Repository.objects.filter(accepted_taxonomy__obj_name__icontains=search_text)
     if 'r_content' in filters:
-        filter_classes['content_types'] = Repository.objects.filter(accepted_content__obj_name__contains=search_text)
+        filter_classes['content_types'] = Repository.objects.filter(accepted_content__obj_name__icontains=search_text)
     if 'r_desc' in filters:
-        filter_classes['description'] = Repository.objects.filter(description__contains=search_text)
+        filter_classes['description'] = Repository.objects.filter(description__icontains=search_text)
     if 'r_remarks' in filters:
-        filter_classes['remarks'] = Repository.objects.filter(remarks__contains=search_text)
+        filter_classes['remarks'] = Repository.objects.filter(remarks__icontains=search_text)
     if 'r_certs' in filters:
-        filter_classes['db_certifications'] = Repository.objects.filter(db_certifications__obj_name__contains=search_text)
+        filter_classes['db_certifications'] = Repository.objects.filter(db_certifications__obj_name__icontains=search_text)
     if 'j_name' in filters:
-        journals_filter = Journal.objects.filter(name__contains=search_text)
+        journals_filter = Journal.objects.filter(name__icontains=search_text)
         journals = Journal.objects.all()
         if journals_filter:
             for jour in journals_filter:
                 for jour_repo in jour.repos_endorsed.all():
                     filter_classes['journal_list'].append(jour_repo)
     if 'j_endorsed' in filters:
-        journals_filter = Journal.objects.filter(repos_endorsed__name__contains=search_text)
+        journals_filter = Journal.objects.filter(repos_endorsed__name__icontains=search_text)
         journals = Journal.objects.all()
         if journals_filter:
             for jour in journals_filter:
@@ -467,6 +467,7 @@ def manage_form(request, title, pk):
         form = JournalSubmissionForm(instance=journal_instance)
         if request.POST:
             form = JournalSubmissionForm(request.POST, instance=journal_instance)
+            form = validate(form)
             if form.is_valid():
                 form.save(user=request.user)
                 return HttpResponseRedirect('/manage/' + title + "/")
@@ -483,6 +484,7 @@ def manage_form(request, title, pk):
         form = RepoSubmissionForm(instance=repo_instance)
         if request.POST:
             form = RepoSubmissionForm(request.POST, instance=repo_instance)
+            form = validate(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
@@ -499,6 +501,7 @@ def manage_form(request, title, pk):
         form = ContentSubmissionForm(instance=content_instance)
         if request.POST:
             form = ContentSubmissionForm(request.POST, instance=content_instance)
+            form = validate(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
@@ -531,6 +534,7 @@ def manage_form(request, title, pk):
         form = TaxSubmissionForm(instance=tax_instance)
         if request.POST:
             form = TaxSubmissionForm(request.POST, instance=tax_instance)
+            form = validate(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
@@ -545,6 +549,7 @@ def manage_form(request, title, pk):
         cert_instance = get_object_or_404(Certification, pk=pk)
         group = Certification.objects.get(pk=pk)
         form = CertificationSubmissionForm(instance=tax_instance)
+        form = validate(form)
         if request.POST:
             form = CertificationSubmissionForm(request.POST, instance=cert_instance)
             if form.is_valid():

@@ -22,10 +22,16 @@ class JournalSubmissionForm(forms.ModelForm):
 
     def save(self, user=None, commit=True):
         inst = super(JournalSubmissionForm, self).save(commit=False)
-        inst.owner = user
+        if user:
+            inst.owner = user
+        else:
+            inst.owner = User.objects.filter(is_superuser=True)[0]
         if commit:
-            user.userprofile.maintains_obj = True
-            user.userprofile.save()
+            try:
+                user.userprofile.maintains_obj = True
+                user.userprofile.save()
+            except:
+                pass
             inst.save()
             self.save_m2m()
         return inst
@@ -65,8 +71,11 @@ class RepoSubmissionForm(forms.ModelForm):
         inst = super(RepoSubmissionForm, self).save(commit=False)
         inst.owner = user
         if commit:
-            user.userprofile.maintains_obj = True
-            user.userprofile.save()
+            try:
+                user.userprofile.maintains_obj = True
+                user.userprofile.save()
+            except:
+                pass
             inst.save()
             self.save_m2m()
         return inst

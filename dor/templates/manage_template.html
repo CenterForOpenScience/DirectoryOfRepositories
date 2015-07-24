@@ -58,7 +58,8 @@
                                     {% endif %}
                                     {% if title == "Taxonomies" or "Data-Types" %}
                                     <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.obj_name }}</a>
-                                    {% else %}
+                                    {% endif %}
+                                    {% if title == "Repositories" or "Journals" %}                                    
                                     <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
                                     {% endif %}
                                 </label>
@@ -68,7 +69,7 @@
                              <td>
                                 {% if staff %}
                                     {% if group.embargoed %}
-                                    <button type="button" class="btn btn-default btn-md" id="button" name="{{ group.id }}">
+                                    <button type="button" class="btn btn-default btn-md approve-button" id="button" name="{{ group.id }}">
                                         <div id="button-content-check">
                                             <i class="fa fa-square-o fa-lg"></i> Approve
                                         </div>

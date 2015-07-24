@@ -417,19 +417,22 @@ def manage_group(request, title):
         args['title'] = 'Repositories'
         args['taxes'] = Taxonomy.objects.annotate()
     elif title == 'Data-Types':
-        args['groups'] = ContentType.objects.all()
+        if request.user.is_staff:
+            args['groups'] = ContentType.objects.all()
         args['title'] = 'Data-Types'
     # elif title == 'Standards':
     #     args['groups'] = Standards.objects.all()
     #     args['title'] = 'Standards'
     elif title == 'Taxonomies':
-        args['groups'] = Taxonomy.objects.all()
+        if request.user.is_staff:
+            args['groups'] = Taxonomy.objects.all()
         args['title'] = 'Taxonomies'
     elif title == 'Certifications':
-        args['groups'] = Certification.objects.all()
+        if request.user.is_staff:
+            args['groups'] = Certification.objects.all()
         args['title'] = 'Certifications'
     else:
-        return HttpResponseRedirect('/manage/')
+        return HttpResponseRedirect('/')
 
     return render_to_response('manage_template.html', args, context_instance=RequestContext(request))
 
@@ -606,7 +609,6 @@ def add_data_type(request):
         data_type_value = request.POST['data_type_value']
     else:
         data_type_value = ''
-
 
     new_data = ContentType(parent=None)
     new_data.save()

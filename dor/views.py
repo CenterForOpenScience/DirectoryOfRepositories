@@ -172,7 +172,7 @@ def logout(request):
 
 
 def repository_list(request):
-    taxes = Taxonomy.objects.all()
+    taxes = Taxonomy.objects.filter(embargoed=False)
     # standards = Standards.objects.all()
     content_types = ContentType.objects.all()
     repos = Repository.objects.all()

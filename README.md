@@ -9,7 +9,7 @@ To install, clone [this](https://github.com/mfraezz/DirectoryOfRepositories) rep
 pip install -Ur requirements.txt
 ```
 
-Note: postgresql is required for psycopg2. (For instructions on how to install homebrew, see [here](http://cosdev.readthedocs.org/en/latest/osf/setup.html#installing-homebrew).) 
+Note: postgresql is required for psycopg2, even if you're not using it as a backend. (For instructions on how to install homebrew, see [here](http://cosdev.readthedocs.org/en/latest/osf/setup.html#installing-homebrew).) 
 ```bash
 brew install postgresql
 ```

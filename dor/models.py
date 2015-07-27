@@ -30,6 +30,7 @@ class Taxonomy(MPTTModel):
     obj_name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
     associated_content = models.ManyToManyField('ContentType', blank=True)
+    embargoed = models.BooleanField(default=True, verbose_name='Hidden on site')
 
     def __str__(self):
         return '{}'.format(self.obj_name)

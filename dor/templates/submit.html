@@ -19,18 +19,20 @@
     {
         full_tree = []
         for (var i = 0; i < result.length; i++) {
-            var tree_item = {};
-            //TODO: Tree population from existing repo data iff exists
-            tree_item["id"] = result[i]["id"].toString();
-            tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
-            tree_item["text"] = result[i]["obj_name"];
-            tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
-            tree_item["icon"] = false
-            if (tree_ids.indexOf(tree_item["id"]) >= 0) {
-                tree_item["state"]["selected"] = true;
-                tree_item["state"]["opened"] = false;
+            if (!result[i]['embargoed']){
+                var tree_item = {};
+                //TODO: Tree population from existing repo data iff exists
+                tree_item["id"] = result[i]["id"].toString();
+                tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
+                tree_item["text"] = result[i]["obj_name"];
+                tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
+                tree_item["icon"] = false
+                if (tree_ids.indexOf(tree_item["id"]) >= 0) {
+                    tree_item["state"]["selected"] = true;
+                    tree_item["state"]["opened"] = false;
+                }
+                full_tree.push(tree_item);
             }
-            full_tree.push(tree_item);
         };
         return full_tree;
     }
@@ -101,6 +103,14 @@
         $("#id_date_operational").datepicker();
     });
 </script>
+<style>
+.suggest{
+    color: #23527C;
+}
+.suggest:hover{
+    color: #4CAF50;
+}
+</style>
 
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">{{ title }} Submission Form</div>
@@ -164,7 +174,7 @@
 
                     <div class="form-block">
                         <div class="row">
-                            <div class="form-description col-md-offset-3 col-md-6">Select the terms that best describe your repository scope.</div>
+                            <div class="form-description col-md-offset-3 col-md-6">Select the terms that best describe your repository scope. Think something is missing here? <a href='/submit/Taxonomies/' class='suggest'>Suggest an addition.</a></div>
                         </div>
                         <div class="row">
                             <label for="{{ form.accepted_taxonomy.id_for_label }}" class="control-label col-md-3">Accepted Taxonomy*: </label>

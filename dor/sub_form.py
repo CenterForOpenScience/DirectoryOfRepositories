@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from mptt.forms import MoveNodeForm
 
 from dor import models
 
@@ -125,10 +124,9 @@ class TaxSubmissionForm(forms.ModelForm):
         model = models.Taxonomy
         labels = {
             'obj_name': 'Name*',
-            'associated_content': 'Associated Content*',
-            'position': 'Position*'
+            'associated_content': 'Associated Content',
         }
-        exclude = ('lft', 'rght', 'tree_id', 'level')
+        exclude = ('lft', 'rght', 'tree_id', 'level', 'embargoed', 'tax_id')
 
 
 class ContentSubmissionForm(forms.ModelForm):

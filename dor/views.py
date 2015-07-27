@@ -301,7 +301,15 @@ def endorse(request):
 
 
 def submit(request, title):
-    if request.user.is_authenticated():
+    if title == 'Taxonomies':
+            if request.POST:
+                form = TaxSubmissionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/manage/' + title + '/')
+            else:
+                form = TaxSubmissionForm()
+    elif request.user.is_authenticated():
         if title == 'Journals':
             if request.POST:
                 form = JournalSubmissionForm(request.POST)
@@ -346,15 +354,6 @@ def submit(request, title):
         #             return HttpResponseRedirect('/manage/'+title+'/')
         #     else:
         #         form = StandardSubmissionForm()
-
-        elif title == 'Taxonomies':
-            if request.POST:
-                form = TaxSubmissionForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return HttpResponseRedirect('/manage/' + title + '/')
-            else:
-                form = TaxSubmissionForm()
         else:
             return HttpResponseRedirect('/manage/')
     else:
@@ -633,11 +632,36 @@ def add_cert(request):
     else:
         cert_value = ''
 
-    new_cert = Certification.create(cert_value)
+    new_cert = Certification(parent=None)
+    new_cert.save()
+    new_cert.obj_name = cert_value
     new_cert.save()
 
     response_data = {}
     response_data['id'] = new_cert.id
-    response_data['name'] = new_cert.name
+    response_data['name'] = new_cert.obj_name
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def add_tax(request):
+    if request.POST:
+        tax_value = request.POST['tax_value']
+    else:
+        tax_value = ''
+
+    try:
+        tax_parent = Taxonomy.objects.get(id=request.POST['tax_parent'])
+    except:
+        tax_parent = Taxonomy.objects.get(id=1)  # 'All terms'
+
+    new_tax = Taxonomy(parent=tax_parent)
+    new_tax.save()
+    new_tax.obj_name = tax_value
+    new_tax.embargoed = True
+    new_tax.save()
+
+    response_data = {}
+    response_data['id'] = new_tax.id
+    response_data['name'] = new_tax.obj_name
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")

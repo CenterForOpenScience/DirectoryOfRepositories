@@ -306,7 +306,7 @@ def submit(request, title):
                 form = TaxSubmissionForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return HttpResponseRedirect('/manage/' + title + '/')
+                    return HttpResponseRedirect('/submit/Repositories/')
             else:
                 form = TaxSubmissionForm()
     elif request.user.is_authenticated():

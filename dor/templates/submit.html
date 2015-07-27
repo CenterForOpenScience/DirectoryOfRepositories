@@ -114,7 +114,13 @@
 
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">{{ title }} Submission Form</div>
-        <div id="form-note">Starred (*) fields are required</div>
+        <div id="form-note">
+        Starred (*) fields are required.
+        <br/>
+        {% if title == "Taxonomies" %}
+        Note: suggested additions require curation before they can be associated with a repository.
+        {% endif %}
+        </div>
         <form name="submit-form" method="post" class="form-horizontal" role="form">
         {% csrf_token %}
         {% if title == "Standards" %}

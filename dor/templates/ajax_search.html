@@ -1,0 +1,108 @@
+{% for repo in repos %}
+    {% if not repo.embargoed %}
+    <div class="row">
+        <div class="repo-result col-md-12 animated fadeIn" id={{ repo }}>
+            <div class="repo-content">
+                <div class="top">
+                    <div class="title col-md-12">
+                        <div class="title col-md-6">
+                            <h2>{{ repo }}</h2>
+                        </div>
+                        {% if user.is_authenticated %}
+                            <div class="endorse col-md-2 col-md-offset-4">
+                            {% for journal in journals %}
+                                {% if journal.owner == user %}
+                                    {% if repo in journal.repos_endorsed.all %}
+                                        <button type="button" class="btn btn-default btn-md" id="checked-button" name="{{ repo.id }} {{ journal.id }}">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Endorsed
+                                            </div>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md" id="button" name="{{ repo.id }} {{ journal.id }}">
+                                            <div id="button-content">
+                                                <i class="fa fa-square-o fa-lg"></i> Endorse
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <br><strong>Endorsed By</strong>:
+                        <div class="endorsed_repo">
+                            {% for journal in journals %}
+                                {% if repo in journal.repos_endorsed.all %}
+                                    <ul>
+                                        <li>{{ journal }}</li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    <strong>URL</strong>: <a href="{{ repo.url }}">{{ repo.url }}</a>
+                    {% if repo.description %}
+                        <br><strong>Description</strong>: {{ repo.description }}
+                    {% endif %}
+{#                    <br><strong>Owner</strong>: {{ repo.owner }}#}
+                    <br><strong>Date Operational</strong>: {{ repo.date_operational }}
+                    {% if repo.contact %}
+                        <br><strong>Contact</strong>: {{ repo.contact }}
+                    {% endif %}
+                    <br><strong>Accepted Data-Types</strong>:
+                        <ul>
+                            {% for content in repo.accepted_content.all %}
+                                <li>{{ content }}</li>
+                            {% endfor %}
+                        </ul>
+{#                    <strong>Database Access Type</strong>: {{ repo.standards.databaseAccessTypes }}#}
+{#                    <br><strong>PID System</strong>: {{ repo.standards.pidSystems }}#}
+{#                    {% if repos.standards.enhancedPublications %}#}
+{#                        <br><strong>Enhanced Publication</strong>: {{ repos.standards.enhancedPublications }}#}
+{#                    {% endif %}#}
+                </div>
+                {% if repo.alt_names %}
+                    <strong>Alternate Name</strong>: {{ repo.alt_names }}
+                {% endif %}
+                <div class="repo-bottom">
+                    <strong>Metadata Information URL</strong>: <a href="{{ repo.metadataInformationURL }}"> {{ repo.metadataInformationURL }} </a>
+                    <br><strong>Database Certifications</strong>:
+                        <ul>
+                            {% for content in repo.db_certifications.all %}
+                                <li>{{ content }}</li>
+                            {% endfor %}
+                        </ul>
+                    <strong>Size</strong>: {{ repo.size }}
+                {% if repo.hosting_institution %}
+                    <br><strong>Hosting Institute</strong>: {{ repo.hosting_institution }}
+                {% endif %}
+                {% if repo_institution_country %}
+                    <br><strong>Institution Country</strong>: {{ repo.institution_country }}
+                {% endif %}
+                {% if repo.databaseLicenseNames %}
+                    <br><strong>Database License Name</strong>: {{ repo.databaseLicenseNames }}
+                {% endif %}
+{#                    <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}#}
+{#                    <br><strong>Certificate</strong>: {{ repo.standards.certificates }}#}
+                    <br><strong>Taxonomies</strong>:
+                    <ul>
+                        {% for tax in repo.accepted_taxonomy.all %}
+                            <li>{{ tax }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="toggle"><i class="toggle-button fa fa-chevron-down"></i></div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+
+<script>
+    for (var i = 0; i < $(".endorsed_repo").length; i++){
+        if ($($(".endorsed_repo")[i]).text().replace(/\s/g, '') == 0){
+            $($(".endorsed_repo")[i]).html("<ul><li><b>No Journal Endorsements</b></li></ul>");
+        }
+    }
+
+</script>

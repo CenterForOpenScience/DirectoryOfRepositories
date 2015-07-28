@@ -1,6 +1,16 @@
-from django.db import models
 import datetime
-from treebeard.ns_tree import NS_Node
+from django.db import models
+from django.contrib.auth.models import User
+from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    user_type = models.CharField(max_length=100, default='', choices=[('Repository Representative', 'Repository Representative'), ('Journal Representative', 'Journal Representative')])
+    maintains_obj = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user.username)
 
 
 class Journal(models.Model):
@@ -8,32 +18,33 @@ class Journal(models.Model):
     owner = models.ForeignKey('auth.User', related_name='journals')
     url = models.URLField()
     repos_endorsed = models.ManyToManyField('Repository', blank=True)
-    remarks = models.CharField(max_length=10000, default='')
 
-    is_visible = models.BooleanField(default=True)  # These should default to False in production
+    is_visible = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)
 
 
-class Taxonomy(NS_Node):
-    name = models.CharField(max_length=100, default='')
+class Taxonomy(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
     tax_id = models.IntegerField(null=True, blank=True)
-    associated_content = models.ManyToManyField('ContentType',)
-
-    node_order_by = ['tax_id', 'name']
+    associated_content = models.ManyToManyField('ContentType', blank=True)
+    embargoed = models.BooleanField(default=True, verbose_name='Hidden on site')
 
     def __str__(self):
-        if not self.is_root():
-            return '{} - {}'.format(self.get_parent().__str__(), self.name)
-        else:
-            return '{}'.format(self.name)
+        return '{}'.format(self.obj_name)
+
+    class Meta:
+        verbose_name_plural = 'Taxonomies'
+
+    class MPTTMeta:
+        order_insertion_by = ['obj_name']
 
 
 class Standards(models.Model):
     name = models.CharField(max_length=100, default='')
     owner = models.ForeignKey('auth.User', related_name='standards')
-
     databaseAccessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed','closed'),])
     accessTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('embargoed', 'embargoed'), ('restricted', 'restricted'), ('closed', 'closed')])
     dataUploadTypes = models.CharField(max_length=100, default='', choices=[('open','open'), ('restricted', 'restricted'), ('closed', 'closed'),])
@@ -57,44 +68,59 @@ class Standards(models.Model):
     def __str__(self):
         return '{0} Standards'.format(self.name)
 
+    class Meta:
+        verbose_name_plural = 'Standards'
 
-class ContentType(NS_Node):
-    name = models.CharField(max_length=100, default='')
 
-    node_order_by = ['name']
+class Certification(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
+
+    node_order_by = ['obj_name']
 
     def __str__(self):
-        return '{0}'.format(self.name)
+        return '{0}'.format(self.obj_name)
+
+
+class ContentType(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    obj_name = models.CharField(max_length=100, default='')
+
+    node_order_by = ['obj_name']
+
+    def __str__(self):
+        return '{0}'.format(self.obj_name)
 
 
 class Repository(models.Model):
-    name = models.CharField(max_length=100, blank=True, default='')
+    name = models.CharField(max_length=100, default='')
     alt_names = models.CharField(max_length=200, blank=True, default='')
-    url = models.URLField()
-    persistent_url = models.URLField(null=True, default='')
-    accepted_taxonomy = models.ManyToManyField('Taxonomy',)
-    accepted_content = models.ManyToManyField('ContentType',)
-    standards = models.ForeignKey('Standards', related_name='standards')
+    url = models.URLField(verbose_name="Repository URL")
+    persistent_url = models.URLField(null=True, blank=True, default='')
+    accepted_taxonomy = TreeManyToManyField('Taxonomy',)
+    accepted_content = TreeManyToManyField('ContentType',)
+    #standards = models.ForeignKey('Standards', related_name='standards', null=True)
     description = models.CharField(max_length=1000, blank=True, default='')
     hosting_institution = models.CharField(max_length=100, blank=True, default='')
     institution_country = models.CharField(max_length=100, blank=True, default='')
-    owner = models.ForeignKey('auth.User', related_name='repositorys')
+    owner = models.ForeignKey('auth.User', related_name='repositorys', null=True, blank=True)
     contact = models.CharField(max_length=100, blank=True, default='')
-    metadataStandardName = models.CharField(max_length=200, default='')
-    metadataStandardURL = models.URLField()
-    metadataRemarks = models.CharField(max_length=1000, blank=True, default='')
+    metadataInformationURL = models.URLField(verbose_name="Metadata Information URL")
+    metadataRemarks = models.CharField(max_length=1000, blank=True, default='', verbose_name="Metadata Remarks")
     size = models.IntegerField(default=0)
-    date_operational = models.DateField(default=datetime.date(1900, 1, 1))
+    date_operational = models.DateField(default=datetime.date.today())
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
+    remarks = models.CharField(max_length=10000, default='')
+    embargoed = models.BooleanField(default=True, verbose_name='Hidden on site')
     allows_embargo_period = models.BooleanField(default=False)
     doi_provided = models.BooleanField(default=False)
     links_to_publications = models.BooleanField(default=False)
-
-    is_visible = models.BooleanField(default=True)  # These should default to False in production
+    db_certifications = TreeManyToManyField('Certification', blank=True)
 
     class Meta:
-        ordering = ('date_operational',)
+        ordering = ('name',)
+        verbose_name_plural = 'Repositories'
 
     def __str__(self):
         return str(self.name)

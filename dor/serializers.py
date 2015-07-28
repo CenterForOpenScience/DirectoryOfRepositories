@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from dor.models import Repository, Taxonomy, Standards,\
-    ContentType, Journal
+    ContentType, Journal, Certification
 from django.contrib.auth.models import User
 from collections import OrderedDict
 
@@ -17,13 +17,13 @@ class JournalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Journal
-        fields = ('name', 'repos_endorsed', 'owner', 'remarks')
+        fields = ('name', 'repos_endorsed', 'owner')
 
 
 class TaxonomySerializer(serializers.ModelSerializer):
     class Meta:
         model = Taxonomy
-        fields = ('name', 'tax_id', 'associated_content')
+        fields = ('obj_name', 'tax_id', 'associated_content', 'parent', 'id', 'embargoed')
 
 
 class StandardsSerializer(serializers.ModelSerializer):
@@ -66,7 +66,13 @@ class StandardsSerializer(serializers.ModelSerializer):
 class ContentTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentType
-        fields = ('name',)
+        fields = ('obj_name',)
+
+
+class CertificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certification
+        fields = ('obj_name',)
 
 
 class RepositorySerializer(serializers.HyperlinkedModelSerializer):
@@ -75,7 +81,8 @@ class RepositorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Repository
         fields = ('name', 'alt_names', 'url', 'persistent_url', 'accepted_taxonomy',
-                  'standards', 'owner', 'accepted_content', 'description', 'hosting_institution',
+                  #'standards', 
+                  'owner', 'accepted_content', 'description', 'hosting_institution',
                   'institution_country', 'contact', 'size', 'date_operational',
-                  'metadataStandardName', 'metadataStandardURL', 'metadataRemarks',
+                  'metadataInformationURL', 'metadataRemarks', 'remarks', 'embargoed',
                   'allows_embargo_period', 'doi_provided', 'links_to_publications')

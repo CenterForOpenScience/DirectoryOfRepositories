@@ -1,0 +1,12 @@
+{
+  "name": "DirectoryOfRepositories",
+  "dependencies": {
+    "jquery": "~1.11.0",
+    "jquery-ui": "~1.10.4",
+    "bootstrap": "~3.3.0",
+    "fontawesome": "~4.3.0",
+    "animate.css": "https://github.com/daneden/animate.css.git#~3.2.1",
+    "select2": "~4.0.0",
+    "jstree": "~3.1.1"
+  }
+}

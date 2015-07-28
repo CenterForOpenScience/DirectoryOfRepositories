@@ -9,9 +9,21 @@ To install, clone [this](https://github.com/mfraezz/DirectoryOfRepositories) rep
 pip install -Ur requirements.txt
 ```
 
-Note: postgresql is required for psycopg2. (For instructions on how to install homebrew, see [here](http://cosdev.readthedocs.org/en/latest/osf/setup.html#installing-homebrew).) 
+Note: postgresql is required for psycopg2, even if you're not using it as a backend. (For instructions on how to install homebrew, see [here](http://cosdev.readthedocs.org/en/latest/osf/setup.html#installing-homebrew).) 
 ```bash
 brew install postgresql
+```
+
+Download bower:
+
+```bower
+npm install -g bower
+```
+
+Bower install all frontend dependencies:
+
+```bash
+bower install
 ```
 
 If the database is broken or nonexistant, run:
@@ -25,21 +37,10 @@ Alternatively, to build the database, run:
 
 ```bash
 python manage.py makemigrations
+python manage.py migrate auth
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py buildtables
-```
-
-Download bower:
-
-```bower
-npm install -g bower
-```
-
-Bower install all frontend dependencies:
-
-```bash
-bower install
 ```
 
 If the database is not broken and you just want to start the server, run:

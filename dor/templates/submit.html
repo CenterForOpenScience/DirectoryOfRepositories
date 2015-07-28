@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} Submission{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"></link>
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/static/bower_components/jquery-ui/ui/jquery-ui.js"></script>
+<script src="/static/bower_components/jstree/dist/jstree.min.js"></script>
+<script type="text/javascript">
+    function get_pk_or_title()
+    {
+        pk = document.location.toString().split('/');
+        return pk[pk.length-2]
+    }
+
+    function build_jstree(result, tree_ids)
+    {
+        full_tree = []
+        for (var i = 0; i < result.length; i++) {
+            if (!result[i]['embargoed']){
+                var tree_item = {};
+                //TODO: Tree population from existing repo data iff exists
+                tree_item["id"] = result[i]["id"].toString();
+                tree_item["parent"] = result[i]["parent"]===null ? "#" : result[i]["parent"].toString();
+                tree_item["text"] = result[i]["obj_name"];
+                tree_item["state"] = tree_item["parent"]==="#" ? {"opened":true} : {"opened":false}
+                tree_item["icon"] = false
+                if (tree_ids.indexOf(tree_item["id"]) >= 0) {
+                    tree_item["state"]["selected"] = true;
+                    tree_item["state"]["opened"] = false;
+                }
+                full_tree.push(tree_item);
+            }
+        };
+        return full_tree;
+    }
+
+    function submitForm()
+    {
+        var form = document.forms['submit-form'];
+        if ("{{ title }}" === "Repositories"){
+            var taxes = document.createElement("input");
+            taxes.name = "accepted_taxonomy";
+            taxes.value = $("#tax-container").jstree("get_selected");
+            taxes.hidden = true;
+            form.appendChild(taxes)
+        }
+
+        pk = get_pk_or_title()
+        if (pk == "{{ title }}") {
+            form.action = "/submit/{{ title }}/";
+        } else {
+            form.action = "/manage/{{ title }}/" + pk + "/";
+        }
+        form.submit();
+    }
+
+    $(document).ready(function (){
+        if ($("#tax-container").length){
+            $.ajax({
+                url: "/api/taxonomy/",
+                type: "GET",
+                success: function(result){
+                    var full_tree=[];
+                    pk = get_pk_or_title()
+                    if (pk != "{{ title }}") {
+                        $.ajax({
+                            url: "/api/repos/" + pk + "/",
+                            type: "GET",
+                            success: function(repo_result){
+                                var tree_data=[];
+                                tree_data = repo_result['accepted_taxonomy'];
+                                tree_ids = []
+                                for (datum of tree_data) {
+                                    datum = datum.split('/');
+                                    datum = datum[datum.length-2];
+                                    tree_ids.push(datum);
+                                }
+                                $("#tax-container").jstree({
+                                    "plugins": ["wholerow", "checkbox"],
+                                    "core":
+                                    {
+                                        "data": build_jstree(result, tree_ids)
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        $("#tax-container").jstree({
+                            "plugins": ["wholerow", "checkbox"],
+                            "core":
+                            {
+                                "data": build_jstree(result, [])
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        $("#id_date_operational").datepicker();
+    });
+</script>
+<style>
+.suggest{
+    color: #23527C;
+}
+.suggest:hover{
+    color: #4CAF50;
+}
+</style>
+
+    <div id="submission-form" class="col-md-8 col-md-offset-2">
+    <div id="sub-title">{{ title }} Submission Form</div>
+        <div id="form-note">
+        Starred (*) fields are required.
+        <br/>
+        {% if title == "Taxonomies" %}
+        Note: suggested additions require curation before they can be associated with a repository.
+        {% endif %}
+        </div>
+        <form name="submit-form" method="post" class="form-horizontal" role="form">
+        {% csrf_token %}
+        {% if title == "Standards" %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label class="control-label col-md-3">{{ field.label_tag }}* </label>
+                    <div class="col-md-9">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit"/>
+        {% elif title == "Repositories"%}
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Repository name that will be displayed to users.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.name.id_for_label }}" class="control-label col-md-3">Name*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.name }}
+                            </div>
+                            {% for err in form.name.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">The home page or main page for accessing or entering data.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.url.id_for_label }}" class="control-label col-md-3">Web Address/URL*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.url }}
+                            </div>
+                            {% for err in form.url.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.persistent_url.id_for_label }}" class="control-label col-md-3">Persistent Url: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.persistent_url }}
+                            </div>
+                            {% for err in form.persistent_url.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Select the terms that best describe your repository scope. Think something is missing here? <a href='/submit/Taxonomies/' class='suggest'>Suggest an addition.</a></div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.accepted_taxonomy.id_for_label }}" class="control-label col-md-3">Accepted Taxonomy*: </label>
+                            <div class="col-md-6">
+                                <div id="tax-container" class="jstree jstree-default jstree-checkbox-selection" role="tree" aria-multiselectable="true">
+                                </div>
+                            </div>
+                            {% for err in form.accepted_taxonomy.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Enter key words or phrases that describe the data and data types you allow; click add after each entry; can also list data types or sources you do not accept if that provides important clarity.</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-6">
+                                <div id="data-input-form">
+                                    <input type="text" class="form-control" id="dataTypeEntry" placeholder="Can't find a specified datatype? Enter one here.">
+                                </div>
+                                <div id="data-input-button">
+                                    <i class="fa fa-plus-square-o fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.accepted_content.id_for_label }}" class="control-label col-md-3">Accepted Data Types*: </label>
+                            <div class="form-field-box col-md-6">
+                                <div id="data-scroll">
+                                    {% for term in form.accepted_content %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {{ term }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% for err in form.accepted_content.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+{#                    <div class="form-block">#}
+{#                        <div class="row">#}
+{#                            <label for="{{ form.standards.id_for_label }}" class="control-label col-md-3">Standards: </label>#}
+{#                            <div class="form-field-box col-md-6">#}
+{#                                {{ form.standards }}#}
+{#                            </div>#}
+{#                            {% for err in form.standards.errors %}#}
+{#                                <div class="form-description col-md-3">{{ err }}</div>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    </div>#}
+
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide a description of your repository.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.description.id_for_label }}" class="control-label col-md-3">Description: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.description }}
+                            </div>
+                            {% for err in form.description.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">List the hosting institution for the repository if appropriate.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.hosting_institution.id_for_label }}" class="control-label col-md-3">Hosting Institution: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.hosting_institution }}
+                            </div>
+                            {% for err in form.hosting_institution.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.institution_country.id_for_label }}" class="control-label col-md-3">Country: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.institution_country }}
+                            </div>
+                            {% for err in form.institution_country.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+{#                    <div class="form-block">#}
+{#                        <div class="row">#}
+{#                            <label for="{{ form.owner.id_for_label }}" class="control-label col-md-3">Owner*: </label>#}
+{#                            <div class="form-field-box col-md-6">#}
+{#                                {{ form.owner }}#}
+{#                            </div>#}
+{#                            {% for err in form.owner.errors %}#}
+{#                                <div class="form-description col-md-3">{{ err }}</div>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Email address for inquiries.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.contact.id_for_label }}" class="control-label col-md-3">Contact: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.contact }}
+                            </div>
+                            {% for err in form.contact.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">URL to metadata information or instructions required as part of deposition. If there is no URL leave blank.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.metadataInformationURL.id_for_label }}" class="control-label col-md-3">Metadata Information URL*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.metadataInformationURL }}
+                            </div>
+                            {% for err in form.metadataInformationURL.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide key information to help alert or instruct users regarding data deposition.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.metadataRemarks.id_for_label }}" class="control-label col-md-3">Metadata Remarks: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.metadataRemarks }}
+                            </div>
+                            {% for err in form.metadataRemarks.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Input the approximate number of data entries in the repository currently.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.size.id_for_label }}" class="control-label col-md-3">Size: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.size }}
+                            </div>
+                            {% for err in form.size.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Provide any further information.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.remarks.id_for_label }}" class="control-label col-md-3">Remarks*: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.remarks }}
+                            </div>
+                            {% for err in form.remarks.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <label for="{{ form.date_operational.id_for_label }}" class="control-label col-md-3">Date Operational: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.date_operational }}
+                            </div>
+                            {% for err in form.date_operational.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if your repository can sync data release to publication date and allows reviewers secure access.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.allows_embargo_period.id_for_label }}" class="control-label col-md-3">Allows Embargo Period: </label>
+                            <div class="form-field-box col-md-6">
+                                    {{ form.allows_embargo_period }}
+                            </div>
+                            {% for err in form.allows_embargo_period.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if a doi or other permanent identifier is provided for data sets.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.doi_provided.id_for_label }}" class="control-label col-md-3">DOI Provided: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.doi_provided }}
+                            </div>
+                            {% for err in form.doi_provided.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-block">
+                        <div class="row">
+                            <div class="form-description col-md-offset-3 col-md-6">Check if you link data sets to publication DOI’s.</div>
+                        </div>
+                        <div class="row">
+                            <label for="{{ form.links_to_publications.id_for_label }}" class="control-label col-md-3">Links to Publications: </label>
+                            <div class="form-field-box col-md-6">
+                                {{ form.links_to_publications }}
+                            </div>
+                            {% for err in form.links_to_publications.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                            <label for="{{ form.db_certifications.id_for_label }}" class="control-label col-md-3">Database Certifications: </label>
+                            <div class="form-field-box col-md-6">
+                                <div id="data-scroll">
+                                    {% for term in form.db_certifications %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {{ term }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% for err in form.db_certifications.errors %}
+                                <div class="form-description col-md-3">{{ err }}</div>
+                            {% endfor %}
+                        </div>
+                </div>
+            <button type="submit" onclick="submitForm()">Submit</button>
+        {% else %}
+            {% for field in form %}
+                    <div class="form-group">
+                        <label class="control-label col-md-3">{{ field.label_tag }} </label>
+                        <div class="col-md-9">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <button type="submit" onclick="submitForm()">Submit</button>
+        {% endif %}
+        </form>
+
+    </div>
+
+{% endblock %}

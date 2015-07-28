@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Manage {{ title }}{% endblock %}
+
+{% block content %}
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+
+    {% csrf_token %}
+    <div id="manage-wrapper">
+        <div class="row">
+            <div class="col-md-9"><h3>Directory of Repositories Management</h3></div>
+            <div class="col-md-3">
+                <h3>
+                    {% if staff %}
+                    <a href ="/submit/{{ title }}">
+                        <button type="button" class="btn btn-default btn-md" id="button-add" name="{{ title }}-add-button">
+                            <i class="fa fa-plus-square-o fa-lg"></i> Add New {{ title }}
+                        </button>
+                    </a>
+                    {% endif %}
+                </h3>
+            </div>
+        </div>
+        <div id="repo-table">
+            <table class="table table-bordered table-hover">
+                <th colspan="3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ title }} you can manage
+                        </div>
+                        {% if staff %}
+                        <div id="dropdown-button-action" class="col-md-offset-5 col-md-3">
+                            <form class="form-inline">
+                                <select class="form-control" id="bulk-action-select">
+                                    <option value="" selected disabled>--Bulk Actions--</option>
+                                    <option value="delete">Delete</option>
+                                    {% if title == "Repositories" %}
+                                        <option value="toggle-approval">Toggle Approval</option>
+                                    {% endif %}
+                                </select>
+                                <button type="button" class="btn btn-default btn-md" id="button-apply">
+                                    <div id="button-bulk-data">
+                                        Apply
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </th>
+                {% for group in groups %}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    {% if staff %}
+                                    <input type="checkbox" class="{{ group.id }}" id="{{ title }}">
+                                    {% endif %}
+                                    {% if title == "Taxonomies" or "Data-Types" %}
+                                    <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.obj_name }}</a>
+                                    {% endif %}
+                                    {% if title == "Repositories" or "Journals" %}                                    
+                                    <a href="/manage/{{ title }}/{{ group.id }}/">{{ group.name }}</a>
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </td>
+                        {% if title == "Repositories" or "Taxonomies" %}
+                             <td>
+                                {% if staff %}
+                                    {% if group.embargoed %}
+                                    <button type="button" class="btn btn-default btn-md approve-button" id="button" name="{{ group.id }}">
+                                        <div id="button-content-check">
+                                            <i class="fa fa-square-o fa-lg"></i> Approve
+                                        </div>
+                                    </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md approve-button" id="checked-button" name="{{ group.id }}">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    {% if group.embargoed %}
+                                    <button type="button" class="btn btn-default btn-md approve-button disabled">
+                                        <div id="button-content-check">
+                                            <i class="fa fa-lg"></i> Pending Approval
+                                        </div>
+                                    </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-default btn-md approve-button disabled" style="background: #A5D6A7">
+                                            <div id="button-content-check">
+                                                <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td>
+                            <div id="trash-button">
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% if title = "Journals" %}
+                {% if repos %}
+                    {%if not staff %}
+                    <table class="table table-bordered table-hover">
+                    <th colspan="3">
+                        <div class="row">
+                            <div class="col-md-4">
+                                Repositories you can manage
+                            </div>
+                        </div>
+                    </th>
+                    {% for repo in repos %}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    {% if staff %}
+                                    <input type="checkbox" class="{{ repo.id }}" id="Repositories">
+                                    {% endif %}
+                                    <a href="/manage/Repositories/{{ repo.id }}/">{{ repo.name }}</a>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            {% if repo.embargoed %}
+                            <button type="button" class="btn btn-default btn-md disabled">
+                                <div id="button-content-check">
+                                    <i class="fa fa-lg"></i> Pending Approval
+                                </div>
+                            </button>
+                            {% else %}
+                                <button type="button" class="btn btn-default btn-md approve-button disabled" style="background: #A5D6A7">
+                                    <div id="button-content-check">
+                                        <i class="fa fa-check-square-o fa-lg"></i> Approved
+                                    </div>
+                                </button>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div id="trash-button">
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

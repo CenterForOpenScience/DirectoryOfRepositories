@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Coalition on Publishing Data in the Earth and Space Sciences{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        {% load staticfiles %}
+        <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'bower_components/fontawesome/css/font-awesome.css' %}">
+        <link rel="stylesheet" href="{% static 'css/select2-bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'bower_components/select2/dist/css/select2.min.css' %}">
+        <link rel="stylesheet" href="{% static 'bower_components/animate.css/animate.min.css' %}">
+        <link rel="stylesheet" href="{% static 'bower_components/jstree/dist/themes/default/style.min.css' %}"
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div id="content">
+            <div class="row">
+                <div id="banner" class="col-md-12">
+                    <a href="/">
+                        <div id="banner-title" class="col-md-5">
+                            COPDESS Directory of Repositories
+                        </div>
+                    </a>
+                    <div id="banner-nav" class="col-md-3 col-md-offset-4">
+                        <a href="/"><div class="nav-icon col-md-4"><i class="fa fa-home fa-3"></i></div></a>
+                        <a href="/search/"><div class="nav-icon col-md-4"><i class="fa fa-search fa-3"></i></div></a>
+                        {% if user.is_staff %}
+                            <div class="nav-icon col-md-4" id = "user-icon-staff" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                        {% elif user.is_authenticated %}
+                            {% if "Journal" in user.userprofile.user_type %}
+                                {% if user.userprofile.maintains_obj %}
+                                <div class="nav-icon col-md-4" id = "user-icon-auth-j" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% else %}
+                                <div class="nav-icon col-md-4" id = "user-icon-sub-j" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% endif %}
+                            {% elif "Repository" in user.userprofile.user_type %}
+                                {% if user.userprofile.maintains_obj %}
+                                <div class="nav-icon col-md-4" id = "user-icon-auth-r" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% else %}
+                                <div class="nav-icon col-md-4" id = "user-icon-sub-r" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                                {% endif %}
+                            {% else %}
+                            <div class="nav-icon col-md-4" id = "user-icon-auth" data-container="body" data-toggle="popover" data-placement="bottom" title="Hello {{ user }}"><i class="fa fa-user fa-3"></i></div>
+                            {% endif %}
+                        {% else %}
+                            <div class="nav-icon col-md-4" id = "user-icon" data-container="body" data-toggle="popover" data-placement="bottom"><i class="fa fa-user fa-3"></i></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+
+        {% load staticfiles %}
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'bower_components/select2/dist/js/select2.min.js' %}"></script>
+        <script>
+            <!-- Enable tooltips around site -->
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+    </body>
+</html>

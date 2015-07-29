@@ -5,7 +5,6 @@ from dor import models
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 import rest_framework_swagger
-from dor import api
 from dor.admin import admin_site
 
 # Create a router and register our viewsets with it.

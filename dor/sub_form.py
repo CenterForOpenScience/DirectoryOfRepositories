@@ -92,6 +92,10 @@ class RepoSubmissionForm(forms.ModelForm):
                 pass
             inst.save()
             self.save_m2m()
+            for datatype in inst.accepted_content.all():
+                if datatype.token_id:
+                    datatype.token_id = ''
+                    datatype.save()
         return inst
 
 class AnonymousRepoSubmissionForm(forms.ModelForm):
@@ -142,6 +146,10 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
         if commit:
             inst.save()
             self.save_m2m()
+            for datatype in inst.accepted_content.all():
+                if datatype.token_id:
+                    datatype.token_id = ''
+                    datatype.save()
         return inst
 
 

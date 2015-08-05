@@ -100,10 +100,6 @@ body{
     background: #F4F4F3;
 }
 
-a{
-    color: white;
-}
-
 a:hover{
     color: #C8E6C9;
     text-decoration: none;
@@ -135,6 +131,7 @@ h2{
 }
 
 .nav-icon{
+    color: #fff;
     display:inline;
     font-size: 50px;
     text-align: center;
@@ -143,6 +140,13 @@ h2{
 .nav-icon:hover{
     color: #C8E6C9;
     cursor: pointer;
+}
+
+.suggest{
+    color: #23527C;
+}
+.suggest:hover{
+    color: #4CAF50;
 }
 
 .popover-content{

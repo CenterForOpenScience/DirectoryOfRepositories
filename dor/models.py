@@ -85,6 +85,8 @@ class Certification(MPTTModel):
 class ContentType(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     obj_name = models.CharField(max_length=100, default='')
+    associated_repo = models.ForeignKey('Repository', related_name='specific_data_types', blank=True, null=True)
+    token_id = models.CharField(max_length=32, blank=True, null=True, default='')
 
     node_order_by = ['obj_name']
 

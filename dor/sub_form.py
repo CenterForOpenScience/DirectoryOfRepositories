@@ -66,6 +66,21 @@ class RepoSubmissionForm(forms.ModelForm):
         }
         exclude = ('owner', 'embargoed')
 
+    def __init__(self, *args, **kwargs):
+        csrf = kwargs.pop('csrf')
+        repo = kwargs.get('instance', None)
+
+        super(RepoSubmissionForm, self).__init__(*args, **kwargs)
+
+        self.fields['accepted_content'].queryset = (
+            models.ContentType.objects.filter(associated_repo=None) &
+            models.ContentType.objects.filter(token_id='')
+        ) | (models.ContentType.objects.filter(token_id=str(csrf)))
+
+        if repo:
+            self.fields['accepted_content'].queryset = self.fields['accepted_content'].queryset | (
+                models.ContentType.objects.filter(associated_repo=repo))
+
     def save(self, user=None, commit=True):
         inst = super(RepoSubmissionForm, self).save(commit=False)
         inst.owner = user
@@ -108,6 +123,18 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'remarks': forms.Textarea(attrs={'cols': 60, 'rows': 10})
         }
         exclude = ('owner', 'embargoed',)
+
+    def __init__(self, *args, **kwargs):
+        csrf = kwargs.pop('csrf')
+        super(AnonymousRepoSubmissionForm, self).__init__(*args, **kwargs)
+
+        self.fields['accepted_content'].queryset = (
+            models.ContentType.objects.filter(associated_repo=None) &
+            models.ContentType.objects.filter(token_id='')
+        ) | (
+            models.ContentType.objects.filter(token_id=str(csrf))
+        )
+
 
     def save(self, user=None, commit=True):
         inst = super(AnonymousRepoSubmissionForm, self).save(commit=False)

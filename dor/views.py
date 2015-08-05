@@ -301,6 +301,9 @@ def endorse(request):
 
 
 def submit(request, title):
+    args = {}
+    args.update(csrf(request))
+
     if title == 'Taxonomies':
             if request.POST:
                 form = TaxSubmissionForm(request.POST)
@@ -321,13 +324,13 @@ def submit(request, title):
                 form = JournalSubmissionForm()
         elif title == 'Repositories':
             if request.POST:
-                form = RepoSubmissionForm(request.POST)
+                form = RepoSubmissionForm(request.POST, csrf=args['csrf_token'])
                 form = validate(form)
                 if form.is_valid():
                     form.save(user=request.user)
                     return HttpResponseRedirect('/manage/')
             else:
-                form = RepoSubmissionForm()
+                form = RepoSubmissionForm(csrf=args['csrf_token'])
         elif title == 'Data-Types':
             if request.POST:
                 form = ContentSubmissionForm(request.POST)
@@ -359,19 +362,16 @@ def submit(request, title):
     else:
         if title == 'Repositories':
             if request.POST:
-                form = AnonymousRepoSubmissionForm(request.POST)
+                form = AnonymousRepoSubmissionForm(request.POST, csrf=args['csrf_token'])
                 form = validate(form)
                 if form.is_valid():
-                    form.save()
-
+                    repo = form.save()
+                    update_submitted_contenttypes(form, repo, request)
                     return render_to_response('search.html', {"submitted_note": "Successfully submitted the repository."}, context_instance=RequestContext(request))
             else:
-                form = AnonymousRepoSubmissionForm()
+                form = AnonymousRepoSubmissionForm(csrf=args['csrf_token'])
         else:
             return HttpResponseRedirect('/search/')
-
-    args = {}
-    args.update(csrf(request))
 
     args['form'] = form
     args['title'] = title
@@ -458,7 +458,9 @@ def approve_embargo(request):
 
 @login_required(login_url='/login/')
 def manage_form(request, title, pk):
-
+    args = {}
+    args.update(csrf(request))
+    
     if title == 'Journals':
         this_title = 'Journals'
         journal_instance = get_object_or_404(Journal, pk=pk)
@@ -471,26 +473,20 @@ def manage_form(request, title, pk):
                 form.save(user=request.user)
                 return HttpResponseRedirect('/manage/' + title + "/")
             else:
-                args = {}
-                args.update(csrf(request))
-
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Repositories':
         this_title = 'Repositories'
         repo_instance = get_object_or_404(Repository, pk=pk)
         group = Repository.objects.get(pk=pk)
-        form = RepoSubmissionForm(instance=repo_instance)
+        form = RepoSubmissionForm(instance=repo_instance, csrf=args['csrf_token'])
         if request.POST:
-            form = RepoSubmissionForm(request.POST, instance=repo_instance)
+            form = RepoSubmissionForm(request.POST, instance=repo_instance, csrf=args['csrf_token'])
             form = validate(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
             else:
-                args = {}
-                args.update(csrf(request))
-
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Data-Types':
@@ -505,9 +501,6 @@ def manage_form(request, title, pk):
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
             else:
-                args = {}
-                args.update(csrf(request))
-
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     # elif title == 'Standards':
@@ -538,9 +531,6 @@ def manage_form(request, title, pk):
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
             else:
-                args = {}
-                args.update(csrf(request))
-
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     elif title == 'Certifications':
@@ -555,16 +545,10 @@ def manage_form(request, title, pk):
                 form.save()
                 return HttpResponseRedirect('/manage/' + title + "/")
             else:
-                args = {}
-                args.update(csrf(request))
-
                 args['form'] = form
                 return render_to_response('submit.html', args, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/manage/' + title + '/')
-
-    args = {}
-    args.update(csrf(request))
 
     args['form'] = form
     args['group'] = group
@@ -617,6 +601,7 @@ def add_data_type(request):
     new_data = ContentType(parent=None)
     new_data.save()
     new_data.obj_name = data_type_value
+    new_data.token_id = request.POST['csrfmiddlewaretoken']
     new_data.save()
 
     response_data = {}
@@ -665,3 +650,9 @@ def add_tax(request):
     response_data['name'] = new_tax.obj_name
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def update_submitted_contenttypes(form, repo, request):
+    for item in ContentType.objects.filter(token_id=request.POST['csrfmiddlewaretoken']):
+        item.associated_repo = repo
+        item.token_id = ''
+        item.save()

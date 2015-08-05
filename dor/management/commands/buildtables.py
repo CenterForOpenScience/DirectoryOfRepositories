@@ -8,24 +8,28 @@ def build_taxonomy():
         root.save()
         root.obj_name = tax
         root.tax_id = int(tax.split()[0])
+        root.embargoed = False
         root.save()
         for field in INDEX_TERMS[tax]:
             node_x = Taxonomy(parent=root)
             node_x.save()
             node_x.obj_name = field
             node_x.tax_id = int(field.split()[0])
+            node_x.embargoed = False
             node_x.save()
             for subfield in INDEX_TERMS[tax][field]:
                 node_y = Taxonomy(parent=node_x)
                 node_y.save()
                 node_y.obj_name = subfield
                 node_y.tax_id = int(subfield.split()[0])
+                node_y.embargoed = False
                 node_y.save()
                 for subj in INDEX_TERMS[tax][field][subfield]:
                     node_z = Taxonomy(parent=node_y)
                     node_z.save()
                     node_z.obj_name = subj
                     node_z.tax_id = int(subj.split()[0])
+                    node_z.embargoed = False
                     node_z.save()
                     while bool(INDEX_TERMS[tax][field][subfield][subj]):
                         datatype = Taxonomy(parent=node_z)

@@ -66,13 +66,13 @@ class StandardsSerializer(serializers.ModelSerializer):
 class ContentTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentType
-        fields = ('obj_name',)
+        fields = ('obj_name', 'parent', 'associated_repo',)
 
 
 class CertificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certification
-        fields = ('obj_name',)
+        fields = ('obj_name', 'parent',)
 
 
 class RepositorySerializer(serializers.HyperlinkedModelSerializer):

@@ -366,7 +366,6 @@ def submit(request, title):
                 form = validate(form)
                 if form.is_valid():
                     repo = form.save()
-                    update_submitted_contenttypes(form, repo, request)
                     return render_to_response('search.html', {"submitted_note": "Successfully submitted the repository."}, context_instance=RequestContext(request))
             else:
                 form = AnonymousRepoSubmissionForm(csrf=args['csrf_token'])
@@ -650,9 +649,3 @@ def add_tax(request):
     response_data['name'] = new_tax.obj_name
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-def update_submitted_contenttypes(form, repo, request):
-    for item in ContentType.objects.filter(token_id=request.POST['csrfmiddlewaretoken']):
-        item.associated_repo = repo
-        item.token_id = ''
-        item.save()

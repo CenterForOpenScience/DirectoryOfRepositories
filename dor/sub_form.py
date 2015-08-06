@@ -95,6 +95,7 @@ class RepoSubmissionForm(forms.ModelForm):
             for datatype in inst.accepted_content.all():
                 if datatype.token_id:
                     datatype.token_id = ''
+                    datatype.associated_repo = inst
                     datatype.save()
         return inst
 
@@ -149,6 +150,7 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             for datatype in inst.accepted_content.all():
                 if datatype.token_id:
                     datatype.token_id = ''
+                    datatype.associated_repo = inst
                     datatype.save()
         return inst
 

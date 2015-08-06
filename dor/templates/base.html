@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="{% static 'bower_components/animate.css/animate.min.css' %}">
         <link rel="stylesheet" href="{% static 'bower_components/jstree/dist/themes/default/style.min.css' %}"
     </head>
-    <body>
+    <body class="container-fluid">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -63,6 +63,11 @@
                 </div>
             </div>
             {% block content %}{% endblock %}
+            <footer class="footer row">
+                <div class="col-md-12">
+                    <p><br/><br/>Copyright © 2015 A joint effort between the Coalition for Publishing Data in the Earth and Space Sciences (COPDESS) and the <a href="http://centerforopenscience.org/">Center for Open Science</a> <br/> Powered by the <a href="http://osf.io/">Open Science Framework</a> | <a href="https://github.com/CenterForOpenScience/centerforopenscience.org/blob/master/TERMS_OF_USE.md">Terms of Use</a> | <a href="https://github.com/CenterForOpenScience/centerforopenscience.org/blob/master/PRIVACY_POLICY.md">Privacy Policy</a></p>
+                </div>
+            </footer>
         </div>
 
         {% load staticfiles %}

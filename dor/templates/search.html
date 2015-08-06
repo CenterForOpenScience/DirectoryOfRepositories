@@ -35,12 +35,20 @@
 
     <div class="row">
         <div id="search-form" class="col-md-8 col-md-offset-2">
-            <form class="form-inline" action="/search/" method="POST" id="search-form">
+            <form action="/search/" method="POST" id="search-form">
                 <div class="form-group">
                     {% csrf_token %}
-                    <input type="text" class="form-control" id="search-query" name="q"><button type="submit" id="search-button" class="btn btn-success">Search</button>
-                    <button id="adv-search-button" class='btn'>Advanced</button>
-                    <div id="adv-search-options" class="repo-result col-md-12 animated fadeIn" hidden="true">
+                        <div class="input-group">
+                            <input type="text"class="form-control" id="search-query" name="q" />
+                            <div class="input-group-btn">
+                                <button type="submit" id="search-button" class="btn btn-success">Search</button>
+                            </div>
+                            <div class="input-group-btn">
+                                <button id="adv-search-button" class='btn'>Advanced</button>
+                            </div>
+                        </div>
+
+                        <div id="adv-search-options" class="repo-result col-md-12 animated fadeIn" hidden="true">
                         <div style="text-align: center"><strong>Search Criteria:</strong></div><hr/>
                         <div id="adv-repos" class="col-sm-8"><strong class="col-md-6">Repositories</strong><br/>
                             <div class="col-xs-6">

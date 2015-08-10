@@ -43,7 +43,7 @@ class JournalViewSet(viewsets.ModelViewSet):
 
 
 class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ContentType.objects.all()
+    queryset = ContentType.objects.order_by('obj_name', 'id')
     serializer_class = ContentTypeSerializer
 
 
@@ -174,7 +174,7 @@ def logout(request):
 def repository_list(request):
     taxes = Taxonomy.objects.filter(embargoed=False)
     # standards = Standards.objects.all()
-    content_types = ContentType.objects.all()
+    content_types = ContentType.objects.order_by('obj_name', 'id')
     repos = Repository.objects.all()
     journals = Journal.objects.all()
 
@@ -416,7 +416,7 @@ def manage_group(request, title):
         args['taxes'] = Taxonomy.objects.annotate()
     elif title == 'Data-Types':
         if request.user.is_staff:
-            args['groups'] = ContentType.objects.all()
+            args['groups'] = ContentType.objects.order_by('obj_name', 'id')
         args['title'] = 'Data-Types'
     # elif title == 'Standards':
     #     args['groups'] = Standards.objects.all()

@@ -81,6 +81,8 @@ class RepoSubmissionForm(forms.ModelForm):
             self.fields['accepted_content'].queryset = self.fields['accepted_content'].queryset | (
                 models.ContentType.objects.filter(associated_repo=repo))
 
+        self.fields['accepted_content'].queryset = self.fields['accepted_content'].queryset.order_by('obj_name', 'id')
+
     def save(self, user=None, commit=True):
         inst = super(RepoSubmissionForm, self).save(commit=False)
         inst.owner = user
@@ -139,6 +141,8 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
         ) | (
             models.ContentType.objects.filter(token_id=str(csrf))
         )
+
+        self.fields['accepted_content'].queryset = self.fields['accepted_content'].queryset.order_by('obj_name', 'id')
 
 
     def save(self, user=None, commit=True):

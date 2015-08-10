@@ -23,7 +23,7 @@ model_list = {
     'template_object_name': 'taxonomy',
     'extra_context': {
         'standards': models.Standards.objects.all(),
-        'content-types': models.ContentType.objects.all()
+        'content-types': models.ContentType.objects.order_by('obj_name', 'id')
     }
 }
 

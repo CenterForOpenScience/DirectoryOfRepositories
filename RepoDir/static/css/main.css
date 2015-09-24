@@ -142,6 +142,22 @@ h2{
     cursor: pointer;
 }
 
+.nav-text{
+    color: #fff;
+    display:inline;
+    margin-top: 13px;
+    font-size: 23px;
+    letter-spacing: -1px;
+    line-height: 100%;
+    vertical-align: bottom;
+    text-align: center;
+}
+
+.nav-text:hover{
+    color: #C8E6C9;
+    cursor: pointer;
+}
+
 .suggest{
     color: #23527C;
 }

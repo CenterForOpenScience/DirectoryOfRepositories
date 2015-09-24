@@ -133,7 +133,7 @@ $(document).ready(function() {
 
     $('#user-icon').popover({
         html:true,
-        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/register/"><div class="popover-custom">Register</div></a><a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a>',
+        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/register/"><div class="popover-custom">Register</div></a>',
         title: 'Welcome!'
     });
 
@@ -144,7 +144,7 @@ $(document).ready(function() {
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('#user-icon-auth-j').popover({
@@ -164,7 +164,7 @@ $(document).ready(function() {
 
     $('#user-icon-sub-r').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit A Repository</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
 

@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+    // Safari / IE don't have a .endsWith function
+    if (typeof String.prototype.endsWith !== 'function') {
+        String.prototype.endsWith = function(suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+    }
+
     function hoverBarResize(){
         $(".hover-bar").css("top", function(){
                 var fullheight =  $("#landing-image").css("height");

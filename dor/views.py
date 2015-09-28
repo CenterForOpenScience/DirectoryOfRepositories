@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import ValidationError
 from django.shortcuts import render_to_response, RequestContext, get_object_or_404
-from sub_form import UserSubmissionForm, RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
+from dor.sub_form import UserSubmissionForm, RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from itertools import chain
@@ -369,6 +369,7 @@ def submit(request, title):
                     return render_to_response('search.html', {"submitted_note": "Successfully submitted the repository."}, context_instance=RequestContext(request))
             else:
                 form = AnonymousRepoSubmissionForm(csrf=args['csrf_token'])
+                args['anonymous'] = True
         else:
             return HttpResponseRedirect('/search/')
 

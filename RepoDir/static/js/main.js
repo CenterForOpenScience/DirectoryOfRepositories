@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+    // Safari / IE don't have a .endsWith function
+    if (typeof String.prototype.endsWith !== 'function') {
+        String.prototype.endsWith = function(suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+    }
+
     function hoverBarResize(){
         $(".hover-bar").css("top", function(){
                 var fullheight =  $("#landing-image").css("height");
@@ -133,7 +140,7 @@ $(document).ready(function() {
 
     $('#user-icon').popover({
         html:true,
-        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/register/"><div class="popover-custom">Register</div></a><a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a>',
+        content:'<a href="/login/"><div class="popover-custom">Login</div></a><a href="/register/"><div class="popover-custom">Register</div></a>',
         title: 'Welcome!'
     });
 
@@ -144,7 +151,7 @@ $(document).ready(function() {
 
     $('#user-icon-auth').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit Repositories</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
     $('#user-icon-auth-j').popover({
@@ -164,7 +171,7 @@ $(document).ready(function() {
 
     $('#user-icon-sub-r').popover({
         html:true,
-        content:'<a href="/submit/Repositories"><div class="popover-custom">Submit A Repository</div></a><a href="/logout/"><div class="popover-custom">Logout</div></a>'
+        content:'<a href="/logout/"><div class="popover-custom">Logout</div></a>'
     });
 
 

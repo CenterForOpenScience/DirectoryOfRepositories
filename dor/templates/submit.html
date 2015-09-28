@@ -105,6 +105,14 @@
 </script>
     <div id="submission-form" class="col-md-8 col-md-offset-2">
     <div id="sub-title">{{ title }} Submission Form</div>
+        {% if anonymous %}
+        <div id="form-note">
+        Note: You are submitting this form anonymously. If you wish to be able to make edits in the future, 
+        <br/>
+        please register and log in.
+        <br/>
+        </div>
+        {% endif %}
         <div id="form-note">
         Starred (*) fields are required.
         <br/>

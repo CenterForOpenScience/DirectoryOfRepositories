@@ -176,19 +176,19 @@ $(document).ready(function() {
 
 
     $('.taxonomy-dropdown').select2({
-        placeholder: "Filter Taxonomies",
+        placeholder: "Type to Filter by Taxonomies",
         allowClear: true,
         width: '100%'
     });
 
     $('.journal-dropdown').select2({
-        placeholder: "Filter Journals",
+        placeholder: "Type to Filter by Journals",
         allowClear: true,
         width: '100%'
     });
 
     $('.content-dropdown').select2({
-        placeholder: "Filter Accepted Data-Types",
+        placeholder: "Type to Filter by Data-Types",
         allowClear: true,
         width: '100%'
     });
@@ -234,6 +234,15 @@ $(document).ready(function() {
             }
 
             filter_query(JSON.stringify(finalFilters));
+        }
+        if ( $('.taxonomy-dropdown').val() !== '') {
+            $('.taxonomy-dropdown').val('').trigger("change");
+        }
+        if ( $('.journal-dropdown').val() !== '') {
+            $('.journal-dropdown').val('').trigger("change");
+        }
+        if  ($('.content-dropdown').val() !== '') {
+            $('.content-dropdown').val('').trigger("change");
         }
     });
 

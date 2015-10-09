@@ -109,7 +109,7 @@ class Repository(models.Model):
     contact = models.CharField(max_length=100, blank=True, default='')
     metadataInformationURL = models.URLField(verbose_name="Metadata Information URL")
     metadataRemarks = models.CharField(max_length=1000, blank=True, default='', verbose_name="Metadata Remarks")
-    size = models.IntegerField(default=0)
+    size = models.CharField(max_length=100, default='')
     date_operational = models.DateField(default=datetime.date.today())
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')

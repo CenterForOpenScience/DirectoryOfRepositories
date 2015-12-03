@@ -336,7 +336,7 @@
                             <div class="form-description col-md-offset-3 col-md-6">Input the approximate volume of data in the repository, in terabytes (TB) or petabytes (PB), or the number of datasets the repository currently holds.</div>
                         </div>
                         <div class="row">
-                            <label for="{{ form.size.id_for_label }}" class="control-label col-md-3">Size/Volume: </label>
+                            <label for="{{ form.size.id_for_label }}" class="control-label col-md-3">Size/Volume*: </label>
                             <div class="form-field-box col-md-6">
                                 {{ form.size }}
                             </div>
@@ -413,7 +413,7 @@
                         </div>
                     </div>
                     <div class="row">
-                            <label for="{{ form.db_certifications.id_for_label }}" class="control-label col-md-3">Database Certifications: </label>
+                            <label for="{{ form.db_certifications.id_for_label }}" class="control-label col-md-3">Repository Certifications: </label>
                             <div class="form-field-box col-md-6">
                                 <div id="data-scroll">
                                     {% for term in form.db_certifications %}

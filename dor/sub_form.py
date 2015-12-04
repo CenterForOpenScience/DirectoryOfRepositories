@@ -55,7 +55,7 @@ class RepoSubmissionForm(forms.ModelForm):
             'size': 'Size*',
             'date_operational': 'Date Operational*',
             'remarks': 'Remarks*',
-            'db_certifications': 'Database Certificaions*',
+            'db_certifications': 'Repository Certificaions*',
         }
         widgets = {
             'accepted_content': forms.CheckboxSelectMultiple(),
@@ -120,7 +120,7 @@ class AnonymousRepoSubmissionForm(forms.ModelForm):
             'size': 'Size*',
             'date_operational': 'Date Operational*',
             'remarks': 'Remarks*',
-            'db_certifications': 'Database Certificaions*',
+            'db_certifications': 'Repository Certificaions*',
         }
         widgets = {
             'accepted_content': forms.CheckboxSelectMultiple(),

@@ -8,6 +8,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+# Monkey patch due to mptt_admin trying to import something that hass been removed.
+from django.utils.translation import ugettext_lazy
+from django.contrib.admin.views import main
+main.EMPTY_CHANGELIST_VALUE = ugettext_lazy('(None)')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))

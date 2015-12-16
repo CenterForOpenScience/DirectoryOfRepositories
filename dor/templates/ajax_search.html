@@ -84,6 +84,24 @@
                 {% endif %}
 {#                    <br><strong>Quality Management</strong>: {{ repo.standards.qualityManagement }}#}
 {#                    <br><strong>Certificate</strong>: {{ repo.standards.certificates }}#}
+                    <br><strong>Allows Embargo Period</strong>: 
+                        {% if repo.allows_embargo_period %} 
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    <br><strong>Provides DOI</strong>: 
+                        {% if repo.doi_provided %} 
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    <br><strong>Links to Publications</strong>: 
+                        {% if repo.links_to_publications %} 
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
                     <br><strong>Taxonomies</strong>:
                     <ul>
                         {% for tax in repo.accepted_taxonomy.all %}

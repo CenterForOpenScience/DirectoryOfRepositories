@@ -103,7 +103,7 @@ class Repository(models.Model):
     accepted_content = TreeManyToManyField('ContentType',)
     #standards = models.ForeignKey('Standards', related_name='standards', null=True)
     description = models.CharField(max_length=1000, blank=True, default='')
-    hosting_institution = models.CharField(max_length=100, blank=True, default='')
+    hosting_institution = models.CharField(max_length=1000, blank=True, default='')
     institution_country = models.CharField(max_length=100, blank=True, default='')
     owner = models.ForeignKey('auth.User', related_name='repositorys', null=True, blank=True)
     contact = models.CharField(max_length=100, blank=True, default='')

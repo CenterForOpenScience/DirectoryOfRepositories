@@ -63,26 +63,31 @@ class Command(BaseCommand):
             if not contact:
                 contact = row[8].value
             else:
-                remarks = '{}\n\nIntitutional Contacts: {}'.format(remarks, row[8].value)
+                remarks = u'{}\n\nInstitutional Contacts: {}'.format(
+                    remarks, row[8].value)
 
             if remarks:
-                remarks = '{}\n\nProvider Type: {}'.format(remarks, row[10].value)
+                remarks = u'{}\n\nProvider Type: {}'.format(remarks, row[10].value)
             else:
-                remarks = 'Provider Type: {}'.format(row[10].value)
+                remarks = u'Provider Type: {}'.format(row[10].value)
 
-            remarks = '{}\n\nKeywords: {}'.format(remarks, row[11].value)
+            remarks = u'{}\n\nKeywords: {}'.format(remarks, row[11].value)
             hosting_institution = row[12].value
-            remarks = '{}\n\nDatabaseAccessType: {}'.format(remarks, row[13].value)
+            remarks = u'{}\n\nDatabaseAccessType: {}'.format(remarks, row[13].value)
             doi_provided = row[14].value not in ('', 'none')
             if doi_provided:
-                remarks = '{}\n\nPIDSystem: {}'.format(remarks, row[14].value)
+                remarks = u'{}\n\nPIDSystem: {}'.format(
+                    remarks, row[14].value)
 
             if row[15].value:
-                remarks = '{}\n\nEnhances Publications: {}'.format(remarks, row[15].value)
+                remarks = u'{}\n\nEnhances Publications: {}'.format(
+                    remarks, row[15].value)
             if row[16].value:
-                remarks = '{}\n\nQuality Management: {}'.format(remarks, row[16].value)
+                remarks = u'{}\n\nQuality Management: {}'.format(
+                    remarks, row[16].value)
             if row[17].value:
-                remarks = '{}\n\nData Upload Type: {}'.format(remarks, row[17].value)
+                remarks = u'{}\n\nData Upload Type: {}'.format(
+                    remarks, row[17].value)
 
             repo = Repository(
                 owner=owner,
@@ -101,7 +106,7 @@ class Command(BaseCommand):
             repo.save()
 
             migrated_repos.append(repo)
-            print('Created {}'.format(repo))
+            print(u'Created {}'.format(name))
         print('Created {} new repositories'.format(len(migrated_repos)))
 
     def parse_date(self, cell, mode):

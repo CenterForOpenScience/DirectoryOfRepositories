@@ -8,6 +8,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     user_type = models.CharField(max_length=100, default='', choices=[('Repository Representative', 'Repository Representative'), ('Journal Representative', 'Journal Representative')])
     maintains_obj = models.BooleanField(default=False)
+    verification_key = models.CharField(max_length=70, default='', blank=True)
+    datetime_reset_requested = models.DateTimeField(auto_now_add=False, blank=True)
 
     def __str__(self):
         return str(self.user.username)

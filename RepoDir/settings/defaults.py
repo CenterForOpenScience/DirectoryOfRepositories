@@ -32,15 +32,11 @@ ALLOWED_HOSTS = []
 # Emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Live site
 
-# SMTP Settings
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'osf-smtp'
-EMAIL_HOST_PASSWORD = ''  # Set this in local.py
-EMAIL_SUBJECT_PREFIX = '[COPDESS] '
-EMAIL_USE_TLS = True
-
 FROM_EMAIL = 'copdess-noreply@copdessdirectory.osf.io'
+
+# Sendgrid
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "CHANGEME"
 
 # Application definition
 

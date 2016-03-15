@@ -1,9 +1,13 @@
 import datetime
+import sys
 
 import xlrd
 
 from django.core.management.base import BaseCommand
 from dor.models import Repository, User
+
+if sys.version[0] == '3':
+    unicode = str
 
 class Command(BaseCommand):
     help = 'Imports Repository data from a spreadsheet'
@@ -51,43 +55,45 @@ class Command(BaseCommand):
         wb = xlrd.open_workbook(options['fp'][0])
         sheet = wb.sheets()[0]
         for row in (sheet.row(index) for index in range(1, sheet.nrows)):
-            name = row[1].value
-            url = row[2].value
-            description = row[3].value
-            contact = row[4].value
-            size = row[5].value or 0
+            name = self.strip_unicode(row, 1)
+            url = self.strip_unicode(row, 2)
+            description = self.strip_unicode(row, 3)
+            contact = self.strip_unicode(row, 4)
+            size = self.strip_unicode(row, 5) or 0
             date = self.parse_date(row[6], wb.datemode)
-            metadata_url = row[7].value or 'http://DEFAULT_VALUE.com'
-            remarks = row[9].value
+            metadata_url = self.strip_unicode(row, 7) or 'http://DEFAULT_VALUE.com'
+            remarks = self.strip_unicode(row, 9)
 
             if not contact:
-                contact = row[8].value
+                contact = self.strip_unicode(row, 8)
             else:
-                remarks = u'{}\n\nInstitutional Contacts: {}'.format(
-                    remarks, row[8].value)
+                remarks = '{}\n\nInstitutional Contacts: {}'.format(
+                    remarks, self.strip_unicode(row, 8))
 
             if remarks:
-                remarks = u'{}\n\nProvider Type: {}'.format(remarks, row[10].value)
+                remarks = '{}\n\nProvider Type: {}'.format(remarks,
+                    self.strip_unicode(row, 10))
             else:
-                remarks = u'Provider Type: {}'.format(row[10].value)
+                remarks = 'Provider Type: {}'.format(self.strip_unicode(row, 10))
 
-            remarks = u'{}\n\nKeywords: {}'.format(remarks, row[11].value)
-            hosting_institution = row[12].value
-            remarks = u'{}\n\nDatabaseAccessType: {}'.format(remarks, row[13].value)
-            doi_provided = row[14].value not in ('', 'none')
+            remarks = '{}\n\nKeywords: {}'.format(remarks, self.strip_unicode(row, 11))
+            hosting_institution = self.strip_unicode(row, 12)
+            remarks = '{}\n\nDatabaseAccessType: {}'.format(remarks,
+                self.strip_unicode(row, 13))
+            doi_provided = self.strip_unicode(row, 14) not in ('', 'none')
             if doi_provided:
-                remarks = u'{}\n\nPIDSystem: {}'.format(
-                    remarks, row[14].value)
+                remarks = '{}\n\nPIDSystem: {}'.format(
+                    remarks, self.strip_unicode(row, 14))
 
             if row[15].value:
-                remarks = u'{}\n\nEnhances Publications: {}'.format(
-                    remarks, row[15].value)
+                remarks = '{}\n\nEnhances Publications: {}'.format(
+                    remarks, self.strip_unicode(row, 15))
             if row[16].value:
-                remarks = u'{}\n\nQuality Management: {}'.format(
-                    remarks, row[16].value)
+                remarks = '{}\n\nQuality Management: {}'.format(
+                    remarks, self.strip_unicode(row, 16))
             if row[17].value:
-                remarks = u'{}\n\nData Upload Type: {}'.format(
-                    remarks, row[17].value)
+                remarks = '{}\n\nData Upload Type: {}'.format(
+                    remarks, self.strip_unicode(row, 17))
 
             repo = Repository(
                 owner=owner,
@@ -122,3 +128,9 @@ class Command(BaseCommand):
         elif cell.ctype == 3:      # Float - xldate
             date_tuple = xlrd.xldate_as_tuple(cell.value, mode)[:3]
             return datetime.date(date_tuple[0], date_tuple[1], date_tuple[2])
+
+    def strip_unicode(self, row, index):
+        if type(row[index].value) is unicode:
+            return ''.join([c for c in row[index].value if ord(c) < 128])
+        else:
+            return row[index].value

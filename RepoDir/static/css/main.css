@@ -333,6 +333,17 @@ h2{
     padding-top:20px;
 }
 
+.adv-search{
+    position:relative;
+    background:#FFF;
+    border-radius: 5px;
+    border: solid;
+    border-color: #A5D6A7;
+    font-family: 'Lato', sans-serif;
+    padding: 0;
+    margin-bottom:10px;
+}
+
 .repo-result{
     position:relative;
     background:#FFF;
@@ -591,6 +602,11 @@ h2{
 
 #button-apply{
     color:#4CAF50;
+}
+
+#show-more-btn{
+    background-color: #A5D6A7;
+    text-align: center;
 }
 
 .approve-button{

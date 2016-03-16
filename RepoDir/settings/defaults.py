@@ -29,6 +29,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Live site
+
+FROM_EMAIL = 'copdess-noreply@copdessdirectory.osf.io'
+
+# Sendgrid
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "CHANGEME"
 
 # Application definition
 

@@ -257,7 +257,7 @@ $(document).ready(function() {
 
     });
 
-    $("#results-view").on('click','.btn', function(){
+    $("#results-view").on('click','.endorse-btn', function(){
         var ids = $(this).attr("name");
         var id_table = ids.split(" ");
 

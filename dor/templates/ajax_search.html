@@ -1,7 +1,7 @@
 {% for repo in repos %}
     {% if not repo.embargoed %}
     <div class="row">
-        <div class="repo-result col-md-12 animated fadeIn" id={{ repo }}>
+        <div hidden class="repo-result col-md-12 animated fadeIn" id="{{ repo }}">
             <div class="repo-content">
                 <div class="top">
                     <div class="title col-md-12">
@@ -13,13 +13,13 @@
                             {% for journal in journals %}
                                 {% if journal.owner == user %}
                                     {% if repo in journal.repos_endorsed.all %}
-                                        <button type="button" class="btn btn-default btn-md" id="checked-button" name="{{ repo.id }} {{ journal.id }}">
+                                        <button type="button" class="btn btn-default btn-md endorse-btn" id="checked-button" name="{{ repo.id }} {{ journal.id }}">
                                             <div id="button-content-check">
                                                 <i class="fa fa-check-square-o fa-lg"></i> Endorsed
                                             </div>
                                         </button>
                                     {% else %}
-                                        <button type="button" class="btn btn-default btn-md" id="button" name="{{ repo.id }} {{ journal.id }}">
+                                        <button type="button" class="btn btn-default btn-md endorse-btn" id="button" name="{{ repo.id }} {{ journal.id }}">
                                             <div id="button-content">
                                                 <i class="fa fa-square-o fa-lg"></i> Endorse
                                             </div>
@@ -115,7 +115,11 @@
     </div>
     {% endif %}
 {% endfor %}
-
+<div class="row" id="show-more" hidden>
+    <button type="button" class="btn btn-default btn-md col-md-12" id="show-more-btn">
+        <strong>Show More</strong>
+    </button>
+</div>
 <script>
     for (var i = 0; i < $(".endorsed_repo").length; i++){
         if ($($(".endorsed_repo")[i]).text().replace(/\s/g, '') == 0){
@@ -123,4 +127,24 @@
         }
     }
 
+    for (var i = 0; i < 10; i++){
+        if ($(".repo-result")[i]){
+            $(".repo-result")[i].removeAttribute("hidden");
+        }
+    }
+
+    $(document).ready(function(){
+        if ($(".repo-result").length >= 10){
+            $("#show-more")[0].removeAttribute("hidden");
+
+            $("#show-more-btn").on('click', function(){
+                $("#show-more")[0].hidden = true;
+                for (var i = 10; i < $(".repo-result").length; i++){
+                    if ($(".repo-result")[i]){
+                        $(".repo-result")[i].removeAttribute("hidden");
+                    }
+                }
+            });
+        }
+    });
 </script>

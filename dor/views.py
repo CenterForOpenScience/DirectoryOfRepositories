@@ -202,7 +202,7 @@ def repositorySearch(request):
     filter_classes['journal_list'] = []
 
     if 'r_name' in filters:
-        filter_classes['repos'] = Repository.objects.filter(name__icontains=search_text)
+        filter_classes['repos'] = Repository.objects.filter(name__icontains=search_text).order_by('name')
     if 'r_tax' in filters:
         filter_classes['taxonomies'] = Repository.objects.filter(accepted_taxonomy__obj_name__icontains=search_text)
     if 'r_content' in filters:
@@ -233,8 +233,7 @@ def repositorySearch(request):
         for item in filter_classes[class_name]:
             final_queryset.append(item)
 
-    final_result = list(set(chain(final_queryset)))
-
+    final_result = sorted(list(set(chain(final_queryset))), key=lambda x: x.name.upper())
     args = {}
     args.update(csrf(request))
 
@@ -272,7 +271,7 @@ def repositoryFilter(request):
                     for current_repos in tax_filter_qs.filter(id=jour_repos['repos_endorsed']):
                         journal_list_qs.append(current_repos)
                 tax_filter_qs = Repository.objects.filter(id__in=[j_repo.id for j_repo in journal_list_qs])
-    tax_repos = list(tax_filter_qs)
+    tax_repos = sorted(list(tax_filter_qs), key=lambda x: x.name.upper())
 
     args = {}
     args.update(csrf(request))

@@ -85,7 +85,7 @@ class RepoSubmissionForm(forms.ModelForm):
 
     def save(self, user=None, commit=True):
         inst = super(RepoSubmissionForm, self).save(commit=False)
-        inst.owner = user or User.objects.filter(is_superuser=True)[0]
+        inst.owner = user or inst.owner or User.objects.filter(is_superuser=True)[0]
         if commit:
             try:
                 user.userprofile.maintains_obj = True

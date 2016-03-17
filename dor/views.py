@@ -192,7 +192,7 @@ def forgot_password_request(request):
     user_profile.datetime_reset_requested = datetime.datetime.utcnow()
     user_profile.save()
 
-    subject = 'Reset Password'
+    subject = '[COPDESS] Reset Password'
     from_address = settings.FROM_EMAIL
     email_context = Context({
         'username': user.first_name or user.username or '',

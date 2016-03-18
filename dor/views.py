@@ -1,24 +1,42 @@
+import datetime
+from itertools import chain
+import json
+from random import SystemRandom
+import string
+
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import auth
+from django.core.context_processors import csrf
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.forms import ValidationError
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response, RequestContext, get_object_or_404
+from django.template.loader import get_template
+from django.template import Context
+from rest_framework import permissions, viewsets, filters
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 from dor.models import Repository, Taxonomy, Standards, ContentType, Journal, Certification, UserProfile
 from dor.serializers import (UserSerializer, RepositorySerializer,
                              TaxonomySerializer, StandardsSerializer,
                              ContentTypeSerializer, JournalSerializer,
                              CertificationSerializer)
 from dor.permissions import IsOwnerOrReadOnly, CanCreateOrReadOnly
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.forms import ValidationError
-from django.shortcuts import render_to_response, RequestContext, get_object_or_404
 from dor.sub_form import UserSubmissionForm, RepoSubmissionForm, ContentSubmissionForm, StandardSubmissionForm, TaxSubmissionForm, AnonymousRepoSubmissionForm, CertificationSubmissionForm, JournalSubmissionForm
-from django.http import HttpResponseRedirect, HttpResponse
-from django.core.context_processors import csrf
-from itertools import chain
-from django.contrib import auth
-from rest_framework import permissions, viewsets, filters
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-import json
+from RepoDir import settings
 
+def random_string(length=70, chars=None):
+    """Generate a random string of a given length.
+    """
+    random = SystemRandom()
+    if not chars:
+        letters = getattr(string, 'ascii_letters', None) or getattr(string, 'letters', None)  # Polyfill
+        chars = letters + string.digits
+    return ''.join([chars[random.randint(0, len(chars) - 1)] for i in range(length)])
 
 @api_view(('GET',))
 def api_root(request, format=None):
@@ -141,6 +159,93 @@ def register(request):
     args['form'] = form
     return render_to_response('register.html', args, context_instance=RequestContext(request))
 
+def forgot_password_form(request):
+    if request.user.is_authenticated():
+        return render_to_response('index.html', context_instance=RequestContext(request))
+    else:
+        c = {}
+        c.update(csrf(request))
+        return render_to_response('forgot_password.html', c, context_instance=RequestContext(request))
+
+def forgot_password_request(request):
+    c = {}
+    email_address = request.POST.get('email')
+    if not email_address:
+        c['invalid_message'] = "Please enter an email address"
+        return render_to_response('forgot_password.html', c, context_instance=RequestContext(request))
+
+    c['success_message'] = ('If there is an account associated with {0}, an email with instructions on how to reset '
+             'the password has been sent to {0}. If you do not receive an email and believe you should '
+             'have, please email contact@osf.io').format(email_address)
+    user_objs = list(User.objects.filter(email=email_address))
+    if not user_objs:
+        return render_to_response('forgot_password.html', c, context_instance=RequestContext(request))
+
+    user = user_objs[0]
+
+    try:
+        user_profile = UserProfile.objects.get(user=user)
+    except ObjectDoesNotExist:
+        user_profile = UserProfile(user=user)
+
+    user_profile.verification_key = random_string()
+    user_profile.datetime_reset_requested = datetime.datetime.utcnow()
+    user_profile.save()
+
+    subject = '[COPDESS] Reset Password'
+    from_address = settings.FROM_EMAIL
+    email_context = Context({
+        'username': user.first_name or user.username or '',
+        'reset_url': 'http://{}/{}/{}/'.format(request.get_host(), 'reset_password', user_profile.verification_key)
+    })
+    plaintext_email = get_template('emails/forgot_password.txt').render(email_context)
+    send_mail(subject, plaintext_email, from_address, [email_address])
+
+    return render_to_response('forgot_password.html', c, context_instance=RequestContext(request))
+
+def reset_password_form(request, verification_key):
+    template_name = 'reset_password.html'
+    c = {}
+    c.update(csrf(request))
+    try:
+        auth = UserProfile.objects.get(verification_key=verification_key)
+    except ObjectDoesNotExist:
+        c['invalid_message'] = 'Reset token not found, please try again'
+        template_name = 'forgot_password.html'
+    else:
+        if not datetime.datetime.utcnow() < (auth.datetime_reset_requested.replace(tzinfo=None) + datetime.timedelta(hours=1)):
+            c['invalid_message'] = 'Reset token has expired, please try again'
+            template_name = 'forgot_password.html'
+        else:
+            c['email'] = auth.user.email
+            c['form_url'] = request.path
+
+    return render_to_response(template_name, c, context_instance=RequestContext(request))
+
+def reset_password_submit(request):
+    c = {}
+    c.update(csrf(request))
+    email = request.POST.get('email')
+    new_password = request.POST.get('password')
+    new_password_again = request.POST.get('password2')
+
+    if new_password != new_password_again:
+        c['invalid_message'] = "Passwords must match"
+        c['email'] = email
+        c['form_url'] = request.POST.get('reset_form')
+        return render_to_response('reset_password.html', c, context_instance=RequestContext(request))
+    else:
+        user = User.objects.get(email=email)
+        user.set_password(new_password)
+        user.save()
+        auth_user = auth.authenticate(username=user.username, password=new_password)
+        auth.login(request, auth_user)
+
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.verification_key = None
+        user_profile.datetime_reset_requested = None
+        user_profile.save()
+        return HttpResponseRedirect('/')
 
 def auth_view(request):
     username = request.POST.get('username', '')

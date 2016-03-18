@@ -6,6 +6,8 @@ import os
 #     'copdessdirectory.osf.io',
 # ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Local
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',

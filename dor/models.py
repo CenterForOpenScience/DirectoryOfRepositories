@@ -14,6 +14,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.user.username)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.user and not self.user_id:
+            self.user_id = self.user.id
+        super(UserProfile, self).save()
+
 
 class Journal(models.Model):
     name = models.CharField(max_length=100, default='')

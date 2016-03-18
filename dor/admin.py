@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
-from dor.models import Repository, Journal, Taxonomy, ContentType, Standards, Certification
+from dor.models import (Repository, Journal, Taxonomy,
+    ContentType, Standards, Certification, UserProfile)
 from dor.widgets import NestedCheckboxSelectMultiple
 from django_mptt_admin.admin import DjangoMpttAdmin
 from robots.admin import RuleAdmin
@@ -104,7 +105,8 @@ class DORAdminSite(admin.AdminSite):
 
 admin_site = DORAdminSite(name='admin')
 
-admin_site.register(User, UserAdmin)
+admin_site.register(User, CustomUserAdmin)
+admin_site.register(UserProfile, UserProfileAdmin)
 admin_site.register(Rule, RuleAdmin)
 admin_site.register(Url)
 admin_site.register(Site, SiteAdmin)

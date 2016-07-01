@@ -45,6 +45,7 @@
             var formIsValid = true;
             var formHasName = false;
             var formHasUrl = false;
+            var formHasValidUrl = false;
             var formHasTaxonomy = false;
             var formHasContent = false;
 
@@ -52,8 +53,9 @@
                 if (Boolean(input.name === "name" && input.value)) {
                     formHasName = true;
                 } else if (Boolean(input.name === "url" && input.value)) {
+                    formHasUrl = true;
                     var r = new RegExp('^https?:\/\/[^\.][a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$');
-                    formHasUrl = r.test(input.value);
+                    formHasValidUrl = r.test(input.value);
                 } else if (Boolean(input.name === "accepted_taxonomy" && input.value)) {
                     formHasTaxonomy = true;
                 } else if (Boolean(input.name === "accepted_content" && input.value)) {
@@ -71,6 +73,9 @@
             if (!formHasUrl) {
                 formIsValid = false;
                 $("#repo-url-error").text("This field is required.");
+            } else if (!formHasValidUrl) {
+                formIsValid = false;
+                $("#repo-url-error").text("This url is invalid.");
             } else {
                 $("#repo-url-error").text("");
             }

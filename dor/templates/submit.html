@@ -40,6 +40,57 @@
     function submitForm()
     {
         var form = document.forms['submit-form'];
+        
+        form.isValid = function() {
+            var formIsValid = true;
+            var formHasName = false;
+            var formHasUrl = false;
+            var formHasTaxonomy = false;
+            var formHasContent = false;
+
+            $.each($(form).serializeArray(), function(_, input){
+                if (Boolean(input.name === "name" && input.value)) {
+                    formHasName = true;
+                } else if (Boolean(input.name === "url" && input.value)) {
+                    formHasUrl = /^(ftp|http|https):\/\/[^ "]+$/.test(input.value);
+                } else if (Boolean(input.name === "accepted_taxonomy" && input.value)) {
+                    formHasTaxonomy = true;
+                } else if (Boolean(input.name === "accepted_content" && input.value)) {
+                    formHasContent = true;
+                }
+            });
+
+            if (!formHasName) {
+                formIsValid = false;
+                $("#repo-name-error").text("This field is required.");
+            } else {
+                $("#repo-name-error").text("");
+            }
+            
+            if (!formHasUrl) {
+                formIsValid = false;
+                $("#repo-url-error").text("This field is required.");
+            } else {
+                $("#repo-url-error").text("");
+            }
+            
+            if (!formHasTaxonomy) {
+                formIsValid = false;
+                $("#repo-taxonomy-error").text("This field is required.");
+            } else {
+                $("#repo-taxonomy-error").text("");
+            }
+
+            if (!formHasContent) {
+                formIsValid = false;
+                $("#repo-content-error").text("This field is required.");
+            } else {
+                $("#repo-content-error").text("");
+            }
+
+            return formIsValid;
+        };
+
         if ("{{ title }}" === "Repositories"){
             var taxes = document.createElement("input");
             taxes.name = "accepted_taxonomy";
@@ -54,10 +105,20 @@
         } else {
             form.action = "/manage/{{ title }}/" + pk + "/";
         }
-        form.submit();
+
+        if (form.isValid()) {
+            form.submit();
+        } else {
+            $("#submit-form-error").text("Error submitting form. Please make sure you've filled in each required field.");
+        }
     }
 
     $(document).ready(function (){
+        $('#submit-btn').click(function(e) {
+            e.preventDefault();
+            submitForm();
+        });
+
         if ($("#tax-container").length){
             $.ajax({
                 url: "/api/taxonomy/",
@@ -145,6 +206,7 @@
                             <div class="form-field-box col-md-6">
                                 {{ form.name }}
                             </div>
+                            <div id="repo-name-error" class="form-description col-md-3"></div>
                             {% for err in form.name.errors %}
                                 <div class="form-description col-md-3">{{ err }}</div>
                             {% endfor %}
@@ -160,6 +222,7 @@
                             <div class="form-field-box col-md-6">
                                 {{ form.url }}
                             </div>
+                            <div id="repo-url-error" class="form-description col-md-3"></div>    
                             {% for err in form.url.errors %}
                                 <div class="form-description col-md-3">{{ err }}</div>
                             {% endfor %}
@@ -188,6 +251,7 @@
                                 <div id="tax-container" class="jstree jstree-default jstree-checkbox-selection" role="tree" aria-multiselectable="true">
                                 </div>
                             </div>
+                            <div id="repo-taxonomy-error" class="form-description col-md-3"></div>
                             {% for err in form.accepted_taxonomy.errors %}
                                 <div class="form-description col-md-3">{{ err }}</div>
                             {% endfor %}
@@ -221,6 +285,7 @@
                                     {% endfor %}
                                 </div>
                             </div>
+                            <div id="repo-content-error" class="form-description col-md-3"></div>
                             {% for err in form.accepted_content.errors %}
                                 <div class="form-description col-md-3">{{ err }}</div>
                             {% endfor %}
@@ -430,7 +495,8 @@
                             {% endfor %}
                         </div>
                 </div>
-            <button type="submit" onclick="submitForm()">Submit</button>
+            <button id="submit-btn" class="col-sm-2 col-sm-offset-1" type="submit">Submit</button>
+            <div id="submit-form-error" class="form-description col-sm-8"></div>
         {% else %}
             {% for field in form %}
                     <div class="form-group">
@@ -440,7 +506,8 @@
                         </div>
                     </div>
                 {% endfor %}
-                <button type="submit" onclick="submitForm()">Submit</button>
+                <button id="submit-btn" class="col-sm-2" type="submit">Submit</button>
+                <div id="submit-form-error" class="form-description col-sm-9"></div>
         {% endif %}
         </form>
 

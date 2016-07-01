@@ -52,7 +52,8 @@
                 if (Boolean(input.name === "name" && input.value)) {
                     formHasName = true;
                 } else if (Boolean(input.name === "url" && input.value)) {
-                    formHasUrl = input.value.match(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/);
+                    var r = new RegExp('^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$');
+                    formHasUrl = r.test(input.value);
                 } else if (Boolean(input.name === "accepted_taxonomy" && input.value)) {
                     formHasTaxonomy = true;
                 } else if (Boolean(input.name === "accepted_content" && input.value)) {

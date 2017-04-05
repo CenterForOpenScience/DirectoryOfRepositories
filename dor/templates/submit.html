@@ -54,7 +54,7 @@
                     formHasName = true;
                 } else if (Boolean(input.name === "url" && input.value)) {
                     formHasUrl = true;
-                    var r = new RegExp('^https?:\/\/[^\.][a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$');
+                    var r = new RegExp('^https?:\/\/[^\.][a-z0-9-\.]+\.[a-z]{2,4}\/?');
                     formHasValidUrl = r.test(input.value);
                 } else if (Boolean(input.name === "accepted_taxonomy" && input.value)) {
                     formHasTaxonomy = true;
